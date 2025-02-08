@@ -2,20 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Define CSS variables for the light theme */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
+  --color-primary: #2563EB;   /* Bright blue for buttons */
+  --color-secondary: #10B981; /* Vibrant green */
+  --color-accent: #EF4444;    /* Bright coral */
 }
 
+/* Define dark mode theme variables */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1F2937;    /* Dark background */
+    --foreground: #F9FAFB;      /* Light text */
+    --color-primary: #60A5FA;   /* Lighter blue for dark mode */
+    --color-secondary: #34D399; /* Softer green for dark mode */
+    --color-accent: #F472B6;    /* Soft pink for dark mode */
   }
 }
 
+:root.dark {
+  --background: #1F2937;
+  --foreground: #F9FAFB;
+  --color-primary: #34D399;
+  --color-secondary: #34D399;
+  --color-accent: #F472B6;
+}
+
+/* Apply base styles to the body using Tailwind utilities */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-background text-foreground font-sans antialiased;
 }
