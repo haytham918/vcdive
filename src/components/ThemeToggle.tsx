@@ -1,5 +1,7 @@
 "use client";
-
+/*
+    The Component used to Switch Theme
+*/
 import { useEffect, useState, JSX } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Sun, Moon, Desktop } from "phosphor-react";

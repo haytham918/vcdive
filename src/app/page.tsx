@@ -1,3 +1,14 @@
+/*
+
+  Main Page of the Visual Debugger:
+  Layout:
+    -- VCDive Animation
+    -- Description
+    -- Dropzone
+    -- Textarea of Result 
+    -- Reset Button & Upload Buton
+*/
+
 import "@/app/home.css";
 import FileUpload from "@/components/FileUpload";
 const Home = () => {

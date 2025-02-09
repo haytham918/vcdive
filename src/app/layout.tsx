@@ -14,7 +14,6 @@ const ubuntu = Ubuntu({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: "VCDive",
   description: "A Visual Debugger with VCD Files",
@@ -25,7 +24,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const themeScript = `
     (function() {
       const theme = localStorage.getItem('theme');
@@ -41,13 +39,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script dangerouslySetInnerHTML={{__html: themeScript}} />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body
-        className={`${poppins.variable} ${ubuntu.variable} bg-background`}
-        >
+      <body className={`${poppins.variable} ${ubuntu.variable} bg-background`}>
         <header>
-          <ThemeToggle/>
+          <ThemeToggle />
         </header>
         {children}
       </body>

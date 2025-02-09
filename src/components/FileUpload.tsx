@@ -1,5 +1,12 @@
 "use client";
 
+/*
+    Component used for drop-upload file
+    Layout:
+        -- Drop-Zone
+        -- TextArea for Extracted Value
+        -- Reset Button (Clear) && Parse Contents Button (Placeholder rn)
+*/
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useState, useCallback } from "react";
 

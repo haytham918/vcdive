@@ -1,77 +1,239 @@
-.home{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.home-container{
-    padding: 5rem;
-    border: 2px solid;
-    border-color: var(--background);
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content:center;
-    width: 80%;
-    box-shadow: 3px 3px 3px 5px var(--box-shadow-color);
+.home-container {
+  padding: 5rem;
+  border: 2px solid;
+  border-color: var(--background);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  box-shadow: 3px 3px 3px 5px var(--box-shadow-color);
 }
 
 .binary-flip {
-    position: relative;
-    display: inline-block;
-    font-size: 3rem;
-    font-style: italic;
-    color: var(--background);
-    overflow: hidden;
+  position: relative;
+  display: inline-block;
+  font-size: 3rem;
+  font-style: italic;
+  color: var(--background);
+  overflow: hidden;
+}
+
+.binary-flip::before {
+  content: attr(data-text);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  color: var(--color-accent);
+  animation: binaryFlip 6.5s linear infinite;
+}
+
+@keyframes binaryFlip {
+  0% {
+    content: "000000";
   }
-  
-  .binary-flip::before {
+  1% {
+    content: "000001";
+  }
+  2% {
+    content: "000010";
+  }
+  3% {
+    content: "000011";
+  }
+  4% {
+    content: "000100";
+  }
+  5% {
+    content: "000101";
+  }
+  6% {
+    content: "000110";
+  }
+  7% {
+    content: "000111";
+  }
+  8% {
+    content: "001000";
+  }
+  9% {
+    content: "001001";
+  }
+  10% {
+    content: "001010";
+  }
+  11% {
+    content: "001011";
+  }
+  12% {
+    content: "001100";
+  }
+  13% {
+    content: "001101";
+  }
+  14% {
+    content: "001110";
+  }
+  15% {
+    content: "001111";
+  }
+  16% {
+    content: "010000";
+  }
+  17% {
+    content: "010001";
+  }
+  18% {
+    content: "010010";
+  }
+  19% {
+    content: "010011";
+  }
+  20% {
+    content: "010100";
+  }
+  21% {
+    content: "010101";
+  }
+  22% {
+    content: "010110";
+  }
+  23% {
+    content: "010111";
+  }
+  24% {
+    content: "011000";
+  }
+  25% {
+    content: "011001";
+  }
+  26% {
+    content: "011010";
+  }
+  27% {
+    content: "011011";
+  }
+  28% {
+    content: "011100";
+  }
+  29% {
+    content: "011101";
+  }
+  30% {
+    content: "011110";
+  }
+  31% {
+    content: "011111";
+  }
+  32% {
+    content: "100000";
+  }
+  33% {
+    content: "100001";
+  }
+  34% {
+    content: "100010";
+  }
+  35% {
+    content: "100011";
+  }
+  36% {
+    content: "100100";
+  }
+  37% {
+    content: "100101";
+  }
+  38% {
+    content: "100110";
+  }
+  39% {
+    content: "100111";
+  }
+  40% {
+    content: "101000";
+  }
+  41% {
+    content: "101001";
+  }
+  42% {
+    content: "101010";
+  }
+  43% {
+    content: "101011";
+  }
+  44% {
+    content: "101100";
+  }
+  45% {
+    content: "101101";
+  }
+  46% {
+    content: "101110";
+  }
+  47% {
+    content: "101111";
+  }
+  48% {
+    content: "110000";
+  }
+  49% {
+    content: "110001";
+  }
+  50% {
+    content: "110010";
+  }
+  51% {
+    content: "110011";
+  }
+  52% {
+    content: "110100";
+  }
+  53% {
+    content: "110101";
+  }
+  54% {
+    content: "110110";
+  }
+  55% {
+    content: "110111";
+  }
+  56% {
+    content: "111000";
+  }
+  57% {
+    content: "111001";
+  }
+  58% {
+    content: "111010";
+  }
+  59% {
+    content: "111011";
+  }
+  60% {
+    content: "111100";
+  }
+  61% {
+    content: "111101";
+  }
+  62% {
+    content: "111110";
+  }
+  63% {
+    content: "111111";
+  }
+  70%,
+  100% {
     content: attr(data-text);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    color: var(--color-accent);
-    animation: binaryFlip 2s linear forwards;
   }
-  
-  @keyframes binaryFlip {
-    0% {
-      content: '000000';
-    }
-    10% {
-      content: '010101';
-    }
-    20% {
-      content: '101010';
-    }
-    30% {
-      content: '110011';
-    }
-    40% {
-      content: '001100';
-    }
-    50% {
-      content: '111000';
-    }
-    60% {
-      content: '000111';
-    }
-    70% {
-      content: '101101';
-    }
-    80% {
-      content: '010010';
-    }
-    90% {
-      content: '100001';
-    }
-    100% {
-      content: attr(data-text);
-    }
-  }
-  
+}
