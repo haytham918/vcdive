@@ -18,6 +18,12 @@ export default {
         "secondary-hover": "var(--color-secondary-hover)",
         accent: "var(--color-accent)",
         "accent-hover": "var(--color-accent-hover)",
+        babyblue: "var(--color-babyblue)",
+        "babyblue-hover": "var(--color-babyblue-hover)",
+        "dropzone-bg": "var(--dropzone-background)",
+        "dropzone-bd": "var(--dropzone-border)",
+        "textarea-bg": "var(--textarea-background)",
+        "textarea-bd": "var(--textarea-border)",
       },
       fontFamily: {
        sans: ["Poppins", "system-ui", "sans-serif"],
