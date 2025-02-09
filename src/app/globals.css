@@ -2,35 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define CSS variables for the light theme */
+/* Light Theme */
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
-  --color-primary: #2563EB;   /* Bright blue for buttons */
-  --color-secondary: #10B981; /* Vibrant green */
-  --color-accent: #EF4444;    /* Bright coral */
+  --background: #FFFFFF; /* White */
+  --foreground: #1E1E1E; /* Dark Gray */
+  --color-primary: #008080; /* Teal */
+  --color-primary-hover: #006666; /* Darker Teal */
+  --color-secondary: #FFD700; /* Gold */
+  --color-secondary-hover: #FFC200; /* Darker Gold */
+  --color-accent: #FF6347; /* Tomato */
+  --color-accent-hover: #E5533D; /* Darker Tomato */
+
+  --box-shadow-color: rgba(0, 0, 0, 0.2);
 }
 
-/* Define dark mode theme variables */
+/* Dark Theme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1F2937;    /* Dark background */
-    --foreground: #F9FAFB;      /* Light text */
-    --color-primary: #60A5FA;   /* Lighter blue for dark mode */
-    --color-secondary: #34D399; /* Softer green for dark mode */
-    --color-accent: #F472B6;    /* Soft pink for dark mode */
+    --background: #1F2937; /* Dark Gray */
+    --foreground: #E0E0E0; /* Light Gray */
+    --color-primary: #20B2AA; /* Light Teal */
+    --color-primary-hover: #1A998F; /* Darker Light Teal */
+    --color-secondary: #FFD700; /* Gold */
+    --color-secondary-hover: #FFC200; /* Darker Gold */
+    --color-accent: #FF6347; /* Tomato */
+    --color-accent-hover: #E5533D; /* Darker Tomato */
+
+    --box-shadow-color: rgba(255, 255, 255, 0.2);
   }
 }
 
+/* Optional: Manual Dark Theme Class */
 :root.dark {
   --background: #1F2937;
-  --foreground: #F9FAFB;
-  --color-primary: #34D399;
-  --color-secondary: #34D399;
-  --color-accent: #F472B6;
+  --foreground: #E0E0E0;
+  --color-primary: #20B2AA;
+  --color-primary-hover: #1A998F;
+  --color-secondary: #FFD700;
+  --color-secondary-hover: #FFC200;
+  --color-accent: #FF6347;
+  --color-accent-hover: #E5533D;
+
+  --box-shadow-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Apply base styles to the body using Tailwind utilities */
 body {
   @apply bg-background text-foreground font-sans antialiased;
+}
+
+
+.btn-primary {
+  background: var(--color-primary);
+}
+.btn-primary:hover{
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+}
+.btn-secondary:hover{
+  background: var(--color-secondary-hover);
 }

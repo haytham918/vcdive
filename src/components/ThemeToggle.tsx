@@ -12,6 +12,7 @@ interface ThemeItem {
   icon: JSX.Element;
 }
 
+// Three options for theme
 const theme_items: ThemeItem[] = [
   { label: "Light", value: "light", icon: <Sun size={25} weight="bold" /> },
   { label: "Dark", value: "dark", icon: <Moon size={25} weight="bold" /> },
@@ -25,11 +26,14 @@ const theme_items: ThemeItem[] = [
 const ThemeToggle = () => {
   const [theme, setTheme] = useState<ThemeOption | null>(null);
 
+  // Check if there is local storage cache of the setting
+  // If not, go with the default
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") as ThemeOption | null;
     setTheme(storedTheme || "system");
   }, []);
 
+  // Update the theme whenever user changes it
   useEffect(() => {
     if (theme) {
       const root = document.documentElement;
@@ -49,15 +53,14 @@ const ThemeToggle = () => {
   const currentOption = theme_items.find((opt) => opt.value === theme);
 
   return (
-    <Menu as="div" className="relative inline-block text-center font-bold">
-      <MenuButton className="w-[128px] flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-primary text-white hover:bg-primary/80 focus:outline-none">
+    <Menu as="div" className="fixed inline-block text-center font-bold right-2 top-2">
+      <MenuButton className="w-[60px] flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-primary text-white hover:bg-primary-hover focus:outline-none">
         {currentOption ? (
           <>
             {currentOption.icon}
-            <span className="ml-2">{currentOption.label}</span>
           </>
         ) : (
-          "Appearance"
+          "Mode"
         )}
       </MenuButton>
       <MenuItems className="self-center absolute right-0 mt-2 w-40 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 z-10">

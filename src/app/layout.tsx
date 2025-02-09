@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Ubuntu } from "next/font/google";
 import "./globals.css";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const poppins = Poppins({
   weight: "500",
@@ -44,7 +45,10 @@ export default function RootLayout({
       </head>
       <body
         className={`${poppins.variable} ${ubuntu.variable} bg-background`}
-      >
+        >
+        <header>
+          <ThemeToggle/>
+        </header>
         {children}
       </body>
     </html>
