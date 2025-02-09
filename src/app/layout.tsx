@@ -24,8 +24,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const themeScript = `
+    (function() {
+      const theme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (theme === 'dark' || (!theme && systemPrefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  `;
+
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{__html: themeScript}} />
+      </head>
       <body
         className={`${poppins.variable} ${ubuntu.variable} bg-background`}
       >
