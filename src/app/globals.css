@@ -21,6 +21,9 @@
   --textarea-background: #ffffff; /* White */
   --textarea-border: #d1d5db; /* Gray */
 
+  --component-bg-color: #f0f0f0; /* Light mode background */
+  --triangle-color: #888888;     /* Light mode triangle */
+
   --box-shadow-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -43,6 +46,8 @@
     --textarea-background: #1f2937; /* Darker Gray */
     --textarea-border: #4b5563; /* Medium Gray */
 
+    --component-bg-color: #4b5563; /* Dark mode background */
+    --triangle-color: #a0aec0;     /* Dark mode triangle */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
   }
 }
@@ -64,6 +69,9 @@
   --dropzone-border: #4b5563; /* Medium Gray */
   --textarea-background: #1f2937; /* Darker Gray */
   --textarea-border: #4b5563; /* Medium Gray */
+
+  --component-bg-color: #4b5563; /* Dark mode background */
+  --triangle-color: #a0aec0;     /* Dark mode triangle */
 
   --box-shadow-color: rgba(255, 255, 255, 0.2);
 }

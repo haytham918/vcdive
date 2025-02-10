@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: center;
   width: 80%;
-  box-shadow: 3px 3px 3px 5px var(--box-shadow-color);
+  box-shadow: 3px 1px 3px 5px var(--box-shadow-color);
 }
 
 .binary-flip {

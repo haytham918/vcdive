@@ -1,9 +1,10 @@
+import RegisterFile from "@/components/RegisterFile";
 
 const DebuggerPage = () => {
     return (
-        <div className="h-full">Hello There
        
-        </div>
+        <RegisterFile />
+     
     )
 };
 
