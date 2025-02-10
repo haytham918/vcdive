@@ -9,7 +9,7 @@
     -- Reset Button & Upload Buton
 */
 
-import "@/app/home.css";
+import "@/app/(home)/home.css";
 import FileUpload from "@/components/FileUpload";
 const Home = () => {
   return (

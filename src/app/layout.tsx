@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Ubuntu } from "next/font/google";
 import "./globals.css";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const poppins = Poppins({
   weight: "500",
@@ -19,6 +18,7 @@ export const metadata: Metadata = {
   description: "A Visual Debugger with VCD Files",
 };
 
+// Global Layout
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,18 +42,18 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${poppins.variable} ${ubuntu.variable} bg-background`}>
-        <header>
-          <ThemeToggle />
-        </header>
         {children}
-
-      <footer className="text-center opacity-50 flex flex-col p-1 font-[ubuntu]">
-      <span>Shourya Bansal, Ayan Chowdhury, Aaron Rahman, Haytham Tang, Akshay Tate, Ivan Wei</span>
-      <span>&#169; Kris and Ron's Biggest Fans (EECS470-WN25). All Rights Reserved</span>
-      </footer>
-
+        <footer className="opacity-50 flex flex-col p-1 font-[ubuntu] text-center w-full flex-shrink-0 mt-8">
+          <span>
+            Shourya Bansal, Ayan Chowdhury, Aaron Rahman, Haytham Tang, Akshay
+            Tate, Ivan Wei
+          </span>
+          <span>
+            &#169; Kris and Ron's Biggest Fans (EECS470-WN25). All Rights
+            Reserved
+          </span>
+        </footer>
       </body>
-
     </html>
   );
 }

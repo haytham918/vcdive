@@ -57,12 +57,13 @@ const ThemeToggle = () => {
   return (
     <Menu
       as="div"
-      className="fixed inline-block text-center font-bold right-2 top-2"
+      className="ml-auto relative inline-block text-left font-bold mr-2 mt-1"
     >
-      <MenuButton className="w-[60px] flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-babyblue text-white hover:bg-babyblue-hover focus:outline-none">
-        {currentOption ? <>{currentOption.icon}</> : "Mode"}
+      <MenuButton className="w-[60px] flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-babyblue text-white hover:bg-babyblue-hover focus:outline-none">
+        {currentOption ? currentOption.icon : "Mode"}
       </MenuButton>
-      <MenuItems className="self-center absolute right-0 mt-2 w-40 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 z-10">
+
+      <MenuItems className="absolute right-0 w-40 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 z-10">
         {theme_items.map((option) => (
           <MenuItem key={option.value}>
             {({ focus }) => (

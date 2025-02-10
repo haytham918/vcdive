@@ -1,21 +1,22 @@
 "use client";
+
 /* 
     Main Page button to parse vcd contents
 */
+import { useRouter } from "next/navigation";
 
 const ParseButton: React.FC<{ file_content: string }> = ({ file_content }) => {
+  const router = useRouter();
   const handleButtonClick = async () => {
     // Check if the file is empty
     if (!file_content.trim()) {
       alert("Nothing to parse. Check your input");
       return;
     }
-    console.log("heck");
 
     try {
       // Call the parse endpoint
-      console.log(file_content);
-      const response = await fetch("/parse", {
+      const response = await fetch("/backend/parse/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,6 +33,9 @@ const ParseButton: React.FC<{ file_content: string }> = ({ file_content }) => {
       const data = result.data;
       console.log("DATA IS: ", data);
       // TODO:
+
+      // Navigate to the debugger page
+      router.push("/debugger/");
     } catch (err) {
       console.log("Error: ", err);
     }

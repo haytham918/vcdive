@@ -1,12 +1,15 @@
 # Backend for parsing
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
+
 app = Flask(__name__)
 CORS(app)
 
-# Endpoint: /parse
-# -- Triggered by pressing the parse button with some content
-@app.route("/parse", methods=["POST"])
+
+"""Endpoint: /parse
+-- Triggered by pressing the parse button with some content"""
+@app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
     recevied = dict(request.get_json())
     file_content = recevied.get('content', )
