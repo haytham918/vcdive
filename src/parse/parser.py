@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas as pd
+import polars as pl
 import numpy as np
 import json
 
@@ -123,7 +124,6 @@ This parser works for VCD files and VPD that have been converted to VCD
 2) Add alias to bash profile:
 
     alias vpd2vcd='/opt/caen/synopsys/vcs-2023.12-SP2-1/bin/vpd2vcd +splitpacked'
-            /opt/caen/synopsys/vcs-2023.12-SP2-1/bin/vpd2vcd
 
 3) Add exports:
 
@@ -152,8 +152,10 @@ if __name__ == "__main__":
         symbol_table = symbol_map(main_table)
         data = parse_data(f, symbol_table)
 
-    df = pd.DataFrame.from_dict(data, orient="index", dtype=str)
-    df.replace("", np.nan, inplace=True)
-    df.ffill(axis=0, inplace=True)
-    df = df.reset_index().rename(columns={"index": "time"})
-    df.to_csv("output_filled.csv", index=False)
+    with open("dump.json", "w") as fout:
+        json.dump(data, fout, indent=4)
+    # df = pd.DataFrame.from_dict(data, orient="index",dtype=str)
+    # df.replace("", np.nan, inplace=True)
+    # df.ffill(axis=0, inplace=True)
+    # df = df.reset_index().rename(columns={"index": "time"})
+    # df.to_csv("output_filled.csv", index=False)
