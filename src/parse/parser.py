@@ -1,8 +1,6 @@
 import os
 import sys
-import pandas as pd
 import polars as pl
-import numpy as np
 import json
 
 
@@ -136,7 +134,7 @@ This parser works for VCD files and VPD that have been converted to VCD
 
 5) Run the parser:
 
-    python3 src/parser.py inputs/p3_cpu_vpd.vcd
+    python3 src/parse/parser.py inputs/p3_cpu_vpd.vcd
 
 '''
 if __name__ == "__main__":
@@ -154,8 +152,19 @@ if __name__ == "__main__":
 
     with open("dump.json", "w") as fout:
         json.dump(data, fout, indent=4)
-    # df = pd.DataFrame.from_dict(data, orient="index",dtype=str)
-    # df.replace("", np.nan, inplace=True)
-    # df.ffill(axis=0, inplace=True)
-    # df = df.reset_index().rename(columns={"index": "time"})
-    # df.to_csv("output_filled.csv", index=False)
+
+    data_alt = [{"index": key, **row} for key, row in data.items()]
+    df = (
+        pl.DataFrame(data_alt)
+        .with_columns(pl.exclude(pl.String).cast(pl.Utf8))
+        .rechunk()
+        .with_columns(
+            pl.when(pl.col(pl.String).str.len_chars() == 0)
+            .then(None)
+            .otherwise(pl.col(pl.String))
+            .name.keep()
+        )
+        .select(pl.all().forward_fill())
+        .rename({"index": "time"})
+    )
+    df.write_csv("output_filled.csv")
