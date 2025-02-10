@@ -1,6 +1,7 @@
 import os
 import sys
 import polars as pl
+import pandas as pd
 import json
 
 
@@ -153,9 +154,9 @@ if __name__ == "__main__":
     with open("dump.json", "w") as fout:
         json.dump(data, fout, indent=4)
 
-    data_alt = [{"index": key, **row} for key, row in data.items()]
+    df = pd.DataFrame.from_dict(data, orient="index",dtype=str)
     df = (
-        pl.DataFrame(data_alt)
+        pl.from_pandas(df, include_index=True)
         .with_columns(pl.exclude(pl.String).cast(pl.Utf8))
         .rechunk()
         .with_columns(
@@ -165,6 +166,6 @@ if __name__ == "__main__":
             .name.keep()
         )
         .select(pl.all().forward_fill())
-        .rename({"index": "time"})
+        .rename({"None": "time"})
     )
     df.write_csv("output_filled.csv")
