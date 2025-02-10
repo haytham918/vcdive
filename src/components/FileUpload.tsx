@@ -9,6 +9,7 @@
 */
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useState, useCallback } from "react";
+import ParseButton from "./ParseButton";
 
 // This is the drop-upload box using react-dropzone
 const FileUpload = () => {
@@ -85,8 +86,8 @@ const FileUpload = () => {
         <button onClick={handleReset} className="btn btn-secondary">
           Reset
         </button>
-        {/* TODO: Need Actual Parse BUTTON */}
-        <button className="ml-auto btn btn-primary">Parse VCD Contents</button>
+        {/* Parse Button */}
+        <ParseButton file_content={file_content} />
       </div>
     </div>
   );

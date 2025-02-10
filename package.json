@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "flask-dev": "pip install -r src/parse/requirements.txt && python3 -m flask --app src/parse/main run",
+    "next-dev": "next dev",
+    "dev": "concurrently \"pnpm next-dev\" \"pnpm flask-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
+    "concurrently": "^9.1.2",
     "headlessui": "^0.0.0",
     "next": "15.1.6",
     "phosphor-react": "^1.4.1",

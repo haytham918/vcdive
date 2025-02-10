@@ -5,7 +5,6 @@ import numpy as np
 import json
 
 
-
 # Parse the header of the VCD file
 # @param vcd_file: file object of the VCD file
 # @retun
@@ -13,7 +12,7 @@ def parse_definitions(vcd_file) -> dict:
     # Parse the $var section of the VCD file
     # @param line_str: string of the $var section
     # @return line_dict: dictionary of the $var section
-    def parse_var(line_str : str) -> dict:
+    def parse_var(line_str: str) -> dict:
         line_dict = dict()
         line_list = line_str.split()
         line_dict[line_list[4]] = dict()
@@ -23,11 +22,11 @@ def parse_definitions(vcd_file) -> dict:
         line_dict[line_list[4]]['name'] = line_list[4]
         return line_dict
 
-
     # Parse the $scope section of the VCD file
     # @param vcd_file: file object of the VCD file
-    # @return 
-    def parse_scope(vcd_file, scope_name : str) -> dict:
+    # @return
+
+    def parse_scope(vcd_file, scope_name: str) -> dict:
         symbol_table = dict()
         symbol_table[scope_name] = dict()
         while True:
@@ -35,11 +34,12 @@ def parse_definitions(vcd_file) -> dict:
             if line.startswith("$upscope $end"):
                 break
             if line.startswith("$scope"):
-                symbol_table[scope_name].update(parse_scope(vcd_file, line.split()[2]))
+                symbol_table[scope_name].update(
+                    parse_scope(vcd_file, line.split()[2]))
             if line.startswith("$var"):
                 symbol_table[scope_name].update(parse_var(line))
         return symbol_table
-    
+
     main_table = dict()
     while True:
         line = vcd_file.readline()
@@ -52,40 +52,46 @@ def parse_definitions(vcd_file) -> dict:
 # Create a symbol table from the main table
 # @param main_table: dictionary of the main table
 # @return symbol_table: dictionary of the symbol table
-def symbol_map(main_table : dict, path = "") -> dict:
+
+
+def symbol_map(main_table: dict, path="") -> dict:
     symbol_table = dict()
     for scope in main_table:
         if scope:
             if type(main_table[scope]) == dict and "name" in main_table[scope]:
-                symbol_table[main_table[scope]['symbol']] = path + main_table[scope]['name']
+                symbol_table[main_table[scope]['symbol']
+                             ] = path + main_table[scope]['name']
             else:
-                symbol_table.update(symbol_map(main_table[scope], path + f"{scope}."))
+                symbol_table.update(symbol_map(
+                    main_table[scope], path + f"{scope}."))
     return symbol_table
 
 # Parse a line of data from the VCD file
 # @param string: string of the line
 # @param symbol_table: dictionary of the symbol table
 # @return data: dictionary of the data {symbol : data}
-def parse_data_line(string : str, symbol_table : dict) -> dict:
+
+
+def parse_data_line(string: str, symbol_table: dict) -> dict:
     if len(string) == 0:
         return {}
     if string[0] == 'b' or string[0] == 'B':
         data = string.split()[0][1:]
         symbol = string.split()[1].strip()
-        return {symbol_table[symbol] : data}
+        return {symbol_table[symbol]: data}
     if string[0] in {'0', '1', 'x', 'X', 'z', 'Z'}:
         data = string[0]
         symbol = string[1:].strip()
-        return {symbol_table[symbol] : data}
+        return {symbol_table[symbol]: data}
     print("[WARNING]: don't know how to parse line: " + string)
     return {}
 
-    
+
 # Parse the data section of the VCD file
 # @param vcd_file: file object of the VCD file
 # @param symbol_table: dictionary of the symbol table
 # @return data: dictionary of the data {time_step : {symbol : data, ...}, ...}
-def parse_data(vcd_file : str, symbol_table : dict) -> dict:
+def parse_data(vcd_file: str, symbol_table: dict) -> dict:
     data = dict()
     current_time_step = 0
     data[current_time_step] = dict()
@@ -100,9 +106,10 @@ def parse_data(vcd_file : str, symbol_table : dict) -> dict:
             elif line.startswith("$end"):
                 break
             else:
-                data[current_time_step].update(parse_data_line(line, symbol_table))
+                data[current_time_step].update(
+                    parse_data_line(line, symbol_table))
     return data
-        
+
 
 '''
 This parser works for VCD files and VPD that have been converted to VCD
@@ -137,16 +144,15 @@ if __name__ == "__main__":
     assert os.path.exists(vcd_file), "File does not exist"
     assert vcd_file.endswith(".vcd"), "File is not a VCD file"
 
-
     with open(vcd_file, 'r') as f:
         main_table = parse_definitions(f)
         with open("symbol_table_debug.json", "w") as fout:
             json.dump(main_table, fout, indent=4)
-        f.readline() # Skip the line after $enddefinitions
+        f.readline()  # Skip the line after $enddefinitions
         symbol_table = symbol_map(main_table)
         data = parse_data(f, symbol_table)
 
-    df = pd.DataFrame.from_dict(data, orient="index",dtype=str)
+    df = pd.DataFrame.from_dict(data, orient="index", dtype=str)
     df.replace("", np.nan, inplace=True)
     df.ffill(axis=0, inplace=True)
     df = df.reset_index().rename(columns={"index": "time"})
