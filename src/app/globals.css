@@ -86,6 +86,8 @@ header {
   border-radius: 0px 0px 10px 10px;
   box-shadow: 3px 3px 3px var(--box-shadow-color);
   margin-bottom: 2rem;
+  align-items: center;
+  justify-content: center;
 }
 
 main {
@@ -110,6 +112,7 @@ main {
   padding-left: 1rem;
   padding-right: 1rem;
   font-weight: bold;
+  column-gap: 0.25rem;
 }
 
 button:active {
