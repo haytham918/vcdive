@@ -5,6 +5,8 @@ import pandas as pd
 import json
 
 
+NAME = "___NAME"
+
 # Parse the header of the VCD file
 # @param vcd_file: file object of the VCD file
 # @retun
@@ -19,7 +21,7 @@ def parse_definitions(vcd_file) -> dict:
         line_dict[line_list[4]]['type'] = line_list[1]
         line_dict[line_list[4]]['size'] = line_list[2]
         line_dict[line_list[4]]['symbol'] = line_list[3]
-        line_dict[line_list[4]]['name'] = line_list[4]
+        line_dict[line_list[4]][NAME] = line_list[4]
         return line_dict
 
     # Parse the $scope section of the VCD file
@@ -58,9 +60,9 @@ def symbol_map(main_table: dict, path="") -> dict:
     symbol_table = dict()
     for scope in main_table:
         if scope:
-            if type(main_table[scope]) == dict and "name" in main_table[scope]:
+            if type(main_table[scope]) == dict and NAME in main_table[scope]:
                 symbol_table[main_table[scope]['symbol']
-                             ] = path + main_table[scope]['name']
+                             ] = path + main_table[scope][NAME]
             else:
                 symbol_table.update(symbol_map(
                     main_table[scope], path + f"{scope}."))
