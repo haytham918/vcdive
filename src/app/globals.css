@@ -21,7 +21,11 @@
   --textarea-background: #ffffff; /* White */
   --textarea-border: #d1d5db; /* Gray */
 
-  --component-bg-color: #f0f0f0; /* Light mode background */
+  --mainsection-bg-color: #f5f5f5; /* Light Mode Main Section BG color */
+  --subsection-bg-color:  #e0e0e0;  /* Light Mode Subsection BG Color */
+
+  --entry-bg-color: #f0f0f0; /* Light mode entry BG color */
+
   --triangle-color: #888888;     /* Light mode triangle */
 
   --box-shadow-color: rgba(0, 0, 0, 0.2);
@@ -46,7 +50,7 @@
     --textarea-background: #1f2937; /* Darker Gray */
     --textarea-border: #4b5563; /* Medium Gray */
 
-    --component-bg-color: #4b5563; /* Dark mode background */
+    --entry-bg-color: #4b5563; /* Dark mode entry */
     --triangle-color: #a0aec0;     /* Dark mode triangle */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
   }
@@ -70,7 +74,9 @@
   --textarea-background: #1f2937; /* Darker Gray */
   --textarea-border: #4b5563; /* Medium Gray */
 
-  --component-bg-color: #4b5563; /* Dark mode background */
+  --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */
+  --subsection-bg-color: #4c5d6e;  /* Dark  Mode Subsection BG Color */
+  --entry-bg-color: #3b4c5d; /* Dark mode entry */
   --triangle-color: #a0aec0;     /* Dark mode triangle */
 
   --box-shadow-color: rgba(255, 255, 255, 0.2);

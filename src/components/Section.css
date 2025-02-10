@@ -1,0 +1,39 @@
+.section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
+}
+
+.main-section{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    background: var(--mainsection-bg-color);
+    width: max-content;
+}
+
+.sub-section{
+    background: var(--subsection-bg-color);
+}
+
+.section-header{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: bold;
+}
+
+.subsection-header{
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: bold;
+}
+
+.entry{
+    background: var(--entry-bg-color);
+    display: flex;
+    padding: 0.25rem;
+
+}

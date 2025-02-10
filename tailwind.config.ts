@@ -24,6 +24,7 @@ export default {
         "dropzone-bd": "var(--dropzone-border)",
         "textarea-bg": "var(--textarea-background)",
         "textarea-bd": "var(--textarea-border)",
+        "entry-bg": "var(--entry-bg-color)"
       },
       fontFamily: {
        sans: ["Poppins", "system-ui", "sans-serif"],

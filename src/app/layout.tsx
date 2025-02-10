@@ -45,8 +45,8 @@ export default function RootLayout({
         {children}
         <footer className="opacity-50 flex flex-col p-1 font-[ubuntu] text-center w-full flex-shrink-0 mt-8">
           <span>
-            Shourya Bansal, Ayan Chowdhury, Aaron Rahman, Haytham Tang, Akshay
-            Tate, Ivan Wei
+            Shourya Bansal, Haytham Tang, Akshay
+            Tate
           </span>
           <span>
             &#169; Kris and Ron's Biggest Fans (EECS470-WN25). All Rights
