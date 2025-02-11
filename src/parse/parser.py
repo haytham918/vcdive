@@ -56,9 +56,6 @@ def parse_definitions(vcd_file) -> dict:
 
 # Create a symbol table from the main table
 # @param main_table: dictionary of the main table
-# @return symbol_table: dictionary of the symbol table
-
-
 def symbol_map(main_table: dict, path="") -> dict:
     symbol_table = dict()
     for scope in main_table:
@@ -182,15 +179,21 @@ if __name__ == "__main__":
         main_table = parse_definitions(f)
         print(time.time() - current_time)
         current_time = time.time()
-        # with open("symbol_table_debug.json", "w") as fout:
-        #     json.dump(main_table, fout, indent=4)
+        
         f.readline()  # Skip the line after $enddefinitions
         print("Generating Symbol Table ", end="")
         symbol_table = symbol_map(main_table)
+
         print(time.time() - current_time)
         current_time = time.time()
         print("Parsing Data ", end="")
-        data = parse_data(f, symbol_table)
+
+        optimized_table = dict()
+        i = 0
+        for k in symbol_table:
+            optimized_table[k] = i
+            i += 1
+        data = parse_data(f, optimized_table)
         print(time.time() - current_time)
         current_time = time.time()
     
