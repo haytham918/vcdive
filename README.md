@@ -5,10 +5,12 @@
 
 ## Getting Started
 
+**Make sure you have `node` and `pnpm` installed**  
 Install packages and run the development server:
 
 ```bash
 pnpm install
+pip install -r src/parse/requirements.txt
 pnpm dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
