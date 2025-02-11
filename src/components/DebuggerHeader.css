@@ -7,7 +7,10 @@
 }
 
 .cycle-navigation-container {
+  position: absolute;
   display: flex;
   flex-direction: row;
   column-gap: 0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
