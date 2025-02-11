@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import time
+import gc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 NAME = "___NAME"
@@ -120,13 +121,16 @@ def parse_data(vcd_file: str, symbol_table: dict) -> dict:
 def fill_missing_rows(data: dict) -> dict:
     sorted_keys = sorted(data.keys(), key=lambda k: int(k))
     for i in range(1, len(sorted_keys)):
+        if i % 999 == 0:
+            gc.collect()
+
         prev_row = data[sorted_keys[i - 1]]
         current_row = data[sorted_keys[i]]
         filled_row = prev_row.copy()
         filled_row.update(current_row)
         data[sorted_keys[i]] = filled_row
     return data
-    
+   
 def make_hierarchical(flat_dict):
     nested_dict = {}
     for key, value in flat_dict.items():
@@ -190,6 +194,11 @@ if __name__ == "__main__":
         print(time.time() - current_time)
         current_time = time.time()
     
-    print("Filling Missing Rows")
+    print("Filling Missing Rows", end="")
     data = fill_missing_rows(data)
+    print(time.time() - current_time)
+    current_time = time.time()
     print("Done")
+
+    # with open("symbol_table_debug.json", "w") as fout:
+    #     json.dump(main_table, fout, indent=4)
