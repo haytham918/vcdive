@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 *pycache*
+
+inputs/*
+
+dump.json
+symbol_table_debug.json
+*.csv
