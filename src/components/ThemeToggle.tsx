@@ -57,7 +57,7 @@ const ThemeToggle = () => {
   return (
     <Menu
       as="div"
-      className="ml-auto relative inline-block text-left font-bold mr-4"
+      className="ml-auto relative inline-block text-left font-bold mr-2"
     >
       <MenuButton className="w-[60px] flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-babyblue text-white hover:bg-babyblue-hover focus:outline-none">
         {currentOption ? currentOption.icon : "Mode"}

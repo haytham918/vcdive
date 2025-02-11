@@ -27,8 +27,8 @@ export default {
         "entry-bg": "var(--entry-bg-color)"
       },
       fontFamily: {
-       sans: ["Poppins", "system-ui", "sans-serif"],
-       heading: ["Ubuntu", "sans-serif"],
+       sans: ["Roboto Mono", "system-ui", "sans-serif"],
+       heading: ["Ubuntu Mono", "sans-serif"],
       },
      
     },

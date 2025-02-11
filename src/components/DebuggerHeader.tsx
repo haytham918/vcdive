@@ -12,7 +12,7 @@ const DebuggerHeader = () => {
         <span> Home </span>
       </Link>
 
-      <h1 className="text-xl font-bold">VCDive Debugger</h1>
+      <h1 className="text-lg font-bold">VCDive Debugger</h1>
     </div>
   );
 };

@@ -4,7 +4,7 @@
     Component used for drop-upload file
     Layout:
         -- Drop-Zone
-        -- TextArea for Extracted Value
+        -- Display What file
         -- Reset Button (Clear) && Parse Contents Button (Placeholder rn)
 */
 import { FileRejection, useDropzone } from "react-dropzone";
@@ -13,20 +13,17 @@ import ParseButton from "./ParseButton";
 
 // This is the drop-upload box using react-dropzone
 const FileUpload = () => {
-  const [file_content, setFileContent] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [file_name, setFileName] = useState("");
+  const [is_loading, setLoading] = useState(false);
 
   // Read in the file
   const onDrop = useCallback((accepted_file: File[]) => {
     if (accepted_file.length > 0) {
-      const file = accepted_file[0];
-      const reader = new FileReader();
+      const uploaded_file = accepted_file[0];
+      setFileName(uploaded_file.name);
 
-      reader.onload = (event) => {
-        const content = event.target?.result as string;
-        setFileContent(content);
-      };
-
-      reader.readAsText(file);
+      setFile(uploaded_file);
     }
   }, []);
 
@@ -49,18 +46,29 @@ const FileUpload = () => {
     multiple: false,
   });
 
-  // When type the text area
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFileContent(event.target.value);
-  };
-
   // For reset button
   const handleReset = () => {
-    setFileContent("");
+    setFile(null);
+    setFileName("");
   };
 
+  const setLoadingTrue = () => {
+    setLoading(true);
+  };
+
+  // Uploaded file text
+  const uploaded_file_component =
+    file_name !== "" ? (
+      <div className="text-primary font-bold text-lg">
+        <span>Uploaded File is: </span>
+        <span className="italic">{file_name}</span>
+      </div>
+    ) : (
+      <div className="text-accent font-bold text-lg">Nothing uploaded</div>
+    );
+
   return (
-    <div className="w-[85%] p-2">
+    <div className="w-[85%] p-2 gap-y-2 flex-col flex">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-6 rounded-lg text-center text-black cursor-pointer bg-dropzone-bg border-dropzone-bd transition-colors ${
@@ -70,24 +78,29 @@ const FileUpload = () => {
         }`}
       >
         <input {...getInputProps()} />
-        <p className="italic">
+        <p>
           {isDragActive
             ? "Drop the file here..."
             : "Drop or upload your .vcd file"}
         </p>
       </div>
-      <textarea
-        className="mt-4 p-2 border rounded w-full h-64 bg-textarea-bg border-textarea-bd"
-        value={file_content}
-        onChange={handleChange}
-        placeholder="You can also copy-paste .vcd content here"
-      />
+
+      {uploaded_file_component}
+
       <div className="flex w-[100%]">
-        <button onClick={handleReset} className="btn btn-secondary">
+        <button
+          onClick={handleReset}
+          disabled={is_loading}
+          className="btn btn-secondary"
+        >
           Reset
         </button>
         {/* Parse Button */}
-        <ParseButton file_content={file_content} />
+        <ParseButton
+          uploaded_file={file}
+          is_loading={is_loading}
+          setLoadingTrue={setLoadingTrue}
+        />
       </div>
     </div>
   );

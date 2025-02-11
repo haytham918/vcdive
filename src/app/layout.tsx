@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Poppins, Ubuntu } from "next/font/google";
+import { Roboto_Mono, Ubuntu_Mono } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({
+const roboto = Roboto_Mono({
   weight: "500",
-  variable: "--font-poppins",
+  variable: "--font-roboto",
   subsets: ["latin"],
 });
-const ubuntu = Ubuntu({
+const ubuntu = Ubuntu_Mono({
   weight: "700",
   variable: "--font-ubuntu",
   subsets: ["latin"],
@@ -41,13 +41,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${poppins.variable} ${ubuntu.variable} bg-background`}>
+      <body className={`${roboto.variable} ${ubuntu.variable} bg-background`}>
         {children}
-        <footer className="opacity-50 flex flex-col p-1 font-[ubuntu] text-center w-full flex-shrink-0 mt-8">
-          <span>
-            Shourya Bansal, Haytham Tang, Akshay
-            Tate
-          </span>
+        <footer className="opacity-50 flex flex-col p-1 font-heading text-center w-full flex-shrink-0 mt-8">
+          <span>Shourya Bansal, Haytham Tang, Akshay Tate</span>
           <span>
             &#169; Kris and Ron's Biggest Fans (EECS470-WN25). All Rights
             Reserved

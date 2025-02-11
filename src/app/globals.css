@@ -22,11 +22,11 @@
   --textarea-border: #d1d5db; /* Gray */
 
   --mainsection-bg-color: #f5f5f5; /* Light Mode Main Section BG color */
-  --subsection-bg-color:  #e0e0e0;  /* Light Mode Subsection BG Color */
+  --subsection-bg-color: #e0e0e0; /* Light Mode Subsection BG Color */
 
   --entry-bg-color: #f0f0f0; /* Light mode entry BG color */
 
-  --triangle-color: #888888;     /* Light mode triangle */
+  --triangle-color: #888888; /* Light mode triangle */
 
   --box-shadow-color: rgba(0, 0, 0, 0.2);
 }
@@ -51,7 +51,7 @@
     --textarea-border: #4b5563; /* Medium Gray */
 
     --entry-bg-color: #4b5563; /* Dark mode entry */
-    --triangle-color: #a0aec0;     /* Dark mode triangle */
+    --triangle-color: #a0aec0; /* Dark mode triangle */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
   }
 }
@@ -75,9 +75,9 @@
   --textarea-border: #4b5563; /* Medium Gray */
 
   --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */
-  --subsection-bg-color: #4c5d6e;  /* Dark  Mode Subsection BG Color */
+  --subsection-bg-color: #4c5d6e; /* Dark  Mode Subsection BG Color */
   --entry-bg-color: #3b4c5d; /* Dark mode entry */
-  --triangle-color: #a0aec0;     /* Dark mode triangle */
+  --triangle-color: #a0aec0; /* Dark mode triangle */
 
   --box-shadow-color: rgba(255, 255, 255, 0.2);
 }
@@ -132,6 +132,17 @@ main {
 button:active {
   transform: translateY(1px); /* Move button down 2px */
   box-shadow: 0 1px var(--box-shadow-color); /* Reduce shadow */
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+button:disabled:hover {
+  background-color: #1d1d1d;
 }
 
 .btn-primary {
