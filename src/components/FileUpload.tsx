@@ -71,7 +71,7 @@ const FileUpload = () => {
     <div className="w-[85%] p-2 gap-y-2 flex-col flex">
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed p-6 rounded-lg text-center text-black cursor-pointer bg-dropzone-bg border-dropzone-bd transition-colors ${
+        className={`border-2 border-dashed p-12 rounded-lg text-center text-black cursor-pointer bg-dropzone-bg border-dropzone-bd transition-colors ${
           isDragActive
             ? "border-blue-500 bg-blue-100"
             : "border-gray-300 bg-gray-50"

@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { ArrowUUpLeft } from "phosphor-react";
 import "./DebuggerHeader.css";
+import CycleNavigation from "./CycleNavigation";
+import NSToggle from "./NSToggle";
 // Additional header stuff for the debugger page
 const DebuggerHeader = () => {
   return (
@@ -9,10 +11,11 @@ const DebuggerHeader = () => {
       {/* Button to go back */}
       <Link href="/" className="btn btn-babyblue">
         <ArrowUUpLeft size={25} weight="bold" />
-        <span> Home </span>
       </Link>
 
-      <h1 className="text-lg font-bold">VCDive Debugger</h1>
+      <h1 className="text-lg font-bold">VCDive</h1>
+      <CycleNavigation />
+      <NSToggle />
     </div>
   );
 };

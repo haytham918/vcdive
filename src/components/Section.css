@@ -23,6 +23,9 @@
   font-size: 1.2rem;
   line-height: 1.75rem;
   font-weight: bold;
+  border: 3px solid;
+  border-color: transparent transparent var(--foreground) transparent;
+  margin-bottom: 0.5rem;
 }
 
 .subsection-header {

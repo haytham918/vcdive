@@ -108,6 +108,10 @@ main {
   flex: 1;
 }
 
+a {
+  cursor: pointer;
+}
+
 .btn {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
@@ -123,8 +127,8 @@ main {
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   font-weight: bold;
   column-gap: 0.25rem;
 }
