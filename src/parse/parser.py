@@ -1,11 +1,12 @@
 import os
 import sys
-import polars as pl
-import pandas as pd
 import json
-
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 NAME = "___NAME"
+INTERNAL_DELIM = "."
+JUNK_TERMS = {"unnamed", "genblk", ".psel", "tmp"}
 
 # Parse the header of the VCD file
 # @param vcd_file: file object of the VCD file
@@ -22,6 +23,8 @@ def parse_definitions(vcd_file) -> dict:
         line_dict[line_list[4]]['size'] = line_list[2]
         line_dict[line_list[4]]['symbol'] = line_list[3]
         line_dict[line_list[4]][NAME] = line_list[4]
+        if line_list[4] in JUNK_TERMS:
+            return {}
         return line_dict
 
     # Parse the $scope section of the VCD file
@@ -36,8 +39,7 @@ def parse_definitions(vcd_file) -> dict:
             if line.startswith("$upscope $end"):
                 break
             if line.startswith("$scope"):
-                symbol_table[scope_name].update(
-                    parse_scope(vcd_file, line.split()[2]))
+                symbol_table[scope_name].update(parse_scope(vcd_file, line.split()[2]))
             if line.startswith("$var"):
                 symbol_table[scope_name].update(parse_var(line))
         return symbol_table
@@ -61,31 +63,33 @@ def symbol_map(main_table: dict, path="") -> dict:
     for scope in main_table:
         if scope:
             if type(main_table[scope]) == dict and NAME in main_table[scope]:
-                symbol_table[main_table[scope]['symbol']
-                             ] = path + main_table[scope][NAME]
+                symbol_table[main_table[scope]['symbol']] = path + main_table[scope][NAME]
             else:
-                symbol_table.update(symbol_map(
-                    main_table[scope], path + f"{scope}."))
+                symbol_table.update(symbol_map(main_table[scope], path + f"{scope}{INTERNAL_DELIM}"))
     return symbol_table
 
 # Parse a line of data from the VCD file
 # @param string: string of the line
 # @param symbol_table: dictionary of the symbol table
 # @return data: dictionary of the data {symbol : data}
-
-
 def parse_data_line(string: str, symbol_table: dict) -> dict:
     if len(string) == 0:
         return {}
+    
     if string[0] == 'b' or string[0] == 'B':
         data = string.split()[0][1:]
         symbol = string.split()[1].strip()
-        return {symbol_table[symbol]: data}
+        if 'x' in data or 'z' in data: # optimization
+            return {symbol_table[symbol]: -1}
+        return {symbol_table[symbol]: int(data, 2)}
+    if string[0] in {'x', 'X'}: # optimization
+        symbol = string[1:].strip()
+        return {symbol_table[symbol]: -1}
     if string[0] in {'0', '1', 'x', 'X', 'z', 'Z'}:
         data = string[0]
         symbol = string[1:].strip()
         return {symbol_table[symbol]: data}
-    print("[WARNING]: don't know how to parse line: " + string)
+   #  print("[WARNING]: don't know how to parse line: " + string)
     return {}
 
 
@@ -108,9 +112,30 @@ def parse_data(vcd_file: str, symbol_table: dict) -> dict:
             elif line.startswith("$end"):
                 break
             else:
-                data[current_time_step].update(
-                    parse_data_line(line, symbol_table))
+                line_data = parse_data_line(line, symbol_table)
+                for name in line_data:
+                    data[current_time_step][name] = line_data[name]
     return data
+
+def fill_missing_rows(data: dict) -> dict:
+    sorted_keys = sorted(data.keys(), key=lambda k: int(k))
+    for i in range(1, len(sorted_keys)):
+        prev_row = data[sorted_keys[i - 1]]
+        current_row = data[sorted_keys[i]]
+        filled_row = prev_row.copy()
+        filled_row.update(current_row)
+        data[sorted_keys[i]] = filled_row
+    return data
+    
+def make_hierarchical(flat_dict):
+    nested_dict = {}
+    for key, value in flat_dict.items():
+        keys = key.split('.')
+        d = nested_dict
+        for part in keys[:-1]:
+            d = d.setdefault(part, {})
+        d[keys[-1]] = value
+    return nested_dict
 
 
 '''
@@ -141,33 +166,30 @@ This parser works for VCD files and VPD that have been converted to VCD
 
 '''
 if __name__ == "__main__":
-    vcd_file = sys.argv[1]
+    vcd_file = 'inputs/bfsvpd.vcd'
     assert os.path.exists(vcd_file), "File does not exist"
     assert vcd_file.endswith(".vcd"), "File is not a VCD file"
+    current_time = time.time()
+
 
     with open(vcd_file, 'r') as f:
+        print("Reading Headers ", end="")
+        
         main_table = parse_definitions(f)
-        with open("symbol_table_debug.json", "w") as fout:
-            json.dump(main_table, fout, indent=4)
+        print(time.time() - current_time)
+        current_time = time.time()
+        # with open("symbol_table_debug.json", "w") as fout:
+        #     json.dump(main_table, fout, indent=4)
         f.readline()  # Skip the line after $enddefinitions
+        print("Generating Symbol Table ", end="")
         symbol_table = symbol_map(main_table)
+        print(time.time() - current_time)
+        current_time = time.time()
+        print("Parsing Data ", end="")
         data = parse_data(f, symbol_table)
-
-    with open("dump.json", "w") as fout:
-        json.dump(data, fout, indent=4)
-
-    df = pd.DataFrame.from_dict(data, orient="index",dtype=str)
-    df = (
-        pl.from_pandas(df, include_index=True)
-        .with_columns(pl.exclude(pl.String).cast(pl.Utf8))
-        .rechunk()
-        .with_columns(
-            pl.when(pl.col(pl.String).str.len_chars() == 0)
-            .then(None)
-            .otherwise(pl.col(pl.String))
-            .name.keep()
-        )
-        .select(pl.all().forward_fill())
-        .rename({"None": "time"})
-    )
-    df.write_csv("output_filled.csv")
+        print(time.time() - current_time)
+        current_time = time.time()
+    
+    print("Filling Missing Rows")
+    data = fill_missing_rows(data)
+    print("Done")
