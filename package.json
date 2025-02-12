@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "pip install -r src/parse/requirements.txt && python3 -m flask --app src/parse/main run",
+    "flask-dev": "pip install -r src/parse/requirements.txt && cd src/parse && python3 setup.py build_ext --inplace && cd ../../  && python3 -m flask --app src/parse/main run",
     "next-dev": "next dev",
     "dev": "concurrently \"pnpm next-dev\" \"pnpm flask-dev\"",
     "build": "next build",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
+    "axios": "^1.7.9",
     "concurrently": "^9.1.2",
     "headlessui": "^0.0.0",
     "next": "15.1.6",

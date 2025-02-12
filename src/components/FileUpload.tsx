@@ -21,6 +21,13 @@ const FileUpload = () => {
   const onDrop = useCallback((accepted_file: File[]) => {
     if (accepted_file.length > 0) {
       const uploaded_file = accepted_file[0];
+
+      // const reader = new FileReader();
+      // reader.onload = (event : any) => {
+      //   const text = event.target?.result as string
+      //   console.log(text)
+      // }
+      // reader.readAsText(uploaded_file)
       setFileName(uploaded_file.name);
 
       setFile(uploaded_file);
@@ -52,8 +59,14 @@ const FileUpload = () => {
     setFileName("");
   };
 
+  // Set Loading Icon
   const setLoadingTrue = () => {
     setLoading(true);
+  };
+
+  // Unset loading icon
+  const setLoadingFalse = () => {
+    setLoading(false);
   };
 
   // Uploaded file text
@@ -100,6 +113,7 @@ const FileUpload = () => {
           uploaded_file={file}
           is_loading={is_loading}
           setLoadingTrue={setLoadingTrue}
+          setLoadingFalse={setLoadingFalse}
         />
       </div>
     </div>
