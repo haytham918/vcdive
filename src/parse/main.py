@@ -1,6 +1,7 @@
 # Backend for parsing
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_caching import Cache
 from werkzeug.exceptions import RequestEntityTooLarge
 import tempfile
 import os
@@ -9,6 +10,13 @@ import vcd_parser
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024
+cache_config = {
+    "DEBUG": True,
+    "CACHE_TYPE": "SimpleCache",
+    "CACHE_DEFAULT_TIMEOUT": 300,
+}
+app.config.from_mapping(cache_config)
+cache = Cache(app)
 CORS(app)
 
 UPLOAD_DIR = "./uploads"
@@ -22,6 +30,8 @@ def handle_file_too_large(e):
 
 """Endpoint: /parse
 -- Triggered by pressing the parse button with some content"""
+
+
 @app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
     if "file" not in request.files:

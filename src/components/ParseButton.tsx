@@ -5,7 +5,6 @@
 */
 import { useRouter } from "next/navigation";
 import { SpinnerGap } from "phosphor-react";
-import axios from "axios";
 const ParseButton: React.FC<{
   uploaded_file: File | null;
   is_loading: boolean; // is_loading state from above
@@ -31,7 +30,7 @@ const ParseButton: React.FC<{
       formData.append("file", uploaded_file);
 
       // Send entire file in one request
-      const response = await fetch("/backend/parse", {
+      const response = await fetch("/backend/parse/", {
         method: "POST",
         body: formData,
       });

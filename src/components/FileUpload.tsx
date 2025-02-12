@@ -96,6 +96,7 @@ const FileUpload = () => {
             ? "Drop the file here..."
             : "Drop or upload your .vcd file"}
         </p>
+        <p>(large file may not work with drop/upload)</p>
       </div>
 
       {uploaded_file_component}
