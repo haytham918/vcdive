@@ -4,13 +4,13 @@
 #include <pybind11/stl.h>
 #endif
 
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-
 #ifdef PYBIND
 namespace py = pybind11;
 #endif
@@ -45,10 +45,10 @@ class StringViewStream {
 // Convert binary to hex
 std::string bin2hex(const std::string_view binary_ascii) {
 	if (binary_ascii.find('x') != std::string_view::npos) {
-		return "x";
+		return "x\0";
 	}
 	if (binary_ascii.find('z') != std::string_view::npos) {
-		return "z";
+		return "z\0";
 	}
 
 	static constexpr char hex_table[] = "0123456789abcdef";
@@ -58,7 +58,7 @@ std::string bin2hex(const std::string_view binary_ascii) {
 	size_t padding = (remainder == 0) ? 0 : (4 - remainder);
 
 	std::string hex;
-	hex.reserve((length + padding) / 4);  // Pre-allocate exact size
+	hex.reserve((length + padding) / 4 + 1);  // Pre-allocate exact size
 
 	int value = 0;
 	int bit_count = 0;
@@ -77,7 +77,7 @@ std::string bin2hex(const std::string_view binary_ascii) {
 		}
 	}
 
-	return hex;
+	return hex + "\0";
 }
 
 class Parser {
@@ -97,10 +97,10 @@ class Parser {
 		if (row >= time_steps.size()) {
 			return {};
 		}
-		std::cout << row << std::endl;
 		std::unordered_map<std::string, std::string> result;
 		for (size_t i = 0; i < column_names.size(); i++) {
-			result[column_names[i]] = db[row * column_names.size() + i];
+			const char* ptr = db[row * column_names.size() + i];
+			result[column_names[i]] = (ptr) ? std::string(ptr) : std::string("");
 		}
 		return result;
 	}
@@ -116,7 +116,7 @@ class Parser {
    private:
 	std::fstream file_stream;
 	std::unordered_map<std::string, std::string> symbol_table;
-	std::vector<std::string_view> db;
+	std::vector<char*> db;
 	std::vector<std::unordered_map<std::string_view, std::string>> raw_data;
 	std::vector<std::string> column_names;
 	std::vector<int> time_steps;
@@ -216,14 +216,16 @@ class Parser {
 		for (size_t i = 0; i < raw_data.size(); ++i) {
 			if (i == 0) {
 				for (auto& [name, value] : raw_data[i]) {
-					db[i * symbol_table.size() + column_map[name]] = value;
+					db[i * symbol_table.size() + column_map.at(name)] = raw_data[i][name].data();
+					assert(db[i * symbol_table.size() + column_map[name]]);
 				}
 			} else {
 				for (size_t j = 0; j < raw_data[0].size(); ++j) {
 					db[i * symbol_table.size() + j] = db[(i - 1) * symbol_table.size() + j];
 				}
 				for (auto& [name, value] : raw_data[i]) {
-					db[i * symbol_table.size() + column_map[name]] = value;
+					db[i * symbol_table.size() + column_map.at(name)] = raw_data[i][name].data();
+					assert(db[i * symbol_table.size() + column_map.at(name)]);
 				}
 			}
 		}
