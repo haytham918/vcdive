@@ -22,54 +22,28 @@ const ParseButton: React.FC<{
     }
     setLoadingTrue();
 
-    const CHUNK_SIZE = 10 * 1024 * 1024;
-    let start = 0;
-    let part = 0;
-    const totalParts = Math.ceil(uploaded_file.size / CHUNK_SIZE);
+    // const CHUNK_SIZE = 10 * 1024 * 1024;
+    // let start = 0;
+    // let part = 0;
+    // const totalParts = Math.ceil(uploaded_file.size / CHUNK_SIZE);
     try {
-      while (start < uploaded_file.size) {
-        const chunk = uploaded_file.slice(start, start + CHUNK_SIZE);
-        const formData = new FormData();
-        formData.append("file", chunk);
-        formData.append("part", part.toString()); // Keep track of chunk number
-        formData.append("filename", uploaded_file.name);
+      const formData = new FormData();
+      formData.append("file", uploaded_file);
 
-        // If this is the last
-        if (part === totalParts - 1) {
-          formData.append("final", "true");
-        }
+      // Send entire file in one request
+      const response = await fetch("/backend/parse", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-        // Send chunk to the backend
-        const response = await axios.post("/backend/parse/", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-          timeout: 600000, // 5-minute timeout
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) /
-                (progressEvent.total || progressEvent.loaded)
-            );
-            console.log(`Chunk ${part} Upload Progress: ${percentCompleted}%`);
-          },
-        });
+      const result = await response.json();
+      console.log("Upload completed successfully:", result.data);
 
-        console.log(`Chunk ${part} uploaded successfully:`, response.data);
-
-        // Move to the next chunk
-        start += CHUNK_SIZE;
-        part += 1;
-      }
-
-      console.log("Upload completed. Processing file...");
       // TODO: Navigate to the debugger page
       // router.push("/debugger/");
     } catch (error: any) {
-      if (axios.isCancel(error)) {
-        console.warn("Upload canceled:", error.message);
-      } else if (error.response) {
-        console.error(`Error ${error.response.status}: ${error.response.data}`);
-      } else {
-        console.error("Upload failed:", error.message);
-      }
+      console.error("Failed: ", error.message);
     } finally {
       setLoadingFalse();
     }
