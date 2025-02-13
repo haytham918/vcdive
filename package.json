@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "pip install -r src/parse/requirements.txt && cd src/parse && python3 setup.py build_ext --inplace && cd ../../  && python3 -m flask --app src/parse/main run",
+    "install-dependencies": "pip install -r src/parse/requirements.txt",
+    "build-parser": "cd src/parse && python3 setup.py build_ext --inplace",
+    "start-flask": "cd src/parse && python3 -m flask --app main run",
+    "flask-dev": "pnpm install-dependencies && pnpm build-parser && pnpm start-flask",
     "next-dev": "next dev",
     "dev": "concurrently \"pnpm next-dev\" \"pnpm flask-dev\"",
     "build": "next build",

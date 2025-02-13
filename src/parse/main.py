@@ -19,8 +19,7 @@ app.config.from_mapping(cache_config)
 cache = Cache(app)
 CORS(app)
 
-UPLOAD_DIR = "./uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+parser = None
 
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -28,12 +27,11 @@ def handle_file_too_large(e):
     return jsonify(error="File uploaded is too large"), 413
 
 
-"""Endpoint: /parse
+"""Endpoint: /parse/
 -- Triggered by pressing the parse button with some content"""
-
-
 @app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
+    global parser
     if "file" not in request.files:
         return jsonify({"error": "No content provided"}), 400
 
@@ -47,24 +45,27 @@ def parse_vcd():
     try:
         # Process the VCD file
         parser = vcd_parser.VCDParser(temp_file_path)
-        row = parser.query_row(0)
-        print(row)
 
         # Clean up by deleting the temporary file
         os.remove(temp_file_path)
 
-        return jsonify({"data": row})
+        return jsonify({"file_name": file.name})
     except Exception as e:
         os.remove(temp_file_path)  # Ensure file is deleted even on failure
         return jsonify({"error": f"Parsing failed: {str(e)}"}), 500
 
 
-"""frontend /debugger calling /backend/(cycle_number)"""
-
-
-@app.route("/backend/(cycle_number)", methods=["GET"])
-def cycle_info():
-    pass
+"""frontend /debugger calling /backend/<pos/neg>/<cycle_number>/"""
+@app.route("/backend/<pos_neg>/<cycle_number>/", methods=["GET"])
+def cycle_info(pos_neg, cycle_number):
+    # Check if the parser is here
+    index = int(cycle_number) << 1 if pos_neg.lower(
+    ) == "pos" else int(cycle_number)
+    if parser:
+        result = parser.query_row(index)
+        return jsonify({"data": result})
+    else:
+        return jsonify({"error": "No avilable parser, needing reparse"}), 500
 
 
 if __name__ == "__main__":
