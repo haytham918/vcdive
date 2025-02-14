@@ -20,6 +20,9 @@ cache = Cache(app)
 CORS(app)
 
 parser = None
+file_name = None
+num_pos_cycles = None
+num_neg_cycles = None
 
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -32,6 +35,9 @@ def handle_file_too_large(e):
 @app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
     global parser
+    global file_name
+    global num_pos_cycles
+    global num_neg_cycles
     if "file" not in request.files:
         return jsonify({"error": "No content provided"}), 400
 
@@ -45,11 +51,14 @@ def parse_vcd():
     try:
         # Process the VCD file
         parser = vcd_parser.VCDParser(temp_file_path)
+        file_name = file.name
+        num_pos_cycles = parser.get_pos_cycle_numbers()
+        num_neg_cycles = parser.get_neg_cycle_numbers()
 
         # Clean up by deleting the temporary file
         os.remove(temp_file_path)
 
-        return jsonify({"file_name": file.name})
+        return jsonify({"file_name": file.name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
     except Exception as e:
         os.remove(temp_file_path)  # Ensure file is deleted even on failure
         return jsonify({"error": f"Parsing failed: {str(e)}"}), 500
