@@ -4,7 +4,7 @@
 
 /* Light Theme */
 :root {
-  --background: #ffffff; /* White */
+  --background: hsl(0, 0%, 95%); /* very light gray */
   --foreground: #1e1e1e; /* Dark Gray */
   --color-primary: #008080; /* Teal */
   --color-primary-hover: #006666; /* Darker Teal */

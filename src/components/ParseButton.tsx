@@ -44,12 +44,12 @@ const ParseButton: React.FC<{
     } catch (error: any) {
       console.error("Failed: ", error.message);
     } finally {
-      setLoadingFalse();
+     setLoadingFalse();
     }
   };
 
   return (
-    <button className="ml-auto btn btn-primary" onClick={handleButtonClick}>
+    <button className="ml-auto btn btn-primary" onClick={handleButtonClick} disabled={is_loading}>
       {!is_loading ? (
         <p className="w-[180px]">Parse VCD Contents</p>
       ) : (

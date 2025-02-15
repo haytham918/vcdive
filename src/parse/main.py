@@ -6,6 +6,7 @@ import tempfile
 import os
 import sys
 import vcd_parser
+from connect_caen import debug_vcd_on_caen
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024
@@ -22,12 +23,34 @@ def handle_file_too_large(e):
     return jsonify(error="File uploaded is too large"), 413
 
 
-"""Endpoint: /parse/
--- Triggered by pressing the parse button with some content"""
+@app.route("/backend/caen/", methods=["POST"])
+def parse_vcd_on_cane():
+    """
+    Frontend specify the filename on CAEN and click the button
+    Call debug_on_caen method
+
+    REMEMBER: set your environmental variable for your SSH_CAEN_PASSWORD
+    REMEMBER: change with your uniqname, and the directory to the repo that includes "vcd" directory (ending with /)
+    """
+    try:
+        data = request.get_json()
+        if not data or "file_name" not in data:
+            return jsonify({"error": "No data or file_name being sent"}), 400
+        caen_file_name = data['file_name']
+        debug_vcd_on_caen("yunxuant", "~/eecs470/test_shit/", caen_file_name)
+        return jsonify({"message": "Works succesfully on CAEN"})  # It works
+    except Exception as e:  # Some error happens
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
+    """
+    Endpoint: /parse/
+    -- Triggered by:
+        -- pressing the parse button with some content
+        -- pressing the utton to work on CAEN
+    """
     global parser
     global file_name
     global num_pos_cycles
@@ -58,15 +81,13 @@ def parse_vcd():
         return jsonify({"error": f"Parsing failed: {str(e)}"}), 500
 
 
-"""
-This is the endpoint when the front-end loads the /debugger page
-It will try to fetch metadata about the file (if available on python)
-This is useful if we forward from ssh, and then directly navigate to the page
-"""
-
-
 @app.route("/backend/file_metadata", methods=["GET"])
 def get_metadata():
+    """
+    This is the endpoint when the front-end loads the /debugger page
+    It will try to fetch metadata about the file (if available on python)
+    This is useful if we forward from ssh, and then directly navigate to the page
+    """
     # If there is file_name available, we have parsed something
     if (file_name):
         return jsonify({"file_name": file_name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
@@ -74,11 +95,13 @@ def get_metadata():
         return jsonify({"error": "No available parsed file"}), 500
 
 
-"""frontend /debugger calling /backend/<pos/neg>/<cycle_number>/"""
-
-
 @app.route("/backend/<pos_neg>/<cycle_number>/", methods=["GET"])
 def cycle_info(pos_neg, cycle_number):
+    """
+    Frontend /debugger calling /backend/<pos/neg>/<cycle_number>/
+    pos_neg: pos => only positive cycles, neg => all cycles including neg
+    cycle_number: the relative cycle number we fetching information from
+    """
     # Check if the parser is here
     index = int(cycle_number) << 1 if pos_neg.lower(
     ) == "pos" else int(cycle_number)

@@ -20,11 +20,13 @@ const Home = () => {
     </header>
     <main>
     <div className="home">
-      <div className="home-container">
+        <div className="title">
         <h1 className="binary-flip" data-text="VCDive">
           000000
         </h1>
-        <h3 className="text-2xl">Visual Debugger for VCD</h3>
+        <h3 className="text-3xl font-bold">Visual Debugger for VCD</h3>
+        </div>
+      <div className="home-container">
         <FileUpload />
       </div>
     </div>

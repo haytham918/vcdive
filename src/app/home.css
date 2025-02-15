@@ -6,6 +6,14 @@
   height: 100%;
 }
 
+.title{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
 .home-container {
   padding: 5rem;
   border: 2px solid;

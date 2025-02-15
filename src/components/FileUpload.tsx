@@ -82,6 +82,7 @@ const FileUpload = () => {
 
   return (
     <div className="w-[85%] p-2 gap-y-2 flex-col flex">
+      <h2 className="text-2xl text-center font-bold">Manually upload a file</h2>
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-12 rounded-lg text-center text-black cursor-pointer bg-dropzone-bg border-dropzone-bd transition-colors ${
