@@ -28,6 +28,9 @@
 
   --triangle-color: #888888; /* Light mode triangle */
 
+  --button-nonselect-background: #888888;
+  --button-nonselect-hover: rgb(189, 200, 217);
+
   --box-shadow-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -52,6 +55,13 @@
 
     --entry-bg-color: #4b5563; /* Dark mode entry */
     --triangle-color: #a0aec0; /* Dark mode triangle */
+
+    --button-nonselect-background: #4b5563; /* When button not selected */
+    --button-nonselect-hover: rgb(
+      32,
+      39,
+      47
+    ); /* When button not selected hover */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
   }
 }
@@ -79,6 +89,12 @@
   --entry-bg-color: #3b4c5d; /* Dark mode entry */
   --triangle-color: #a0aec0; /* Dark mode triangle */
 
+  --button-nonselect-background: #4b5563; /* When button not selected */
+  --button-nonselect-hover: rgb(
+    32,
+    39,
+    47
+  ); /* When not selected button hover */
   --box-shadow-color: rgba(255, 255, 255, 0.2);
 }
 

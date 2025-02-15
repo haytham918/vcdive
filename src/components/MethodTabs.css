@@ -1,0 +1,19 @@
+.tabs-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 0.1rem;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.1rem;
+  align-item: center;
+  justify-content: center;
+}
+
+.btn-nonselect {
+  background: var(--button-nonselect-background);
+}
+
+.btn-nonselect:hover {
+  background: var(--button-nonselect-hover);
+}
