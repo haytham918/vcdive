@@ -1,7 +1,8 @@
 "use client";
 
-import RegisterFile from "@/components/RegisterFile";
-import Section from "@/components/Section";
+import DebuggerHeader from "@/components/DebuggerHeader";
+import Section from "@/components/processor_components/Section";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useEffect, useState } from "react";
 /*
 
@@ -19,7 +20,10 @@ const DebuggerPage = () => {
   const fetch_file_metada = async () => {
     const response = await fetch("/backend/file_metadata/", { method: "GET" });
     // Fail to get result
-    if (!response.ok) return;
+    if (!response.ok) {
+      console.log("Failed Fetching Metadata");
+      return;
+    }
 
     const fetched_metadata = await response.json();
     console.log("FETCHED META", fetched_metadata);
@@ -38,7 +42,10 @@ const DebuggerPage = () => {
         method: "GET",
       });
 
-      if (!response.ok) return;
+      if (!response.ok) {
+        console.log("Fetching Cycle info");
+        return;
+      }
 
       const data = await response.json();
       console.log("FETCHED CYCLE DATA: ", data);
@@ -55,7 +62,17 @@ const DebuggerPage = () => {
     fetch_cycle_info();
   }, [include_neg, cur_cycle]);
 
-  return <Section />;
+  return (
+    <>
+      <header>
+        <DebuggerHeader />
+        <ThemeToggle />
+      </header>
+      <main>
+        <Section />
+      </main>
+    </>
+  );
 };
 
 export default DebuggerPage;

@@ -9,10 +9,16 @@
     -- Reset Button & Upload Buton
 */
 
-import "@/app/(home)/home.css";
+import "@/app/home.css";
 import FileUpload from "@/components/FileUpload";
+import ThemeToggle from "@/components/ThemeToggle";
 const Home = () => {
   return (
+    <>
+    <header>
+        <ThemeToggle />
+    </header>
+    <main>
     <div className="home">
       <div className="home-container">
         <h1 className="binary-flip" data-text="VCDive">
@@ -22,6 +28,8 @@ const Home = () => {
         <FileUpload />
       </div>
     </div>
+    </main>
+    </>
   );
 };
 

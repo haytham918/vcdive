@@ -1,7 +1,6 @@
 # Backend for parsing
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_caching import Cache
 from werkzeug.exceptions import RequestEntityTooLarge
 import tempfile
 import os
@@ -10,13 +9,6 @@ import vcd_parser
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024
-cache_config = {
-    "DEBUG": True,
-    "CACHE_TYPE": "SimpleCache",
-    "CACHE_DEFAULT_TIMEOUT": 300,
-}
-app.config.from_mapping(cache_config)
-cache = Cache(app)
 CORS(app)
 
 parser = None
@@ -32,6 +24,8 @@ def handle_file_too_large(e):
 
 """Endpoint: /parse/
 -- Triggered by pressing the parse button with some content"""
+
+
 @app.route("/backend/parse/", methods=["POST"])
 def parse_vcd():
     global parser
@@ -51,20 +45,38 @@ def parse_vcd():
     try:
         # Process the VCD file
         parser = vcd_parser.VCDParser(temp_file_path)
-        file_name = file.name
+        file_name = file.filename
         num_pos_cycles = parser.get_pos_cycle_numbers()
         num_neg_cycles = parser.get_neg_cycle_numbers()
 
         # Clean up by deleting the temporary file
         os.remove(temp_file_path)
 
-        return jsonify({"file_name": file.name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
+        return jsonify({"file_name": file_name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
     except Exception as e:
         os.remove(temp_file_path)  # Ensure file is deleted even on failure
         return jsonify({"error": f"Parsing failed: {str(e)}"}), 500
 
 
+"""
+This is the endpoint when the front-end loads the /debugger page
+It will try to fetch metadata about the file (if available on python)
+This is useful if we forward from ssh, and then directly navigate to the page
+"""
+
+
+@app.route("/backend/file_metadata", methods=["GET"])
+def get_metadata():
+    # If there is file_name available, we have parsed something
+    if (file_name):
+        return jsonify({"file_name": file_name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
+    else:
+        return jsonify({"error": "No available parsed file"}), 500
+
+
 """frontend /debugger calling /backend/<pos/neg>/<cycle_number>/"""
+
+
 @app.route("/backend/<pos_neg>/<cycle_number>/", methods=["GET"])
 def cycle_info(pos_neg, cycle_number):
     # Check if the parser is here

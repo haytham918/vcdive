@@ -2,3 +2,4 @@ flask
 flask-cors
 pybind11==2.13.6
 setuptools==75.8.0
+pexpect
