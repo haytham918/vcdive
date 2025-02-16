@@ -5,6 +5,7 @@ import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
 import { tree } from "next/dist/build/templates/app-page";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 /*
 
     Page for the /debugger
@@ -22,7 +23,7 @@ const DebuggerPage = () => {
     const response = await fetch("/backend/file_metadata/", { method: "GET" });
     // Fail to get result
     if (!response.ok) {
-      console.log("Failed Fetching Metadata");
+      toast.error("Failed Fetching Metadata");
       return;
     }
 
@@ -44,7 +45,7 @@ const DebuggerPage = () => {
       });
 
       if (!response.ok) {
-        console.log("FAILED Fetching Cycle info");
+        toast.error("FAILED Fetching Cycle info");
         return;
       }
 
@@ -72,6 +73,25 @@ const DebuggerPage = () => {
       <main>
         <Section />
       </main>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            color: "dark-gray",
+            fontWeight: "bold",
+          },
+          success: {
+            style: {
+              background: "beige",
+            },
+          },
+          error: {
+            style: {
+              background: "beige",
+            },
+          },
+        }}
+      />
     </>
   );
 };

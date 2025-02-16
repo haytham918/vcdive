@@ -6,6 +6,7 @@
 import { useRouter } from "next/navigation";
 import { SpinnerGap } from "phosphor-react";
 import { Method } from "@/app/page";
+import toast, { Toaster } from "react-hot-toast";
 const ParseButton: React.FC<{
   method: Method;
   uploaded_file: File | null;
@@ -18,7 +19,7 @@ const ParseButton: React.FC<{
   const handleButtonClickUpload = async () => {
     // Check if the file is empty
     if (!uploaded_file) {
-      alert("Nothing to parse. Check your input");
+      toast.error(`Nothing to parse\n`);
       return;
     }
     loadingHandler(true);
@@ -32,10 +33,13 @@ const ParseButton: React.FC<{
         body: formData,
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(`Error: ${result.error}`);
+      if (!response.ok) {
+        toast.error(`Parsing Failed\n${result.error}`);
+        throw new Error(`Error: ${result.error}`);
+      }
 
       console.log("Upload completed successfully:", result.data);
-
+      toast.success("Parsed Successfully");
       router.push("/debugger/");
     } catch (error: any) {
       console.error("Failed: ", error.message);
@@ -48,7 +52,7 @@ const ParseButton: React.FC<{
   const handleButtonClickCaen = async () => {
     // Check if the filename is empty
     if (file_name === "") {
-      alert("You need to specify the filename");
+      toast.error("No file name");
       return;
     }
     loadingHandler(true);
@@ -64,9 +68,13 @@ const ParseButton: React.FC<{
 
       // Wait for the backend
       const result = await response.json();
-      if (!response.ok) throw new Error(`Error: ${result.error}`);
+      if (!response.ok) {
+        toast.error(`Parsing Failed\n${result.error}`);
+        throw new Error(`Error: ${result.error}`);
+      }
 
       console.log(result.message);
+      toast.success("Parsed Successfully");
       router.push("/debugger/");
     } catch (error: any) {
       console.log("FAILED: ", error.message);
@@ -79,7 +87,7 @@ const ParseButton: React.FC<{
   const handleButtonClickLocal = async () => {
     // Check if the filename is empty
     if (file_name === "") {
-      alert("You need to specify the filename");
+      toast.error("No file name");
       return;
     }
     loadingHandler(true);
@@ -95,9 +103,13 @@ const ParseButton: React.FC<{
 
       // Wait for the backend
       const result = await response.json();
-      if (!response.ok) throw new Error(`Error: ${result.error}`);
+      if (!response.ok) {
+        toast.error(`Parsing Failed\n${result.error}`);
+        throw new Error(`Error: ${result.error}`);
+      }
 
       console.log("Local Successful");
+      toast.success("Parsed Successfully");
       router.push("/debugger/");
     } catch (error: any) {
       console.log("FAILED: ", error.message);
@@ -116,21 +128,42 @@ const ParseButton: React.FC<{
   }
 
   return (
-    <button
-      className="ml-auto btn btn-primary"
-      onClick={handleButtonClick}
-      disabled={is_loading}
-    >
-      {!is_loading ? (
-        <p className="w-[180px]">Parse VCD Contents</p>
-      ) : (
-        <SpinnerGap
-          size={25}
-          weight="bold"
-          className="w-[180px] animate-spin"
-        />
-      )}
-    </button>
+    <>
+      <button
+        className="ml-auto btn btn-primary"
+        onClick={handleButtonClick}
+        disabled={is_loading}
+      >
+        {!is_loading ? (
+          <p className="w-[180px]">Parse VCD Contents</p>
+        ) : (
+          <SpinnerGap
+            size={25}
+            weight="bold"
+            className="w-[180px] animate-spin"
+          />
+        )}
+      </button>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            color: "dark-gray",
+            fontWeight: "bold",
+          },
+          success: {
+            style: {
+              background: "beige",
+            },
+          },
+          error: {
+            style: {
+              background: "beige",
+            },
+          },
+        }}
+      />
+    </>
   );
 };
 

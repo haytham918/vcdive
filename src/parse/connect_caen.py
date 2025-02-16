@@ -88,15 +88,22 @@ def ssh_caen_with_duo(username: str, remote_commands: str) -> None:
             cmd_timeout = 60  # Set longer timeout for the curl command
 
         idx_command = child.expect([
-            r'(\$|#|%|>)\s',
-            pexpect.EOF,
-            pexpect.TIMEOUT
+            r'(\$|#|%|>)\s',               # 0 => Command prompt
+            r"Warning: setting file .* failed!",  # 1 => Specific error pattern
+            # 2 => Another error pattern
+            r"curl: \(26\) read function returned funny value",
+            pexpect.EOF,                  # 3
+            pexpect.TIMEOUT               # 4
         ], timeout=cmd_timeout)
 
-        if idx_command != 0:
-            # Command fails
+        if idx_command in [1, 2]:
+            # We matched an error message
             raise RuntimeError(
-                f"Error or timeout waiting for command '{cmd}' output.")
+                f"Error: '{cmd}'")
+
+        elif idx_command in [3, 4]:
+            # EOF or TIMEOUT
+            raise RuntimeError(f"Command '{cmd}' failed with EOF or TIMEOUT.")
 
     # Remember to exit
     child.sendline("exit")
