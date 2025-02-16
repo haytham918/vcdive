@@ -12,10 +12,13 @@ import { useState, useCallback } from "react";
 import ParseButton from "./ParseButton";
 
 // This is the drop-upload box using react-dropzone
-const FileUpload = () => {
+const FileUpload: React.FC<{
+  file_name: string;
+  is_loading: boolean;
+  loadingHandler: (loading_val: boolean) => void;
+  fileNameHandler: (str: string) => void;
+}> = ({ file_name, is_loading, loadingHandler, fileNameHandler }) => {
   const [file, setFile] = useState<File | null>(null);
-  const [file_name, setFileName] = useState("");
-  const [is_loading, setLoading] = useState(false);
 
   // Read in the file
   const onDrop = useCallback((accepted_file: File[]) => {
@@ -28,7 +31,7 @@ const FileUpload = () => {
       //   console.log(text)
       // }
       // reader.readAsText(uploaded_file)
-      setFileName(uploaded_file.name);
+      fileNameHandler(uploaded_file.name);
 
       setFile(uploaded_file);
     }
@@ -56,17 +59,7 @@ const FileUpload = () => {
   // For reset button
   const handleReset = () => {
     setFile(null);
-    setFileName("");
-  };
-
-  // Set Loading Icon
-  const setLoadingTrue = () => {
-    setLoading(true);
-  };
-
-  // Unset loading icon
-  const setLoadingFalse = () => {
-    setLoading(false);
+    fileNameHandler("");
   };
 
   // Uploaded file text
@@ -82,7 +75,7 @@ const FileUpload = () => {
 
   return (
     <div className="w-[85%] p-2 gap-y-2 flex-col flex">
-      <h2 className="text-2xl text-center font-bold">Manually upload a file</h2>
+      <h2 className="text-2xl text-center font-bold">Manually Upload a File</h2>
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-12 rounded-lg text-center text-black cursor-pointer bg-dropzone-bg border-dropzone-bd transition-colors ${
@@ -112,10 +105,11 @@ const FileUpload = () => {
         </button>
         {/* Parse Button */}
         <ParseButton
+          method="drop"
           uploaded_file={file}
+          file_name={file_name}
           is_loading={is_loading}
-          setLoadingTrue={setLoadingTrue}
-          setLoadingFalse={setLoadingFalse}
+          loadingHandler={loadingHandler}
         />
       </div>
     </div>

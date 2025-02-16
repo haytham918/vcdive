@@ -50,7 +50,7 @@
 
     --dropzone-background: #374151; /* Dark Gray */
     --dropzone-border: #4b5563; /* Medium Gray */
-    --textarea-background: #1f2937; /* Darker Gray */
+    --textarea-background: rgba(99, 113, 127, 0.76); /* Darker Gray */
     --textarea-border: #4b5563; /* Medium Gray */
 
     --entry-bg-color: #4b5563; /* Dark mode entry */
@@ -81,7 +81,7 @@
 
   --dropzone-background: #374151; /* Dark Gray */
   --dropzone-border: #4b5563; /* Medium Gray */
-  --textarea-background: #1f2937; /* Darker Gray */
+  --textarea-background: rgba(99, 113, 127, 0.76); /* Darker Gray */
   --textarea-border: #4b5563; /* Medium Gray */
 
   --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */

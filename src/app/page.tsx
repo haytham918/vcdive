@@ -10,6 +10,8 @@
 */
 "use client";
 import "@/app/home.css";
+import FileCaen from "@/components/FileCaen";
+import FileLocal from "@/components/FileLocal";
 import FileUpload from "@/components/FileUpload";
 import MethodTabs from "@/components/MethodTabs";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -33,10 +35,53 @@ const Home = () => {
   // State variable for the chosen method
   const [chosen_method, setChosenMethod] = useState<Method>("drop");
 
+  // File related state variables
+  const [file_name, setFileName] = useState("");
+  const [is_loading, setLoading] = useState(false);
+
+  const fileNameHandler = (str: string) => {
+    setFileName(str);
+  };
+
+  // Set Loadin Icon
+  const loadingHandler = (loading_val: boolean) => {
+    setLoading(loading_val);
+  };
+
   // Button clock handler
   const chosen_method_handler = (method: Method) => {
     setChosenMethod(method);
   };
+
+  let file_component; // Main layout depending on the file method
+  if (chosen_method === "drop") {
+    file_component = (
+      <FileUpload
+        file_name={file_name}
+        is_loading={is_loading}
+        loadingHandler={loadingHandler}
+        fileNameHandler={fileNameHandler}
+      />
+    );
+  } else if (chosen_method === "caen") {
+    file_component = (
+      <FileCaen
+        file_name={file_name}
+        is_loading={is_loading}
+        loadingHandler={loadingHandler}
+        fileNameHandler={fileNameHandler}
+      />
+    );
+  } else {
+    file_component = (
+      <FileLocal
+        file_name={file_name}
+        is_loading={is_loading}
+        loadingHandler={loadingHandler}
+        fileNameHandler={fileNameHandler}
+      />
+    );
+  }
   return (
     <>
       <header>
@@ -56,7 +101,7 @@ const Home = () => {
               chosen_method={chosen_method}
               chosen_method_handler={chosen_method_handler}
             />
-            <FileUpload />
+            {file_component}
           </div>
         </div>
       </main>

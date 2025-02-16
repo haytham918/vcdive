@@ -59,6 +59,10 @@ def parse_vcd():
         return jsonify({"error": "No content provided"}), 400
 
     file = request.files["file"]
+    # If the same file has been parsed
+    if file.filename == file_name:
+        print("SAME", file=sys.stderr)
+        return jsonify({"file_name": file_name, "num_pos_cycles": num_pos_cycles, "num_neg_cycles": num_neg_cycles})
 
     # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
