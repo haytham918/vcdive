@@ -6,15 +6,25 @@
 ## Getting Started
 
 **Make sure you have `node` and `pnpm` installed**  
-Install packages and run the development server:
+Install packages:
 
 ```bash
 pnpm install
-pip install -r src/parse/requirements.txt
+```
+
+Run the develpment server:
+```bash
 pnpm dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## How to use CAEN Fowarding
+
+1. **Make sure you are on U-M Wifi or VPN**
+2. Update `src/parse/main.py:debug_vcd_on_caen()` with your **uniqname** and **parent directory containing /vcd/**
+3. Set **SSH_CAEN_PASSWORD** in environmental variable with your U-M Password
+4. Be ready for a DUO push
 
 ## Acknoledgement
 We get our inspiration from [Deric Dinu Danel's visual debugger](https://github.com/dericdinudaniel/eecs470-p4-gui-debugger.git). We appreciate him sharing his work with us and explaining some workflow. 
