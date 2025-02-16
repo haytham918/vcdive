@@ -31,13 +31,12 @@ const ParseButton: React.FC<{
         method: "POST",
         body: formData,
       });
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-
       const result = await response.json();
+      if (!response.ok) throw new Error(`Error: ${result.error}`);
+
       console.log("Upload completed successfully:", result.data);
 
-      // TODO: Navigate to the debugger page
-      // router.push("/debugger/");
+      router.push("/debugger/");
     } catch (error: any) {
       console.error("Failed: ", error.message);
     } finally {
@@ -58,13 +57,17 @@ const ParseButton: React.FC<{
       const response = await fetch("/backend/caen/", {
         method: "POST",
         body: JSON.stringify({ file_name: file_name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       // Wait for the backend
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-
       const result = await response.json();
+      if (!response.ok) throw new Error(`Error: ${result.error}`);
+
       console.log(result.message);
+      router.push("/debugger/");
     } catch (error: any) {
       console.log("FAILED: ", error.message);
     } finally {
@@ -85,13 +88,17 @@ const ParseButton: React.FC<{
       const response = await fetch("/backend/local/", {
         method: "POST",
         body: JSON.stringify({ file_name: file_name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       // Wait for the backend
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-
       const result = await response.json();
-      console.log(result.message);
+      if (!response.ok) throw new Error(`Error: ${result.error}`);
+
+      console.log("Local Successful");
+      router.push("/debugger/");
     } catch (error: any) {
       console.log("FAILED: ", error.message);
     } finally {

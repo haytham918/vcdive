@@ -3,6 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
+import { tree } from "next/dist/build/templates/app-page";
 import { useEffect, useState } from "react";
 /*
 
@@ -11,9 +12,9 @@ import { useEffect, useState } from "react";
 */
 const DebuggerPage = () => {
   const [file_name, setFileName] = useState(""); // File Name for current parsed file
-  const [include_neg, setIncludeNeg] = useState(false); // Whether include neg edge
-  const [num_pos_cycles, setNumPosCycles] = useState(0); // Number of positive cycles
-  const [num_neg_cycles, setNumNegCycles] = useState(0); // Number of all cycles
+  const [include_neg, setIncludeNeg] = useState(true); // Whether include neg edge
+  const [num_pos_clocks, setNumPosClocks] = useState(0); // Number of positive clocks
+  const [num_neg_clocks, setNumNegClocks] = useState(0); // Number of all clocks
   const [cur_cycle, setCurCycle] = useState(0);
 
   // Async function to fetch the metadata about the current parsed file
@@ -28,8 +29,8 @@ const DebuggerPage = () => {
     const fetched_metadata = await response.json();
     console.log("FETCHED META", fetched_metadata);
     setFileName(fetched_metadata["file_name"]);
-    setNumPosCycles(fetched_metadata["num_pos_cycles"]);
-    setNumNegCycles(fetched_metadata["num_neg_cycles"]);
+    setNumPosClocks(fetched_metadata["num_pos_clocks"]);
+    setNumNegClocks(fetched_metadata["num_neg_clocks"]);
   };
 
   // Fetch parsed information about this cycle
@@ -43,7 +44,7 @@ const DebuggerPage = () => {
       });
 
       if (!response.ok) {
-        console.log("Fetching Cycle info");
+        console.log("FAILED Fetching Cycle info");
         return;
       }
 
@@ -60,7 +61,7 @@ const DebuggerPage = () => {
   // use effect to fetch cycle info whenever the include_neg or cur_cycle changes
   useEffect(() => {
     fetch_cycle_info();
-  }, [include_neg, cur_cycle]);
+  }, [include_neg, cur_cycle, file_name]);
 
   return (
     <>

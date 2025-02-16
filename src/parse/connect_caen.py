@@ -65,6 +65,7 @@ def ssh_caen_with_duo(username: str, remote_commands: str) -> None:
             handle_duo(child)
         elif idx_password == 1:
             print("CHECK YOUR SSH PASSWORD BUDDY", file=sys.stderr)
+            raise RuntimeError("PASSWORD Incorrect")
         else:
             raise RuntimeError(
                 "EOF or TIMEOUT: DUO prompt doesn't appear after password")

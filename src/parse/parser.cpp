@@ -200,10 +200,17 @@ class Parser {
 		std::string line;
 		while (std::getline(file_stream, line)) {
 			if (line.starts_with("#")) {
-				time_steps.push_back(std::stoi(line.substr(1)));
-				raw_data.emplace_back();
+				int t = std::stoi(line.substr(1));
+				// Ignore the #0
+				if (t != 0) {
+					time_steps.push_back(t);
+					raw_data.emplace_back();
+				}
 			} else {
-				parse_data_line(line);
+				// Only parse data line when time_steps is not empty (after #0)
+				if (!time_steps.empty()) {
+					parse_data_line(line);
+				}
 			}
 		}
 	}
