@@ -17,10 +17,6 @@ const NSItems: NSOption[] = [
 const NSToggle = () => {
   const [selected_number_sys, setNumberSys] = useState<NumberSystem>("0x");
 
-  const handleClick = (val: NumberSystem) => {
-    setNumberSys(val);
-  };
-
   return (
     <Menu
       as="div"

@@ -3,8 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
-import { tree } from "next/dist/build/templates/app-page";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*
 
@@ -18,6 +17,15 @@ const DebuggerPage = () => {
   const [num_neg_clocks, setNumNegClocks] = useState(0); // Number of all clocks
   const [cur_cycle, setCurCycle] = useState(0);
 
+  // The max cycle index based on including neg edges or not
+  const end_cycle_index = include_neg ? num_neg_clocks - 1 : num_pos_clocks - 1;
+
+  // Handler function to set the current cycle
+  const cycleHandler = useCallback((cycle: number) => {
+    setCurCycle(cycle);
+  }, []);
+
+  console.log("Current cycle is", cur_cycle);
   // Async function to fetch the metadata about the current parsed file
   const fetch_file_metada = async () => {
     const response = await fetch("/backend/file_metadata/", { method: "GET" });
@@ -67,7 +75,11 @@ const DebuggerPage = () => {
   return (
     <>
       <header>
-        <DebuggerHeader />
+        <DebuggerHeader
+          cur_cycle={cur_cycle}
+          end_cycle_index={end_cycle_index}
+          cycleHandler={cycleHandler}
+        />
         <ThemeToggle />
       </header>
       <main>

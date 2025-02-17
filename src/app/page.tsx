@@ -16,7 +16,7 @@ import FileUpload from "@/components/FileUpload";
 import MethodTabs from "@/components/MethodTabs";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Upload, FileCloud, Files } from "phosphor-react";
-import { useState, JSX } from "react";
+import { useState, JSX, useCallback } from "react";
 
 // Methods for sending the file
 export type Method = "drop" | "caen" | "local";
@@ -41,24 +41,24 @@ const Home = () => {
   const [is_loading, setLoading] = useState(false);
 
   // Set file name on CAEN or Local
-  const fileNameHandler = (str: string) => {
+  const fileNameHandler = useCallback((str: string) => {
     setFileName(str);
-  };
+  }, []);
 
   // Set file name for Upload
-  const uploadedFileNameHandler = (str: string) => {
+  const uploadedFileNameHandler = useCallback((str: string) => {
     setUploadedFileName(str);
-  };
+  }, []);
 
   // Set Loadin Icon
-  const loadingHandler = (loading_val: boolean) => {
+  const loadingHandler = useCallback((loading_val: boolean) => {
     setLoading(loading_val);
-  };
+  }, []);
 
   // Button clock handler
-  const chosen_method_handler = (method: Method) => {
+  const chosen_method_handler = useCallback((method: Method) => {
     setChosenMethod(method);
-  };
+  }, []);
 
   let file_component; // Main layout depending on the file method
   if (chosen_method === "drop") {

@@ -4,9 +4,10 @@
     Main Page button to parse vcd contents
 */
 import { useRouter } from "next/navigation";
-import { SpinnerGap } from "phosphor-react";
+import { SpinnerGap, KeyReturn } from "phosphor-react";
 import { Method } from "@/app/page";
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
 const ParseButton: React.FC<{
   method: Method;
   uploaded_file: File | null;
@@ -133,6 +134,20 @@ const ParseButton: React.FC<{
     handleButtonClick = handleButtonClickLocal;
   }
 
+  // Keyboard for enter
+  useEffect(() => {
+    const handlePressEnter = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleButtonClick();
+      }
+    };
+
+    window.addEventListener("keydown", handlePressEnter);
+    return () => {
+      window.removeEventListener("keydown", handlePressEnter);
+    };
+  }, [handleButtonClick]);
+
   return (
     <>
       <button
@@ -141,7 +156,14 @@ const ParseButton: React.FC<{
         disabled={is_loading}
       >
         {!is_loading ? (
-          <p className="w-[180px]">Parse VCD Contents</p>
+          <p className="w-[180px]">
+            Parse VCD Contents{" "}
+            <KeyReturn
+              style={{ justifySelf: "center" }}
+              weight="bold"
+              size={25}
+            />
+          </p>
         ) : (
           <SpinnerGap
             size={25}

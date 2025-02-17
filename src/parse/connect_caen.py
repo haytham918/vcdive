@@ -50,7 +50,7 @@ def ssh_caen_with_duo(username: str, remote_commands: str) -> None:
 
     if idx == 0:
         # Need to send the password
-        print("NEED TO SEND FUCKING PASSWORD", file=sys.stderr)
+        print("NEED TO SEND PASSWORD", file=sys.stderr)
         child.sendline(ssh_password)
         idx_password = child.expect([
             r'Duo two-factor login*',

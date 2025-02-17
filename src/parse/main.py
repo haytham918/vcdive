@@ -37,7 +37,6 @@ def parse_vcd_on_cane():
         if not data or "file_name" not in data:
             return jsonify({"error": "No data or file_name being sent"}), 400
         caen_file_name = data['file_name']
-        print("HELLO", file=sys.stderr)
         debug_vcd_on_caen(
             "yunxuant", "~/eecs470/p4-w25.group11/", caen_file_name)
         return jsonify({"message": "Works succesfully on CAEN"})  # It works
@@ -58,7 +57,6 @@ def parse_vcd_from_local():
     global num_neg_clocks
     try:
         data = request.get_json()
-        print(data, file=sys.stderr)
         # Check if data is sent and there is file_name
         if not data or "file_name" not in data:
             return jsonify({"error": "No data or file_name"}), 400
