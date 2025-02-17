@@ -38,7 +38,8 @@ def parse_vcd_on_cane():
             return jsonify({"error": "No data or file_name being sent"}), 400
         caen_file_name = data['file_name']
         print("HELLO", file=sys.stderr)
-        debug_vcd_on_caen("yunxuant", "~/eecs470/test_shit/", caen_file_name)
+        debug_vcd_on_caen(
+            "yunxuant", "~/eecs470/p4-w25.group11/", caen_file_name)
         return jsonify({"message": "Works succesfully on CAEN"})  # It works
     except Exception as e:  # Some error happens
         return jsonify({"error": str(e)}), 500
@@ -75,8 +76,8 @@ def parse_vcd_from_local():
         if file_name != data["file_name"]:
             file_name = data["file_name"]
             parser = vcd_parser.VCDParser(file_path)
-            num_pos_clocks = parser.get_pos_cycle_numbers()
-            num_neg_clocks = parser.get_neg_cycle_numbers()
+            num_pos_clocks = parser.get_pos_clock_numbers()
+            num_neg_clocks = parser.get_neg_clock_numbers()
 
         return jsonify({"file_name": file_name, "num_pos_clocks": num_pos_clocks, "num_neg_clocks": num_neg_clocks})
     except Exception as e:
@@ -112,8 +113,8 @@ def parse_vcd():
         # Process the VCD file
         parser = vcd_parser.VCDParser(temp_file_path)
         file_name = file.filename
-        num_pos_clocks = parser.get_pos_cycle_numbers()
-        num_neg_clocks = parser.get_neg_cycle_numbers()
+        num_pos_clocks = parser.get_pos_clock_numbers()
+        num_neg_clocks = parser.get_neg_clock_numbers()
 
         # Clean up by deleting the temporary file
         os.remove(temp_file_path)

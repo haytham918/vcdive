@@ -114,7 +114,7 @@ def debug_vcd_on_caen(username: str, directory_name: str, file_name: str) -> Non
     """
     username: Your uniqname
     direcotry_name: the path to your parent repo of vcd, ending with /
-        -- eg. "~/eecs470/test_shit/"
+        -- eg. "~/eecs470/p4-w25.group11/"
     filename: actual file
     """
     cd_command = f"cd {directory_name}vcd/"
@@ -124,4 +124,4 @@ def debug_vcd_on_caen(username: str, directory_name: str, file_name: str) -> Non
 
 
 if __name__ == "__main__":
-    debug_vcd_on_caen("yunxuant", "~/eecs470/test_shit/", "uart.vcd")
+    debug_vcd_on_caen("yunxuant", "~/eecs470/p4-w25.group11/", "uart.vcd")

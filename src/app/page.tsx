@@ -37,10 +37,17 @@ const Home = () => {
 
   // File related state variables
   const [file_name, setFileName] = useState("");
+  const [uploaded_file_name, setUploadedFileName] = useState("");
   const [is_loading, setLoading] = useState(false);
 
+  // Set file name on CAEN or Local
   const fileNameHandler = (str: string) => {
     setFileName(str);
+  };
+
+  // Set file name for Upload
+  const uploadedFileNameHandler = (str: string) => {
+    setUploadedFileName(str);
   };
 
   // Set Loadin Icon
@@ -57,10 +64,10 @@ const Home = () => {
   if (chosen_method === "drop") {
     file_component = (
       <FileUpload
-        file_name={file_name}
+        file_name={uploaded_file_name}
         is_loading={is_loading}
         loadingHandler={loadingHandler}
-        fileNameHandler={fileNameHandler}
+        fileNameHandler={uploadedFileNameHandler}
       />
     );
   } else if (chosen_method === "caen") {

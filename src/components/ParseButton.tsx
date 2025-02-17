@@ -54,6 +54,9 @@ const ParseButton: React.FC<{
     if (file_name === "") {
       toast.error("No file name");
       return;
+    } else if (!file_name.endsWith(".vcd")) {
+      toast.error("Only .vcd files are supported");
+      return;
     }
     loadingHandler(true);
     try {
@@ -88,6 +91,9 @@ const ParseButton: React.FC<{
     // Check if the filename is empty
     if (file_name === "") {
       toast.error("No file name");
+      return;
+    } else if (!file_name.endsWith(".vcd")) {
+      toast.error("Only .vcd files are supported");
       return;
     }
     loadingHandler(true);
@@ -147,6 +153,7 @@ const ParseButton: React.FC<{
       <Toaster
         position="bottom-right"
         toastOptions={{
+          duration: 3000,
           style: {
             color: "dark-gray",
             fontWeight: "bold",

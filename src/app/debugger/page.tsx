@@ -76,6 +76,7 @@ const DebuggerPage = () => {
       <Toaster
         position="bottom-right"
         toastOptions={{
+          duration: 3000,
           style: {
             color: "dark-gray",
             fontWeight: "bold",
