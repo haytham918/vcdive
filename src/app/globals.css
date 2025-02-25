@@ -26,7 +26,7 @@
 
   --entry-bg-color: #f0f0f0; /* Light mode entry BG color */
 
-  --triangle-color: #888888; /* Light mode triangle */
+  --table-bg-color: #888888; /* Light mode triangle */
 
   --button-nonselect-background: #888888;
   --button-nonselect-hover: rgb(189, 200, 217);
@@ -54,7 +54,7 @@
     --textarea-border: #4b5563; /* Medium Gray */
 
     --entry-bg-color: #4b5563; /* Dark mode entry */
-    --triangle-color: #a0aec0; /* Dark mode triangle */
+    --table-bg-color: #a0aec0; /* Dark mode triangle */
 
     --button-nonselect-background: #4b5563; /* When button not selected */
     --button-nonselect-hover: rgb(
@@ -87,7 +87,7 @@
   --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */
   --subsection-bg-color: #4c5d6e; /* Dark  Mode Subsection BG Color */
   --entry-bg-color: #3b4c5d; /* Dark mode entry */
-  --triangle-color: #a0aec0; /* Dark mode triangle */
+  --table-bg-color: #a0aec0; /* Dark mode triangle */
 
   --button-nonselect-background: #4b5563; /* When button not selected */
   --button-nonselect-hover: rgb(
@@ -126,6 +126,17 @@ main {
 
 a {
   cursor: pointer;
+}
+
+table,
+th,
+td {
+  border: 1px solid var(--table-bg-color);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+table {
+  border-radius: 5px;
 }
 
 .btn {

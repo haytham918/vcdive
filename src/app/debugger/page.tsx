@@ -1,6 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
+import PhysicalRegisterFile from "@/components/processor_components/PhysicalRegisterFile";
 import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
@@ -83,7 +84,9 @@ const DebuggerPage = () => {
         <ThemeToggle />
       </header>
       <main>
-        <Section />
+        <div className="ml-8 mr-8">
+        <PhysicalRegisterFile />
+        </div>
       </main>
       <Toaster
         position="bottom-right"

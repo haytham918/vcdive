@@ -10,6 +10,7 @@
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useState, useCallback } from "react";
 import ParseButton from "./ParseButton";
+import toast from "react-hot-toast";
 
 // This is the drop-upload box using react-dropzone
 const FileUpload: React.FC<{
@@ -43,7 +44,7 @@ const FileUpload: React.FC<{
       const { errors } = rejected_file[0];
       errors.forEach((error) => {
         if (error.code === "file-invalid-type") {
-          alert("Invalid file type. Please upload a .vcd file");
+          toast.error("Invalid file type.\nPlease upload a .vcd file");
         }
       });
     }

@@ -9,8 +9,8 @@
 }
 
 .main-section {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
   background: var(--mainsection-bg-color);
   width: max-content;
 }
@@ -36,8 +36,13 @@
 
 .entry {
   background: var(--entry-bg-color);
-  display: flex;
   padding: 0.25rem;
   font-size: 1rem;
   line-height: 1.125rem;
+}
+
+.table_header{
+  padding: 0.5rem;
+  font-size: 1.05rem;
+  line-height: 1.25rem;
 }
