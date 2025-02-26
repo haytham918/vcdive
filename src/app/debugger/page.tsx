@@ -2,6 +2,7 @@
 
 import DebuggerHeader from "@/components/DebuggerHeader";
 import PhysicalRegisterFile from "@/components/processor_components/PhysicalRegisterFile";
+import ReadyList from "@/components/processor_components/ReadyList";
 import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
@@ -13,7 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 */
 const DebuggerPage = () => {
   const [file_name, setFileName] = useState(""); // File Name for current parsed file
-  const [include_neg, setIncludeNeg] = useState(true); // Whether include neg edge
+  const [include_neg, setIncludeNeg] = useState(false); // Whether include neg edge
   const [num_pos_clocks, setNumPosClocks] = useState(0); // Number of positive clocks
   const [num_neg_clocks, setNumNegClocks] = useState(0); // Number of all clocks
   const [cur_cycle, setCurCycle] = useState(0);
@@ -21,9 +22,14 @@ const DebuggerPage = () => {
   // The max cycle index based on including neg edges or not
   const end_cycle_index = include_neg ? num_neg_clocks - 1 : num_pos_clocks - 1;
 
+  const negFlipHandler = () => {
+    setIncludeNeg(!include_neg);
+  };
+
   // Handler function to set the current cycle
   const cycleHandler = useCallback((cycle: number) => {
     setCurCycle(cycle);
+    toast.success("Changed Cycle Succesfully");
   }, []);
 
   console.log("Current cycle is", cur_cycle);
@@ -77,15 +83,18 @@ const DebuggerPage = () => {
     <>
       <header>
         <DebuggerHeader
+          file_name={file_name}
           cur_cycle={cur_cycle}
           end_cycle_index={end_cycle_index}
+          include_neg={include_neg}
+          negFlipHandler={negFlipHandler}
           cycleHandler={cycleHandler}
         />
         <ThemeToggle />
       </header>
       <main>
         <div className="ml-8 mr-8">
-        <PhysicalRegisterFile />
+          <ReadyList />
         </div>
       </main>
       <Toaster

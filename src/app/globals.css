@@ -32,6 +32,8 @@
   --button-nonselect-hover: rgb(189, 200, 217);
 
   --box-shadow-color: rgba(0, 0, 0, 0.2);
+
+  --table-head-color: #d0e7ff;
 }
 
 /* Dark Theme */
@@ -63,6 +65,8 @@
       47
     ); /* When button not selected hover */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
+
+    --table-head-color: #1f3b73;
   }
 }
 
@@ -96,6 +100,7 @@
     47
   ); /* When not selected button hover */
   --box-shadow-color: rgba(255, 255, 255, 0.2);
+  --table-head-color: #1f3b73;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
@@ -134,6 +139,21 @@ td {
   border: 1px solid var(--table-bg-color);
   border-collapse: separate;
   border-spacing: 0;
+}
+th,
+td {
+  padding: 0.2rem;
+  text-align: center;
+}
+th {
+  background: var(--table-head-color);
+  font-size: 1.05rem;
+  line-height: 1.25rem;
+}
+td {
+  background: var(--entry-bg-color);
+  font-size: 1rem;
+  line-height: 1.125rem;
 }
 table {
   border-radius: 5px;

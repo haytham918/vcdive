@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./DebuggerHeader.css";
+import toast, { Toaster } from "react-hot-toast";
 
 const CycleNavigation: React.FC<{
   cur_cycle: number; // The current cycle
@@ -37,6 +38,39 @@ const CycleNavigation: React.FC<{
     },
     [cur_cycle, end_cycle_index, cycleHandler]
   );
+
+  const [input_val, setInputVal] = useState("");
+
+  // Function that updates input as user types
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(event.target?.value);
+  };
+
+  // Handler function when user inputs a cycle number
+  const handleInputCycle = () => {
+    if (input_val.trim() !== "") {
+      const input_cycle = Number(input_val);
+      if (input_cycle > end_cycle_index) {
+        toast.error("Specified Cycle\nOut of Bound");
+        setInputVal("");
+        return;
+      }
+      cycleHandler(input_cycle);
+      setInputVal("");
+    }
+  };
+
+  // Function to handle user type on input
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "-" || event.key === "Subtract") {
+      event.preventDefault();
+      toast.error("No Negative Cycle");
+      return;
+    }
+    if (event.key === "Enter") {
+      handleInputCycle();
+    }
+  };
 
   // useEffect for keyboard
   useEffect(() => {
@@ -124,6 +158,24 @@ const CycleNavigation: React.FC<{
       <button className="btn btn-babyblue" onClick={handleEndCycle}>
         End (e)
       </button>
+
+      {/* Input for Cycle */}
+      <input
+        className="input-cycle"
+        placeholder="Cycle #"
+        type="number"
+        min="0"
+        value={input_val}
+        max={end_cycle_index}
+        onChange={handleInputChange}
+        onKeyDown={handleInputKeyDown}
+        onBlur={handleInputCycle}
+      />
+
+      <h4 className="flex flex-col border-l-2 pl-2">
+        Current Cycle
+        <span className="ml-auto relative ">{cur_cycle}</span>
+      </h4>
     </div>
   );
 };

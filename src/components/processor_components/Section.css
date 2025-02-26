@@ -33,16 +33,3 @@
   line-height: 1.5rem;
   font-weight: bold;
 }
-
-.entry {
-  background: var(--entry-bg-color);
-  padding: 0.25rem;
-  font-size: 1rem;
-  line-height: 1.125rem;
-}
-
-.table_header{
-  padding: 0.5rem;
-  font-size: 1.05rem;
-  line-height: 1.25rem;
-}

@@ -15,20 +15,20 @@ const PhysicalRegisterFile = () => {
     <div className="section sub-section">
       <h2 className="subsection-header">Values</h2>
 
-     <table>
+      <table>
         <thead>
-            <tr>
-            <th className="table_header">Fuck Roomate</th>
-            <th>Fuck him</th>
-            </tr>
+          <tr>
+            <th>Hello There</th>
+            <th>Hi There</th>
+          </tr>
         </thead>
         <tbody>
-            <tr>
-                <td className="entry">What's the </td>
-                <td>Fuck him</td>
-            </tr>
+          <tr>
+            <td>What's the </td>
+            <td>Hi There</td>
+          </tr>
         </tbody>
-     </table>
+      </table>
     </div>
   ) : null;
 
