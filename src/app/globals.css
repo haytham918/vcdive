@@ -34,6 +34,8 @@
   --box-shadow-color: rgba(0, 0, 0, 0.2);
 
   --table-head-color: #d0e7ff;
+  --table-entry-emerald: #a7f3d0;
+  --table-entry-red: #ff8a80;
 }
 
 /* Dark Theme */
@@ -67,6 +69,8 @@
     --box-shadow-color: rgba(255, 255, 255, 0.2);
 
     --table-head-color: #1f3b73;
+    --table-entry-emerald: #065f46;
+    --table-entry-red: #991b24;
   }
 }
 
@@ -101,6 +105,8 @@
   ); /* When not selected button hover */
   --box-shadow-color: rgba(255, 255, 255, 0.2);
   --table-head-color: #1f3b73;
+  --table-entry-emerald: #065f46;
+  --table-entry-red: #991b24;
 }
 
 /* Apply base styles to the body using Tailwind utilities */

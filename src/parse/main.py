@@ -16,6 +16,7 @@ parser = None
 file_name = None
 num_pos_clocks = None
 num_neg_clocks = None
+first_clk_value = None
 
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -55,6 +56,7 @@ def parse_vcd_from_local():
     global parser
     global num_pos_clocks
     global num_neg_clocks
+    global first_clk_value
     try:
         data = request.get_json()
         # Check if data is sent and there is file_name
@@ -76,6 +78,7 @@ def parse_vcd_from_local():
             parser = vcd_parser.VCDParser(file_path)
             num_pos_clocks = parser.get_pos_clock_numbers()
             num_neg_clocks = parser.get_neg_clock_numbers()
+            first_clk_value = parser.get_first_clk_value()
 
         return jsonify({"file_name": file_name, "num_pos_clocks": num_pos_clocks, "num_neg_clocks": num_neg_clocks})
     except Exception as e:
@@ -94,6 +97,7 @@ def parse_vcd():
     global file_name
     global num_pos_clocks
     global num_neg_clocks
+    global first_clk_value
     if "file" not in request.files:
         return jsonify({"error": "No content provided"}), 400
 
@@ -113,6 +117,7 @@ def parse_vcd():
         file_name = file.filename
         num_pos_clocks = parser.get_pos_clock_numbers()
         num_neg_clocks = parser.get_neg_clock_numbers()
+        first_clk_value = parser.get_first_clk_value()
 
         # Clean up by deleting the temporary file
         os.remove(temp_file_path)
@@ -145,9 +150,16 @@ def cycle_info(pos_neg, cycle_number):
     cycle_number: the relative cycle number we fetching information from
     """
     # Check if the parser is here
-    index = int(cycle_number) << 1 if pos_neg.lower(
-    ) == "pos" else int(cycle_number)
     if parser:
+        cycle_number = int(cycle_number)
+        print(cycle_number, file=sys.stderr)
+        if pos_neg.lower() == "pos":  # If only pos
+            if first_clk_value == '1':  # If first cycle is 1, then 0 2 4 6 ... pos
+                index = cycle_number << 1
+            else:
+                index = (cycle_number << 1) + 1  # else, 1 3 5 7 ... pos
+        else:
+            index = cycle_number
         result = parser.query_row(index)
         return jsonify({"data": result})
     else:
