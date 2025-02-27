@@ -2,6 +2,7 @@
 
 import DebuggerHeader from "@/components/DebuggerHeader";
 import ReadyList from "@/components/processor_components/ReadyList";
+import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -88,7 +89,17 @@ const DebuggerPage = () => {
         return [new_key, val];
       })
   );
-
+  
+  const rob_data = Object.fromEntries(
+    Object.entries(cycle_data)
+      .filter(([key, val]) => key.includes("ROB"))
+      .map(([key, val]) => {
+        const dotindex = key.indexOf(".");
+        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
+        return [new_key, val];
+      })
+  );
+ 
   return (
     <>
       <header>
@@ -103,7 +114,8 @@ const DebuggerPage = () => {
         <ThemeToggle />
       </header>
       <main>
-        <div className="ml-8 mr-8">
+        <div className="ml-8 mr-8 flex flex-row flex-wrap">
+          <ReorderBuffer rob_data={rob_data} />
           <ReadyList ready_list_data={ready_list_data} />
         </div>
       </main>

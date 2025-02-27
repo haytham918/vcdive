@@ -35,7 +35,8 @@
 
   --table-head-color: #d0e7ff;
   --table-entry-emerald: #a7f3d0;
-  --table-entry-red: #ff8a80;
+  --table-entry-red: #f98379f3;
+  --table-entry-yellow: #fce9b0;
 }
 
 /* Dark Theme */
@@ -71,6 +72,7 @@
     --table-head-color: #1f3b73;
     --table-entry-emerald: #065f46;
     --table-entry-red: #991b24;
+    --table-entry-yellow: #b8860b;
   }
 }
 
@@ -107,6 +109,7 @@
   --table-head-color: #1f3b73;
   --table-entry-emerald: #065f46;
   --table-entry-red: #991b24;
+  --table-entry-yellow: #b8860b;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
@@ -148,6 +151,7 @@ td {
 }
 th,
 td {
+  background: var(--entry-bg-color);
   padding: 0.2rem;
   text-align: center;
 }
@@ -157,7 +161,6 @@ th {
   line-height: 0.9rem;
 }
 td {
-  background: var(--entry-bg-color);
   font-size: 0.9rem;
   line-height: 0.8rem;
 }
@@ -169,6 +172,14 @@ td.emerald {
 }
 td.red {
   background-color: var(--table-entry-red) !important;
+}
+
+tr.blue {
+  background-color: #006666 !important;
+}
+
+td.yellow {
+  background-color: var(--table-entry-yellow) !important;
 }
 
 .btn {

@@ -161,6 +161,7 @@ def cycle_info(pos_neg, cycle_number):
         else:
             index = cycle_number
         result = parser.query_row(index)
+
         return jsonify({"data": result})
     else:
         return jsonify({"error": "No avilable parser, needing reparse"}), 500

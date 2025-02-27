@@ -9,10 +9,13 @@
 }
 
 .main-section {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   background: var(--mainsection-bg-color);
   width: max-content;
+  height: fit-content;
 }
 
 .sub-section {
