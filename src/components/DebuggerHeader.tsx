@@ -61,6 +61,11 @@ const DebuggerHeader: React.FC<{
         end_cycle_index={end_cycle_index}
         cycleHandler={cycleHandler}
       />
+      <h4 className="flex flex-col absolute right-[220px]">
+        Current Cycle
+        <span className="ml-auto relative ">{cur_cycle}</span>
+      </h4>
+
       <div className="absolute right-[130px] flex gap-x-1">
         <Switch
           checked={include_neg}

@@ -171,11 +171,6 @@ const CycleNavigation: React.FC<{
         onKeyDown={handleInputKeyDown}
         onBlur={handleInputCycle}
       />
-
-      <h4 className="flex flex-col border-l-2 pl-2">
-        Current Cycle
-        <span className="ml-auto relative ">{cur_cycle}</span>
-      </h4>
     </div>
   );
 };

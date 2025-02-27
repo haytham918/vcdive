@@ -153,16 +153,22 @@ td {
 }
 th {
   background: var(--table-head-color);
-  font-size: 1.05rem;
-  line-height: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
 }
 td {
   background: var(--entry-bg-color);
-  font-size: 1rem;
-  line-height: 1.125rem;
+  font-size: 0.9rem;
+  line-height: 0.8rem;
 }
 table {
   border-radius: 5px;
+}
+td.emerald {
+  background-color: var(--table-entry-emerald) !important;
+}
+td.red {
+  background-color: var(--table-entry-red) !important;
 }
 
 .btn {

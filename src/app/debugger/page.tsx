@@ -1,9 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
-import PhysicalRegisterFile from "@/components/processor_components/PhysicalRegisterFile";
 import ReadyList from "@/components/processor_components/ReadyList";
-import Section from "@/components/processor_components/Section";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -18,6 +16,7 @@ const DebuggerPage = () => {
   const [num_pos_clocks, setNumPosClocks] = useState(0); // Number of positive clocks
   const [num_neg_clocks, setNumNegClocks] = useState(0); // Number of all clocks
   const [cur_cycle, setCurCycle] = useState(0);
+  const [cycle_data, setCycleData] = useState({});
 
   // The max cycle index based on including neg edges or not
   const end_cycle_index = include_neg ? num_neg_clocks - 1 : num_pos_clocks - 1;
@@ -29,7 +28,6 @@ const DebuggerPage = () => {
   // Handler function to set the current cycle
   const cycleHandler = useCallback((cycle: number) => {
     setCurCycle(cycle);
-    toast.success("Changed Cycle Succesfully");
   }, []);
 
   console.log("Current cycle is", cur_cycle);
@@ -65,7 +63,8 @@ const DebuggerPage = () => {
       }
 
       const data = await response.json();
-      console.log("FETCHED CYCLE DATA: ", data);
+      setCycleData(data.data);
+      console.log("FETCHED CYCLE DATA: ", data.data);
     }
   };
 
@@ -78,6 +77,17 @@ const DebuggerPage = () => {
   useEffect(() => {
     fetch_cycle_info();
   }, [include_neg, cur_cycle, file_name]);
+
+  // Filter READY_LIST data to pass
+  const ready_list_data = Object.fromEntries(
+    Object.entries(cycle_data)
+      .filter(([key, val]) => key.includes("READY_LIST"))
+      .map(([key, val]) => {
+        const dotindex = key.indexOf(".");
+        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
+        return [new_key, val];
+      })
+  );
 
   return (
     <>
@@ -94,7 +104,7 @@ const DebuggerPage = () => {
       </header>
       <main>
         <div className="ml-8 mr-8">
-          <ReadyList />
+          <ReadyList ready_list_data={ready_list_data} />
         </div>
       </main>
       <Toaster
