@@ -9,21 +9,26 @@ import { useRouter } from "next/navigation";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import icon_img from "../../public/apple-touch-icon.png";
+import { NumberSystem } from "@/app/debugger/page";
 // Additional header stuff for the debugger page
 const DebuggerHeader: React.FC<{
   file_name: string;
   cur_cycle: number;
   end_cycle_index: number;
   include_neg: boolean;
+  selected_number_sys: NumberSystem;
   negFlipHandler: () => void;
   cycleHandler: (cycle: number) => void;
+  numberSysHandler: (number_system: NumberSystem) => void;
 }> = ({
   file_name,
   cur_cycle,
   end_cycle_index,
   include_neg,
+  selected_number_sys,
   negFlipHandler,
   cycleHandler,
+  numberSysHandler,
 }) => {
   const router = useRouter();
   useEffect(() => {
@@ -63,7 +68,9 @@ const DebuggerHeader: React.FC<{
       />
       <h4 className="flex flex-col absolute right-[220px]">
         Current Cycle
-        <span className="ml-auto relative ">{cur_cycle}</span>
+        <span className="ml-auto relative ">
+          {cur_cycle} / {end_cycle_index}
+        </span>
       </h4>
 
       <div className="absolute right-[130px] flex gap-x-1">
@@ -76,7 +83,10 @@ const DebuggerHeader: React.FC<{
         </Switch>
         <p className="text-center">neg</p>
       </div>
-      <NSToggle />
+      <NSToggle
+        selected_number_sys={selected_number_sys}
+        numberSysHandler={numberSysHandler}
+      />
     </div>
   );
 };

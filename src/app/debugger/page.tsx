@@ -1,7 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
-import ReadyList from "@/components/processor_components/ReadyList";
+import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
@@ -11,13 +11,21 @@ import toast, { Toaster } from "react-hot-toast";
     Page for the /debugger
 
 */
+export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
+
 const DebuggerPage = () => {
+  const [selected_number_sys, setNumberSys] = useState<NumberSystem>("0x"); // Number System
   const [file_name, setFileName] = useState(""); // File Name for current parsed file
   const [include_neg, setIncludeNeg] = useState(false); // Whether include neg edge
   const [num_pos_clocks, setNumPosClocks] = useState(0); // Number of positive clocks
   const [num_neg_clocks, setNumNegClocks] = useState(0); // Number of all clocks
   const [cur_cycle, setCurCycle] = useState(0);
   const [cycle_data, setCycleData] = useState({});
+
+  // Update number system
+  const numberSysHandler = (preference: NumberSystem) => {
+    setNumberSys(preference);
+  };
 
   // The max cycle index based on including neg edges or not
   const end_cycle_index = include_neg ? num_neg_clocks - 1 : num_pos_clocks - 1;
@@ -89,7 +97,7 @@ const DebuggerPage = () => {
         return [new_key, val];
       })
   );
-  
+
   const rob_data = Object.fromEntries(
     Object.entries(cycle_data)
       .filter(([key, val]) => key.includes("ROB"))
@@ -99,7 +107,17 @@ const DebuggerPage = () => {
         return [new_key, val];
       })
   );
- 
+
+  const prf_data = Object.fromEntries(
+    Object.entries(cycle_data)
+      .filter(([key, val]) => key.includes("REGFILE"))
+      .map(([key, val]) => {
+        const dotindex = key.indexOf(".");
+        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
+        return [new_key, val];
+      })
+  );
+
   return (
     <>
       <header>
@@ -108,15 +126,21 @@ const DebuggerPage = () => {
           cur_cycle={cur_cycle}
           end_cycle_index={end_cycle_index}
           include_neg={include_neg}
+          selected_number_sys={selected_number_sys}
           negFlipHandler={negFlipHandler}
           cycleHandler={cycleHandler}
+          numberSysHandler={numberSysHandler}
         />
         <ThemeToggle />
       </header>
       <main>
         <div className="ml-8 mr-8 flex flex-row flex-wrap">
           <ReorderBuffer rob_data={rob_data} />
-          <ReadyList ready_list_data={ready_list_data} />
+          <PRF_ReadyList
+            selected_number_sys={selected_number_sys}
+            ready_list_data={ready_list_data}
+            prf_data={prf_data}
+          />
         </div>
       </main>
       <Toaster

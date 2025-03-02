@@ -166,6 +166,7 @@ td {
 }
 table {
   border-radius: 5px;
+  margin-inline: 0.2rem;
 }
 td.emerald {
   background-color: var(--table-entry-emerald) !important;

@@ -1,8 +1,5 @@
-"use client";
+import { NumberSystem } from "@/app/debugger/page";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useState } from "react";
-
-type NumberSystem = "0d" | "0x"; // Maybe binary in the future
 
 interface NSOption {
   sys: NumberSystem;
@@ -14,9 +11,10 @@ const NSItems: NSOption[] = [
   { sys: "0x", label: "0x' Hexadecimal" },
 ];
 
-const NSToggle = () => {
-  const [selected_number_sys, setNumberSys] = useState<NumberSystem>("0x");
-
+const NSToggle: React.FC<{
+  selected_number_sys: NumberSystem;
+  numberSysHandler: (number_sys: NumberSystem) => void;
+}> = ({ selected_number_sys, numberSysHandler }) => {
   return (
     <Menu
       as="div"
@@ -32,7 +30,7 @@ const NSToggle = () => {
             <MenuItem key={item.sys}>
               {({ focus }) => (
                 <button
-                  onClick={() => setNumberSys(item.sys)}
+                  onClick={() => numberSysHandler(item.sys)}
                   className={`flex font-bold w-full items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 overflow-hidden ${
                     focus ? "bg-gray-100 dark:bg-gray-700" : ""
                   }`}
