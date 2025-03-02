@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import type { Metadata } from "next";
 import { Roboto_Mono, Ubuntu_Mono } from "next/font/google";
 import "./globals.css";
@@ -19,28 +20,32 @@ export const metadata: Metadata = {
 };
 
 // Global Layout
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const themeScript = `
-    (function() {
-      const theme = localStorage.getItem('theme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (theme === 'dark' || (!theme && systemPrefersDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    })();
-  `;
+  // const themeScript = `
+  //   (function() {
+  //     const theme = localStorage.getItem('theme');
+  //     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  //     if (theme === 'dark' || (!theme && systemPrefersDark)) {
+  //       document.documentElement.classList.add('dark');
+  //     } else {
+  //       document.documentElement.classList.remove('dark');
+  //     }
+  //   })();
+  // `;
+
+  const cookieStore = await cookies(); // Await the promise here
+  const themeCookie = cookieStore.get("theme")?.value;
+  const isDark = themeCookie === "dark";
 
   return (
-    <html lang="en">
-      <head>
+    <html lang="en" className={isDark ? "dark" : ""}>
+      {/* <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+      </head> */}
       <body className={`${roboto.variable} ${ubuntu.variable} bg-background`}>
         {children}
         <footer className="opacity-50 flex flex-col p-1 font-heading text-center w-full flex-shrink-0 mt-8">

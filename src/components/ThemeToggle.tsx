@@ -5,6 +5,7 @@
 import { useEffect, useState, JSX } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Sun, Moon, Desktop } from "phosphor-react";
+import { get_cookie, set_cookie } from "@/utils/cookies";
 
 type ThemeOption = "light" | "dark" | "system";
 
@@ -31,7 +32,7 @@ const ThemeToggle = () => {
   // Check if there is local storage cache of the setting
   // If not, go with the default
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as ThemeOption | null;
+    const storedTheme = get_cookie("theme") as ThemeOption | null;
     setTheme(storedTheme || "system");
   }, []);
 
@@ -48,7 +49,7 @@ const ThemeToggle = () => {
       } else {
         root.classList.remove("dark");
       }
-      localStorage.setItem("theme", theme);
+      set_cookie("theme", theme);
     }
   }, [theme]);
 
