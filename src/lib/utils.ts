@@ -16,7 +16,7 @@ export const parseInstruction = (instruction: number): DisplayInstruction => {
             valid: true,
         }
     }
-    catch (error) {
+    catch {
         return {
             asm: "Invalid instruction",
             hex: hexadecimal_string,
