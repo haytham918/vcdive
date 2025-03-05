@@ -1,12 +1,9 @@
 "use client";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
+import { convert_reg_hex_to_dec } from "@/lib/utils";
 
 const ROB_SIZE = 32;
-export const convert_reg_hex_to_dec = (reg_hex: string) => {
-  const reg_dec = parseInt(reg_hex, 16);
-  return reg_dec;
-};
 
 const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
   const [show_subsection, setShowSubsection] = useState(true);

@@ -6,7 +6,7 @@ export interface DisplayInstruction {
     valid: boolean;
 }
 
-export const parseInstruction = (instruction: number): DisplayInstruction => {
+export const parse_instruction = (instruction: number): DisplayInstruction => {
     const hexadecimal_string = instruction.toString(16).padStart(8, "0");
     try {
         const inst = new Instruction(hexadecimal_string);
@@ -24,3 +24,8 @@ export const parseInstruction = (instruction: number): DisplayInstruction => {
         }
     }
 }
+
+export const convert_reg_hex_to_dec = (reg_hex: string) => {
+  const reg_dec = parseInt(reg_hex, 16);
+  return reg_dec;
+};
