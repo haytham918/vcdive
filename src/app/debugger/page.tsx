@@ -3,6 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
+import ReservationStation from "@/components/processor_components/ReservationStation";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -103,6 +104,7 @@ const DebuggerPage = () => {
   const ready_list_data = extract_data(cycle_data, "READY_LIST");
   const rob_data = extract_data(cycle_data, "ROB");
   const prf_data = extract_data(cycle_data, "REGFILE");
+  const rs_data = extract_data(cycle_data, "RS");
 
   return (
     <>
@@ -122,6 +124,7 @@ const DebuggerPage = () => {
       <main>
         <div className="ml-8 mr-8 flex flex-row flex-wrap">
           <ReorderBuffer rob_data={rob_data} />
+          <ReservationStation rs_data={rs_data} />
           <PRF_ReadyList
             selected_number_sys={selected_number_sys}
             ready_list_data={ready_list_data}
