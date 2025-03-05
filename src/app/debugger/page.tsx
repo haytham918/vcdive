@@ -87,36 +87,22 @@ const DebuggerPage = () => {
     fetch_cycle_info();
   }, [include_neg, cur_cycle, file_name]);
 
+  const extract_data = (cycle_data: any, functional_unit: string) => {
+    return Object.fromEntries(
+      Object.entries(cycle_data)
+        .filter(([key, _]) => key.includes(functional_unit))
+        .map(([key, val]) => {
+          const dotindex = key.indexOf(".");
+          const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
+          return [new_key, val];
+        })
+    );
+  };
+
   // Filter READY_LIST data to pass
-  const ready_list_data = Object.fromEntries(
-    Object.entries(cycle_data)
-      .filter(([key, val]) => key.includes("READY_LIST"))
-      .map(([key, val]) => {
-        const dotindex = key.indexOf(".");
-        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
-        return [new_key, val];
-      })
-  );
-
-  const rob_data = Object.fromEntries(
-    Object.entries(cycle_data)
-      .filter(([key, val]) => key.includes("ROB"))
-      .map(([key, val]) => {
-        const dotindex = key.indexOf(".");
-        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
-        return [new_key, val];
-      })
-  );
-
-  const prf_data = Object.fromEntries(
-    Object.entries(cycle_data)
-      .filter(([key, val]) => key.includes("REGFILE"))
-      .map(([key, val]) => {
-        const dotindex = key.indexOf(".");
-        const new_key = dotindex >= 0 ? key.substring(dotindex + 1) : key;
-        return [new_key, val];
-      })
-  );
+  const ready_list_data = extract_data(cycle_data, "READY_LIST");
+  const rob_data = extract_data(cycle_data, "ROB");
+  const prf_data = extract_data(cycle_data, "REGFILE");
 
   return (
     <>
