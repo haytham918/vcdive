@@ -1,6 +1,7 @@
 import { Instruction } from "./rvcodec.js/Instruction";
 
 export interface DisplayInstruction {
+    instruction: number;
     asm: string;
     hex: string;
     valid: boolean;
@@ -11,6 +12,7 @@ export const parse_instruction = (instruction: number): DisplayInstruction => {
     try {
         const inst = new Instruction(hexadecimal_string);
         return {
+            instruction: instruction,
             asm: inst.toString(),
             hex: hexadecimal_string,
             valid: true,
@@ -18,6 +20,7 @@ export const parse_instruction = (instruction: number): DisplayInstruction => {
     }
     catch {
         return {
+            instruction: instruction,
             asm: "Invalid instruction",
             hex: hexadecimal_string,
             valid: false,
