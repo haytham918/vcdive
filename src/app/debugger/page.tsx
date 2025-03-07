@@ -124,7 +124,7 @@ const DebuggerPage = () => {
       <main>
         <div className="ml-8 mr-8 flex flex-row flex-wrap">
           <ReorderBuffer rob_data={rob_data} />
-          <ReservationStation rs_data={rs_data} />
+          <ReservationStation rs_data={rs_data} ready_list_data={ready_list_data} />
           <PRF_ReadyList
             selected_number_sys={selected_number_sys}
             ready_list_data={ready_list_data}
