@@ -1,6 +1,7 @@
 "use client";
+
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useState, useMemo } from "react";
 import {
   parse_instruction,
   convert_reg_hex_to_dec,
@@ -9,197 +10,167 @@ import {
   reverseStr,
 } from "@/lib/utils";
 
-// TODO: Make this a config file parameter
+// TODO: Make this a Config File parameter
 const RS_SIZE = 8;
 const RS_PREFIX = "RS";
-
 const BRANCH_MASK_LENGTH = 4;
 
 enum RsView {
-  ASM = 0,
-  HEX,
-  BINARY,
-  __LENGTH,
+  Asm = 0,
+  Hex,
+  Binary,
+  __Length,
 }
 
-// Convert RsView to string
-const RsViewToString = (view_mode: RsView) => {
-  switch (view_mode) {
-    case RsView.ASM:
+const rsViewToString = (view: RsView): string => {
+  switch (view) {
+    case RsView.Asm:
       return "ASM";
-    case RsView.HEX:
+    case RsView.Hex:
       return "HEX";
-    case RsView.BINARY:
+    case RsView.Binary:
       return "BIN";
     default:
       return "Invalid";
   }
 };
 
-const ReservationStation: React.FC<{ rs_data: any; ready_list_data: any }> = ({
-  rs_data,
-  ready_list_data,
+interface RsEntry {
+  valid: boolean;
+  destinationTag: number;
+  t1: number;
+  t2: number;
+  imm: number;
+  destFuType: number;
+  isImm: boolean;
+  branchMask: string;
+}
+
+interface RsRowData {
+  index: number;
+  rowClass: string;
+  t1Class: string;
+  t2Class: string;
+  immClass: string;
+  t1Value: string | number;
+  t2Value: string | number;
+  immValue: string | number;
+}
+
+interface ReservationStationProps {
+  rsData: any;
+  readyListData: any;
+}
+
+const ReservationStation: React.FC<ReservationStationProps> = ({
+  rsData,
+  readyListData,
 }) => {
-  const [show_subsection, setShowSubsection] = useState(true);
-  const [view_mode, setViewMode] = useState(RsView.ASM);
+  const [showSubSection, setShowSubSection] = useState(true);
+  const [viewMode, setViewMode] = useState<RsView>(RsView.Asm);
 
-  const handleHeaderClick = (event: MouseEvent) => {
+  const handleHeaderClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    setShowSubsection(!show_subsection);
+    setShowSubSection((prev) => !prev);
   };
 
-  const handleViewModeChange = (event: MouseEvent) => {
+  const handleViewModeChange = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setViewMode((view_mode + 1) % RsView.__LENGTH);
+    setViewMode((prev) => (prev + 1) % RsView.__Length);
   };
 
-  interface RsEntry {
-    valid: boolean;
-    destination_tag: number;
-    t1: number;
-    t2: number;
-    imm: number;
-    // TODO: Parse `dest_fu` into an actual function unit, once that is determined
-    dest_fu_type: number; // Represents a bit-vector of length NUM_FU_TYPES_BITS
-    is_imm: boolean;
-    branch_mask: string;
-  }
+  const readyStateMaskBigEndian: string =
+    readyListData?.["READY_LIST.ready_state_mask"] ?? "";
+  const readyStateMask: string = reverseStr(readyStateMaskBigEndian);
 
-  const ready_state_mask_bigendian: string =
-    ready_list_data["READY_LIST.ready_state_mask"] === undefined
-      ? ""
-      : ready_list_data["READY_LIST.ready_state_mask"];
-  const ready_state_mask: string = reverseStr(ready_state_mask_bigendian);
+  const isReady = (reg: number): boolean => readyStateMask[reg] === "1";
 
-  const isReady = (reg: number): boolean => {
-    return ready_state_mask[reg] === "1";
-  }
+  const parseRsEntry = (data: any, index: number): RsEntry => {
+    const keyPrefix = `${RS_PREFIX}.rs_data[${index}]`;
 
-  const parseRsEntry = (rs_data: any, index: number): RsEntry => {
-    const key_prefix = `${RS_PREFIX}.rs_data[${index}]`;
-
-    const valueAt = (key: string) => {
-      return rs_data[`${key_prefix}.${key}`];
-    };
-
-    const valueAtNumber = (key: string) => {
-      return hexStringToNumber(valueAt(key));
-    };
-
-    const valid = valueAt("valid") === "1";
-    const destination_tag = valueAtNumber("destination_tag");
-    const t1 = valueAtNumber("t1");
-    const t2 = valueAtNumber("t2");
-    const imm = valueAtNumber("imm");
-    const dest_fu_type = valueAt("dest_fu");
-    const is_imm = valueAt("is_imm") === "1";
-    const branch_mask = hexStringToMask(
-      valueAt("branch_mask"),
-      BRANCH_MASK_LENGTH
-    );
+    const getValue = (key: string): string => data[`${keyPrefix}.${key}`];
+    const getValueNumber = (key: string): number =>
+      hexStringToNumber(getValue(key));
 
     return {
-      valid,
-      destination_tag,
-      t1,
-      t2,
-      imm,
-      dest_fu_type,
-      is_imm,
-      branch_mask,
+      valid: getValue("valid") === "1",
+      destinationTag: getValueNumber("destination_tag"),
+      t1: getValueNumber("t1"),
+      t2: getValueNumber("t2"),
+      imm: getValueNumber("imm"),
+      destFuType: Number(getValue("dest_fu")),
+      isImm: getValue("is_imm") === "1",
+      branchMask: hexStringToMask(getValue("branch_mask"), BRANCH_MASK_LENGTH),
     };
   };
 
-  const rs_table: RsEntry[] = [];
-  for (let i = 0; i < RS_SIZE; i++) {
-    const entry = parseRsEntry(rs_data, i);
-    rs_table.push(entry);
-  }
-
-  // After the loop that populates rs_table, replace the previous rsRowData block with the following:
-
-  interface RsRowData {
-    // The index of the reservation station entry.
-    index: number;
-    // The CSS class for the entire row (indicating overall readiness or validity).
-    rowClass: string;
-    // The CSS class for the T1 cell (green if ready, yellow if waiting, or grey if invalid).
-    t1Class: string;
-    // The CSS class for the T2 cell (green if ready, yellow if waiting, or grey if not used or invalid).
-    t2Class: string;
-    // The CSS class for the Immediate (Imm) cell (green if immediate is used, grey otherwise).
-    immClass: string;
-    // The display value for T1.
-    t1Value: string | number;
-    // The display value for T2.
-    t2Value: string | number;
-    // The display value for the immediate value.
-    immValue: string | number;
-  }
-
-  const rs_row_data = rs_table.map((entry, i): RsRowData => {
-    let row_class, t1_class, t2_class, imm_class;
-  
-    if (!entry.valid) {
-      // For invalid entries, use red for all cells
-      row_class = "bg-red-300 dark:bg-red-700";
-      t1_class = "bg-red-300 dark:bg-red-700";
-      t2_class = "bg-red-300 dark:bg-red-700";
-      imm_class = "bg-red-300 dark:bg-red-700";
-    } else {
-      // For valid entries, determine classes based on readiness and type
-      const is_t1_ready = isReady(entry.t1);
-      const is_t2_ready = !entry.is_imm && isReady(entry.t2);
-  
-      row_class = (is_t1_ready && is_t2_ready)
-        ? "bg-green-300 dark:bg-green-700"
-        : "bg-white dark:bg-gray-800";
-      t1_class = is_t1_ready
-        ? "bg-green-300 dark:bg-green-700"
-        : "bg-yellow-300 dark:bg-yellow-700";
-      t2_class = entry.is_imm
-        ? "bg-gray-400 dark:bg-gray-600"
-        : (is_t2_ready
-            ? "bg-green-300 dark:bg-green-700"
-            : "bg-yellow-300 dark:bg-yellow-700");
-      imm_class = entry.is_imm
-        ? (entry.imm !== 0
-            ? "bg-green-300 dark:bg-green-700"
-            : "bg-gray-400 dark:bg-gray-600")
-        : "bg-gray-400 dark:bg-gray-600";
+  const rsTable: RsEntry[] = useMemo(() => {
+    const table: RsEntry[] = [];
+    for (let i = 0; i < RS_SIZE; i++) {
+      table.push(parseRsEntry(rsData, i));
     }
-  
-    // Determine the display values
-    const t2_value = entry.is_imm ? "-" : entry.t2;
-    const imm_value = entry.is_imm ? entry.imm : "-";
-  
-    // Map snake_case variables to camelCase keys to conform to RsRowData
-    return {
-      index: i,
-      rowClass: row_class,
-      t1Class: t1_class,
-      t2Class: t2_class,
-      immClass: imm_class,
-      t1Value: entry.t1,
-      t2Value: t2_value,
-      immValue: imm_value,
-    };
-  });
+    return table;
+  }, [rsData]);
 
-  const subsection_comp = show_subsection ? (
-    <div className="section sub-section">
-      <h2 className="subsection-header">RS</h2>
+  const rsRowData: RsRowData[] = useMemo(() => {
+    return rsTable.map((entry, i) => {
+      let rowClass: string;
+      let t1Class: string;
+      let t2Class: string;
+      let immClass: string;
 
-      {/* View Mode Button */}
-      {
-        // <div className="flex items-center justify-center">
-        //   <button className="btn btn-babyblue" onClick={handleViewModeChange}>
-        //     {"Instruction View Mode: " + RsViewToString(view_mode)}
-        //   </button>
-        // </div>
+      if (!entry.valid) {
+        rowClass = "bg-red-300 dark:bg-red-700";
+        t1Class = rowClass;
+        t2Class = rowClass;
+        immClass = rowClass;
+      } else {
+        const isT1Ready = isReady(entry.t1);
+        const isT2Ready = !entry.isImm && isReady(entry.t2);
+
+        rowClass =
+          isT1Ready && isT2Ready
+            ? "bg-green-300 dark:bg-green-700"
+            : "bg-white dark:bg-gray-800";
+        t1Class = isT1Ready
+          ? "bg-green-300 dark:bg-green-700"
+          : "bg-yellow-300 dark:bg-yellow-700";
+        t2Class = entry.isImm
+          ? "bg-gray-400 dark:bg-gray-600"
+          : isT2Ready
+          ? "bg-green-300 dark:bg-green-700"
+          : "bg-yellow-300 dark:bg-yellow-700";
+        immClass = entry.isImm
+          ? entry.imm !== 0
+            ? "bg-green-300 dark:bg-green-700"
+            : "bg-gray-400 dark:bg-gray-600"
+          : "bg-gray-400 dark:bg-gray-600";
       }
 
-      {/* RS Table */}
+      return {
+        index: i,
+        rowClass,
+        t1Class,
+        t2Class,
+        immClass,
+        t1Value: entry.t1,
+        t2Value: entry.isImm ? "-" : entry.t2,
+        immValue: entry.isImm ? entry.imm : "-",
+      };
+    });
+  }, [rsTable, readyStateMask]);
+
+  const subSectionComp = showSubSection && (
+    <div className="section sub-section">
+      <h2 className="subsection-header">RS</h2>
+      {/* View Mode Button */}
+      {
+      // <div className="flex items-center justify-center">
+      //   <button className="btn btn-babyblue" onClick={handleViewModeChange}>
+      //     {`Instruction View Mode: ${rsViewToString(viewMode)}`}
+      //   </button>
+      // </div>
+      }
       <table className="min-w-full text-center mt-4">
         <thead>
           <tr>
@@ -210,31 +181,25 @@ const ReservationStation: React.FC<{ rs_data: any; ready_list_data: any }> = ({
           </tr>
         </thead>
         <tbody>
-          {rs_row_data.map((row) => (
+          {rsRowData.map((row) => (
             <tr key={row.index} className={row.rowClass}>
               <td className={`border px-4 py-2 ${row.rowClass}`}>{row.index}</td>
-              <td className={`border px-4 py-2 ${row.t1Class}`}>
-                {row.t1Value}
-              </td>
-              <td className={`border px-4 py-2 ${row.t2Class}`}>
-                {row.t2Value}
-              </td>
-              <td className={`border px-4 py-2 ${row.immClass}`}>
-                {row.immValue}
-              </td>
+              <td className={`border px-4 py-2 ${row.t1Class}`}>{row.t1Value}</td>
+              <td className={`border px-4 py-2 ${row.t2Class}`}>{row.t2Value}</td>
+              <td className={`border px-4 py-2 ${row.immClass}`}>{row.immValue}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  ) : null;
+  );
 
   return (
     <div className="section main-section">
-      <a onClick={handleHeaderClick}>
+      <a href="#" onClick={handleHeaderClick}>
         <h1 className="mainsection-header">Reservation Station</h1>
       </a>
-      {subsection_comp}
+      {subSectionComp}
     </div>
   );
 };
