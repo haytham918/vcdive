@@ -94,17 +94,29 @@ const InstructionQueue: React.FC<{ instruction_queue_data: any }> = ({
                                 IQ_SIZE
                             );
                             return (
-                                <tr>
+                                <tr key={i}>
                                     <td className={entry_color}>
                                         {head_tail_val}
                                     </td>
                                     <td className={entry_color}>{i}</td>
-                                    <td className={entry_color}>{pcs[i]}</td>
+                                    {/* If No color Or red(tail), then garbage vals */}
                                     <td className={entry_color}>
-                                        {instructions[i]}
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? pcs[i]
+                                            : ""}
                                     </td>
                                     <td className={entry_color}>
-                                        {branch_masks[i]}
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? instructions[i]
+                                            : ""}
+                                    </td>
+                                    <td className={entry_color}>
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? branch_masks[i]
+                                            : ""}
                                     </td>
                                 </tr>
                             );

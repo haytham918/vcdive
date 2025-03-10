@@ -58,7 +58,7 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
                     {/* Actual Register Values */}
                     <tbody>
                         {Array.from({ length: ROB_SIZE }, (_, i) => {
-                            const color = fifo_entry_color(
+                            const entry_color = fifo_entry_color(
                                 i,
                                 rob_head,
                                 rob_tail,
@@ -72,13 +72,20 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
                             );
                             return (
                                 <tr key={i} className="blue">
-                                    <td className={color}>{head_tail}</td>
-                                    <td className={color}>{i}</td>
-                                    <td className={color}>
-                                        {color != "" ? destination_tags[i] : ""}
+                                    <td className={entry_color}>{head_tail}</td>
+                                    <td className={entry_color}>{i}</td>
+                                    {/* If No color Or red(tail), then garbage vals */}
+                                    <td className={entry_color}>
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? destination_tags[i]
+                                            : ""}
                                     </td>
-                                    <td className={color}>
-                                        {color != "" ? tag_olds[i] : ""}
+                                    <td className={entry_color}>
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? tag_olds[i]
+                                            : ""}
                                     </td>
                                 </tr>
                             );
