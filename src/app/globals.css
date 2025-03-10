@@ -4,44 +4,80 @@
 
 /* Light Theme */
 :root {
-  --background: hsl(0, 0%, 95%); /* very light gray */
-  --foreground: #1e1e1e; /* Dark Gray */
-  --color-primary: #008080; /* Teal */
-  --color-primary-hover: #006666; /* Darker Teal */
-  --color-secondary: #6a0dad; /* Amethyst Purple */
-  --color-secondary-hover: #5a0a8b; /* Darker Amethyst */
-  --color-accent: #ff6347; /* Tomato */
-  --color-accent-hover: #e5533d; /* Darker Tomato */
+    --background: hsl(0, 0%, 95%); /* very light gray */
+    --foreground: #1e1e1e; /* Dark Gray */
+    --color-primary: #008080; /* Teal */
+    --color-primary-hover: #006666; /* Darker Teal */
+    --color-secondary: #6a0dad; /* Amethyst Purple */
+    --color-secondary-hover: #5a0a8b; /* Darker Amethyst */
+    --color-accent: #ff6347; /* Tomato */
+    --color-accent-hover: #e5533d; /* Darker Tomato */
 
-  --color-babyblue: #1e90ff; /* Dodger Blue */
-  --color-babyblue-hover: #1c86ee; /* Slightly Darker Dodger Blue for Hover in Dark Mode */
+    --color-babyblue: #1e90ff; /* Dodger Blue */
+    --color-babyblue-hover: #1c86ee; /* Slightly Darker Dodger Blue for Hover in Dark Mode */
 
-  --dropzone-background: #f9fafb; /* Light Gray */
-  --dropzone-border: #d1d5db; /* Gray */
-  --textarea-background: #ffffff; /* White */
-  --textarea-border: #d1d5db; /* Gray */
+    --dropzone-background: #f9fafb; /* Light Gray */
+    --dropzone-border: #d1d5db; /* Gray */
+    --textarea-background: #ffffff; /* White */
+    --textarea-border: #d1d5db; /* Gray */
 
-  --mainsection-bg-color: #f5f5f5; /* Light Mode Main Section BG color */
-  --subsection-bg-color: #e0e0e0; /* Light Mode Subsection BG Color */
+    --mainsection-bg-color: #f5f5f5; /* Light Mode Main Section BG color */
+    --subsection-bg-color: #e0e0e0; /* Light Mode Subsection BG Color */
 
-  --entry-bg-color: #f0f0f0; /* Light mode entry BG color */
+    --entry-bg-color: #f0f0f0; /* Light mode entry BG color */
 
-  --table-bg-color: #888888; /* Light mode triangle */
+    --table-bg-color: #888888; /* Light mode triangle */
 
-  --button-nonselect-background: #888888;
-  --button-nonselect-hover: rgb(189, 200, 217);
+    --button-nonselect-background: #888888;
+    --button-nonselect-hover: rgb(189, 200, 217);
 
-  --box-shadow-color: rgba(0, 0, 0, 0.2);
+    --box-shadow-color: rgba(0, 0, 0, 0.2);
 
-  --table-head-color: #d0e7ff;
-  --table-entry-emerald: #a7f3d0;
-  --table-entry-red: #f98379f3;
-  --table-entry-yellow: #fce9b0;
+    --table-head-color: #d0e7ff;
+    --table-entry-emerald: #a7f3d0;
+    --table-entry-red: #f98379f3;
+    --table-entry-yellow: #fce9b0;
 }
 
 /* Dark Theme */
 @media (prefers-color-scheme: dark) {
-  :root {
+    :root {
+        --background: #1f2937; /* Dark Gray */
+        --foreground: #e0e0e0; /* Light Gray */
+        --color-primary: #20b2aa; /* Light Teal */
+        --color-primary-hover: #1a998f; /* Darker Light Teal */
+        --color-secondary: #6a0dad; /* Amethyst Purple */
+        --color-secondary-hover: #5a0a8b; /* Darker Amethyst */
+        --color-accent: #ff6347; /* Tomato */
+        --color-accent-hover: #e5533d; /* Darker Tomato */
+        --color-babyblue: #6495ed; /* Cornflower Blue for dark mode */
+        --color-babyblue-hover: #4169e1; /* Royal Blue for Hover in Dark Mode */
+
+        --dropzone-background: #374151; /* Dark Gray */
+        --dropzone-border: #4b5563; /* Medium Gray */
+        --textarea-background: rgba(99, 113, 127, 0.76); /* Darker Gray */
+        --textarea-border: #4b5563; /* Medium Gray */
+
+        --entry-bg-color: #4b5563; /* Dark mode entry */
+        --table-bg-color: #a0aec0; /* Dark mode triangle */
+
+        --button-nonselect-background: #4b5563; /* When button not selected */
+        --button-nonselect-hover: rgb(
+            32,
+            39,
+            47
+        ); /* When button not selected hover */
+        --box-shadow-color: rgba(255, 255, 255, 0.2);
+
+        --table-head-color: #1f3b73;
+        --table-entry-emerald: #065f46;
+        --table-entry-red: #991b24;
+        --table-entry-yellow: #b8860b;
+    }
+}
+
+/* Optional: Manual Dark Theme Class */
+:root.dark {
     --background: #1f2937; /* Dark Gray */
     --foreground: #e0e0e0; /* Light Gray */
     --color-primary: #20b2aa; /* Light Teal */
@@ -58,192 +94,156 @@
     --textarea-background: rgba(99, 113, 127, 0.76); /* Darker Gray */
     --textarea-border: #4b5563; /* Medium Gray */
 
-    --entry-bg-color: #4b5563; /* Dark mode entry */
+    --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */
+    --subsection-bg-color: #4c5d6e; /* Dark  Mode Subsection BG Color */
+    --entry-bg-color: #3b4c5d; /* Dark mode entry */
     --table-bg-color: #a0aec0; /* Dark mode triangle */
 
     --button-nonselect-background: #4b5563; /* When button not selected */
     --button-nonselect-hover: rgb(
-      32,
-      39,
-      47
-    ); /* When button not selected hover */
+        32,
+        39,
+        47
+    ); /* When not selected button hover */
     --box-shadow-color: rgba(255, 255, 255, 0.2);
-
     --table-head-color: #1f3b73;
     --table-entry-emerald: #065f46;
     --table-entry-red: #991b24;
     --table-entry-yellow: #b8860b;
-  }
-}
-
-/* Optional: Manual Dark Theme Class */
-:root.dark {
-  --background: #1f2937; /* Dark Gray */
-  --foreground: #e0e0e0; /* Light Gray */
-  --color-primary: #20b2aa; /* Light Teal */
-  --color-primary-hover: #1a998f; /* Darker Light Teal */
-  --color-secondary: #6a0dad; /* Amethyst Purple */
-  --color-secondary-hover: #5a0a8b; /* Darker Amethyst */
-  --color-accent: #ff6347; /* Tomato */
-  --color-accent-hover: #e5533d; /* Darker Tomato */
-  --color-babyblue: #6495ed; /* Cornflower Blue for dark mode */
-  --color-babyblue-hover: #4169e1; /* Royal Blue for Hover in Dark Mode */
-
-  --dropzone-background: #374151; /* Dark Gray */
-  --dropzone-border: #4b5563; /* Medium Gray */
-  --textarea-background: rgba(99, 113, 127, 0.76); /* Darker Gray */
-  --textarea-border: #4b5563; /* Medium Gray */
-
-  --mainsection-bg-color: #2a3b4c; /* Dark Mode Main Section BG color */
-  --subsection-bg-color: #4c5d6e; /* Dark  Mode Subsection BG Color */
-  --entry-bg-color: #3b4c5d; /* Dark mode entry */
-  --table-bg-color: #a0aec0; /* Dark mode triangle */
-
-  --button-nonselect-background: #4b5563; /* When button not selected */
-  --button-nonselect-hover: rgb(
-    32,
-    39,
-    47
-  ); /* When not selected button hover */
-  --box-shadow-color: rgba(255, 255, 255, 0.2);
-  --table-head-color: #1f3b73;
-  --table-entry-emerald: #065f46;
-  --table-entry-red: #991b24;
-  --table-entry-yellow: #b8860b;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
 body {
-  @apply bg-background text-foreground font-sans antialiased;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+    @apply bg-background text-foreground font-sans antialiased;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 header {
-  display: flex;
-  padding: 0.2rem;
-  flex-shrink: 0;
-  width: 100%;
-  height: 60px;
-  border: 1px;
-  border-radius: 0px 0px 10px 10px;
-  box-shadow: 3px 3px 3px var(--box-shadow-color);
-  margin-bottom: 2rem;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    padding: 0.2rem;
+    flex-shrink: 0;
+    width: 100%;
+    height: 60px;
+    border: 1px;
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 3px 3px 3px var(--box-shadow-color);
+    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
 }
 
 main {
-  flex: 1;
+    flex: 1;
 }
 
 a {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 table,
 th,
 td {
-  border: 1px solid var(--table-bg-color);
-  border-collapse: separate;
-  border-spacing: 0;
+    border: 1px solid var(--table-bg-color);
+    border-collapse: separate;
+    border-spacing: 0;
 }
 th,
 td {
-  background: var(--entry-bg-color);
-  padding: 0.2rem;
-  text-align: center;
+    background: var(--entry-bg-color);
+    padding: 0.2rem;
+    text-align: center;
 }
 th {
-  background: var(--table-head-color);
-  font-size: 0.9rem;
-  line-height: 0.9rem;
+    background: var(--table-head-color);
+    font-size: 0.9rem;
+    line-height: 0.9rem;
 }
 td {
-  font-size: 0.9rem;
-  line-height: 0.8rem;
+    font-size: 0.9rem;
+    line-height: 0.8rem;
 }
 table {
-  border-radius: 5px;
-  margin-inline: 0.2rem;
+    border-radius: 5px;
+    margin-inline: 0.2rem;
 }
 td.emerald {
-  background-color: var(--table-entry-emerald) !important;
+    background-color: var(--table-entry-emerald) !important;
 }
 td.red {
-  background-color: var(--table-entry-red) !important;
+    background-color: var(--table-entry-red) !important;
 }
 
 tr.blue {
-  background-color: #006666 !important;
+    background-color: #006666 !important;
 }
 
 td.yellow {
-  background-color: var(--table-entry-yellow) !important;
+    background-color: var(--table-entry-yellow) !important;
 }
 
 .btn {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-  border-width: 1px;
-  border-radius: 0.375rem;
-  border-color: #e5e7eb;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  font-weight: bold;
-  column-gap: 0.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+    border-width: 1px;
+    border-radius: 0.375rem;
+    border-color: #e5e7eb;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+        var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-weight: bold;
+    column-gap: 0.25rem;
 }
 
 button:active {
-  transform: translateY(1px); /* Move button down 2px */
-  box-shadow: 0 1px var(--box-shadow-color); /* Reduce shadow */
+    transform: translateY(1px); /* Move button down 2px */
+    box-shadow: 0 1px var(--box-shadow-color); /* Reduce shadow */
 }
 
 button:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-  background-color: #cccccc;
-  color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+    background-color: #cccccc;
+    color: #666666;
 }
 
 button:disabled:hover {
-  background-color: #1d1d1d;
+    background-color: #1d1d1d;
 }
 
 .btn-primary {
-  background: var(--color-primary);
+    background: var(--color-primary);
 }
 .btn-primary:hover {
-  background: var(--color-primary-hover);
+    background: var(--color-primary-hover);
 }
 
 .btn-secondary {
-  background: var(--color-secondary);
+    background: var(--color-secondary);
 }
 .btn-secondary:hover {
-  background: var(--color-secondary-hover);
+    background: var(--color-secondary-hover);
 }
 
 .btn-accent {
-  background: var(--color-accent);
+    background: var(--color-accent);
 }
 
 .btn-accent:hover {
-  background: var(--color-accent-hover);
+    background: var(--color-accent-hover);
 }
 .btn-babyblue {
-  background: var(--color-babyblue);
+    background: var(--color-babyblue);
 }
 .btn-babyblue:hover {
-  background: var(--color-babyblue-hover);
+    background: var(--color-babyblue-hover);
 }

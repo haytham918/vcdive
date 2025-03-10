@@ -100,4 +100,32 @@ export const segment_mask_table = (size: number, mask: string) => {
     return segments;
 };
 
+// Assign if head or tail basd on index
+export const head_tail_comp = (i: number, head: number, tail: number) => {
+    if (head === i && tail === i) return "h&t";
+    else if (head === i) return "h";
+    else if (tail === i) return "t";
+    return null;
+};
+
+// Assign entry color based on head, tail, index, free
+export const fifo_entry_color = (
+    index: number,
+    head: number,
+    tail: number,
+    num_free: number,
+    num_size: number
+) => {
+    if (num_free == num_size) return "";
+    if (index === head) return "emerald";
+    if (index === tail) return "red";
+    if (num_free == 0) return "yellow";
+    if (tail >= head) {
+        if (index < tail && index > head) return "yellow";
+    } else {
+        if (index < tail || index > head) return "yellow";
+    }
+    return "";
+};
+
 // -----------------------------------------------------------------

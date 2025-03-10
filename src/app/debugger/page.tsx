@@ -1,6 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
+import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -108,6 +109,10 @@ const DebuggerPage = () => {
     const ready_list_data = extract_data(cycle_data, "READY_LIST");
     const rob_data = extract_data(cycle_data, "ROB");
     const prf_data = extract_data(cycle_data, "REGFILE");
+    const instruction_queue_data = extract_data(
+        cycle_data,
+        "INSTRUCTION_QUEUE"
+    );
 
     return (
         <>
@@ -126,6 +131,9 @@ const DebuggerPage = () => {
             </header>
             <main>
                 <div className="ml-8 mr-8 flex flex-row flex-wrap">
+                    <InstructionQueue
+                        instruction_queue_data={instruction_queue_data}
+                    />
                     <ReorderBuffer rob_data={rob_data} />
                     <PRF_ReadyList
                         selected_number_sys={selected_number_sys}
