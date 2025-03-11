@@ -1,0 +1,253 @@
+"use client";
+import {
+    BranchOperation,
+    convert_hex_to_dec,
+    fifo_entry_color,
+    head_tail_comp,
+    parse_instruction,
+    process_values,
+} from "@/lib/utils";
+import "./Section.css";
+import { MouseEvent, useState } from "react";
+import { NumberSystem } from "@/app/debugger/page";
+
+const RS_SIZE = 16;
+
+// Entry color
+const rs_entry_color = (is_valid: boolean) => {
+    return is_valid ? "emerald" : "";
+};
+
+const ReservationStation: React.FC<{
+    selected_number_system: NumberSystem;
+    reservation_station_data: any;
+}> = ({ selected_number_system, reservation_station_data }) => {
+    const [show_subsection, setShowSubsection] = useState(true);
+    const [show_squash, setShowSquash] = useState(true);
+
+    // Open / Close subsection when clicking the header
+    const handleHeaderClick = (event: MouseEvent) => {
+        event.preventDefault();
+        setShowSubsection(!show_subsection);
+    };
+
+    // Open / Close Squash info
+    const handleSquashClick = (event: MouseEvent) => {
+        event.preventDefault();
+        setShowSquash(!show_squash);
+    };
+
+    // Get RS info
+    const valids: boolean[] = Array(RS_SIZE).fill(false);
+    const instructions: string[] = Array(RS_SIZE).fill("");
+
+    const destination_tags: (string | number)[] = Array(RS_SIZE).fill("-");
+    const t1s: (string | number)[] = Array(RS_SIZE).fill("-");
+    const t2s: (string | number)[] = Array(RS_SIZE).fill("-");
+    const immediates: (string | number)[] = Array(RS_SIZE).fill("-");
+    const pcs: string[] = Array(RS_SIZE).fill("-");
+    const branch_masks: string[] = Array(RS_SIZE).fill("-");
+    for (let i = 0; i < RS_SIZE; i++) {
+        // Check if this row is valid
+        const is_valid =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].valid`
+            ];
+        valids[i] = is_valid === "1";
+        // If not valid, no need to retrieve further info
+        if (valids[i] == false) continue;
+
+        // Get Instruction
+        const instruction_hex_string =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].instruction`
+            ];
+
+        // Check if it's noop, if so skip
+        if (instruction_hex_string === "00000013") {
+            instructions[i] = "noop";
+            continue;
+        }
+
+        // Decoded Instruction
+        const decoded_instruction = parse_instruction(instruction_hex_string);
+        const instruction_type = decoded_instruction.fmt;
+        instructions[i] = decoded_instruction.asm;
+
+        // Check if instruction is Store or Branch (no jump), if so, destination_tag is not useful
+        if (instruction_type != "S-type" && instruction_type != "B-type") {
+            const destination_tag = convert_hex_to_dec(
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].destination_tag`
+                ]
+            );
+            destination_tags[i] = destination_tag;
+        }
+
+        // Check if tag1 and tag2 are valid reg
+        const t1_valid =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].t1_valid`
+            ] === "1";
+        const t2_valid =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].t2_valid`
+            ] === "1";
+
+        // t1 is valid, display
+        if (t1_valid) {
+            const t1 = convert_hex_to_dec(
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].t1`
+                ]
+            );
+            t1s[i] = t1;
+        }
+
+        // t2 is valid, display
+        if (t2_valid) {
+            const t2 = convert_hex_to_dec(
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].t2`
+                ]
+            );
+            t2s[i] = t2;
+        }
+
+        // Check if it's not r-type, if not then need immediate
+        if (instruction_type != "R-type") {
+            const immediate = process_values(
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].imm`
+                ],
+                selected_number_system
+            );
+            immediates[i] = immediate;
+        }
+
+        // Get pc and branch_mask, display anyway
+        const pc = process_values(
+            reservation_station_data[`RESERVATION_STATION.rs_table[${i}].pc`],
+            selected_number_system
+        );
+        const branch_mask =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].branch_mask`
+            ];
+
+        pcs[i] = pc;
+        branch_masks[i] = branch_mask;
+    }
+
+    // Extract rob squash_en and restore_tail
+    const squash_en = reservation_station_data["RESERVATION_STATION.squash_en"];
+    const is_squash = squash_en === "1";
+    const branch_to_squash = convert_hex_to_dec(
+        reservation_station_data["RESERVATION_STATION.branch_to_squash"]
+    );
+
+    const subsection_comp = show_subsection ? (
+        <div>
+            {/* Squash Info */}
+            <div className="section small-section">
+                <a onClick={handleSquashClick}>
+                    <h3 className="smallsection-header">Squash</h3>
+                </a>
+                {show_squash ? (
+                    <>
+                        <p className="smallsection-text">
+                            Squash Enable:{" "}
+                            <span
+                                className={`font-bold ${
+                                    is_squash
+                                        ? "text-[--color-primary]"
+                                        : "text-[--color-accent]"
+                                }`}
+                            >
+                                {is_squash ? "True" : "False"}
+                            </span>
+                        </p>
+
+                        {is_squash ? (
+                            <p className="smallsection-text w-[100%] flex flex-row">
+                                Branch to Squash -&gt;
+                                <span className="font-bold ml-auto text-[--color-accent]">
+                                    {branch_to_squash}
+                                </span>
+                            </p>
+                        ) : null}
+                    </>
+                ) : null}
+            </div>
+
+            <div className="section sub-section">
+                <h2 className="subsection-header">RS</h2>
+                <div className="flex flex-row gap-x-1">
+                    {/* Table */}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>PC</th>
+                                <th>Inst</th>
+                                <th>T_dst</th>
+                                <th>T_1</th>
+                                <th>T_2</th>
+                                <th>Imm</th>
+                                <th>B_Mask</th>
+                            </tr>
+                        </thead>
+
+                        {/* Actual Register Values */}
+                        <tbody>
+                            {Array.from({ length: RS_SIZE }, (_, i) => {
+                                const is_valid = valids[i];
+                                const entry_color = rs_entry_color(is_valid);
+                                // Display the entries accordingly
+                                return (
+                                    <tr key={i}>
+                                        <td className={entry_color}>{i}</td>
+                                        <td className={entry_color}>
+                                            {is_valid ? pcs[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? instructions[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid
+                                                ? destination_tags[i]
+                                                : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? t1s[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? t2s[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? immediates[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? branch_masks[i] : ""}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    ) : null;
+
+    return (
+        <div className="section main-section">
+            <a onClick={handleHeaderClick}>
+                <h1 className="mainsection-header">Reservation Station</h1>
+            </a>
+            {subsection_comp}
+        </div>
+    );
+};
+
+export default ReservationStation;
