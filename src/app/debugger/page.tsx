@@ -132,6 +132,7 @@ const DebuggerPage = () => {
             <main>
                 <div className="ml-8 mr-8 flex flex-row flex-wrap">
                     <InstructionQueue
+                        selected_number_sys={selected_number_sys}
                         instruction_queue_data={instruction_queue_data}
                     />
                     <ReorderBuffer rob_data={rob_data} />

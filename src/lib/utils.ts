@@ -52,21 +52,21 @@ export const parse_instruction = (instruction: string): DisplayInstruction => {
 };
 
 // Convert register number to decimal
-export const convert_reg_hex_to_dec = (reg_hex: string) => {
-    const reg_dec = parseInt(reg_hex, 16);
-    return reg_dec;
+export const convert_hex_to_dec = (hex: string) => {
+    const dec = parseInt(hex, 16);
+    return dec;
 };
 
 // Process value based on the selected number system
 export const process_values = (value: string, number_system: NumberSystem) => {
-    if (value == "" || value == " ") return "x";
+    if (!value || value == "" || value == " ") return "x";
     // Remove leading zeros
     const trimmedValue = value.replace(/^0+/, "") || "0";
 
     if (number_system == "0d") {
-        return parseInt(trimmedValue, 16);
+        return String(parseInt(trimmedValue, 16));
     }
-    return trimmedValue;
+    return String(trimmedValue);
 };
 
 // Reverse string method

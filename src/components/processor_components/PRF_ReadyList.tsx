@@ -39,7 +39,7 @@ const PRF_ReadyList: React.FC<{
               ];
     // console.log(ready_segments);
 
-    const prf_vals: (string | number)[] = [0];
+    const prf_vals: string[] = ["0"];
     if (ready_state_mask) {
         for (let i = 1; i < ready_state_mask.length; i++) {
             const processed_value = process_values(
