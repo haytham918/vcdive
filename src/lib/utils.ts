@@ -108,7 +108,7 @@ export const parse_instruction = (instruction: string): DisplayInstruction => {
         };
     } catch {
         return {
-            asm: "Invalid",
+            asm: "x",
             fmt: "",
             valid: false,
         };

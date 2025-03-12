@@ -37,6 +37,7 @@
     --table-entry-emerald: #a7f3d0;
     --table-entry-red: #f98379f3;
     --table-entry-yellow: #fce9b0;
+    --table-entry-cyan: #b2dfdb;
 }
 
 /* Dark Theme */
@@ -73,6 +74,7 @@
         --table-entry-emerald: #065f46;
         --table-entry-red: #991b24;
         --table-entry-yellow: #b8860b;
+        --table-entry-cyan: #006666;
     }
 }
 
@@ -110,6 +112,7 @@
     --table-entry-emerald: #065f46;
     --table-entry-red: #991b24;
     --table-entry-yellow: #b8860b;
+    --table-entry-cyan: #006666;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
@@ -175,8 +178,8 @@ td.red {
     background-color: var(--table-entry-red) !important;
 }
 
-tr.blue {
-    background-color: #006666 !important;
+td.cyan {
+    background-color: var(--table-entry-cyan) !important;
 }
 
 td.yellow {

@@ -200,9 +200,14 @@ class Parser {
 			const std::string_view logic_name = symbol_table[symbol.data()];
 
 			// Overwrite or create the value.
-			// If the register is a *_oht or contains "mask", or free_list_t/ready_list_t then we want to use binary
-			// encoding Instead of the compressed HEX.
-			if (logic_name.ends_with("_oht") || logic_name.find("mask") != std::string::npos) {
+			// Values that don't change:
+			/*
+				-- end with _oht (One Hot)
+				-- contains mask (mask set)
+				-- branch_to_squash
+			*/
+			if (logic_name.ends_with("_oht") || logic_name.find("mask") != std::string::npos ||
+				logic_name.find("branch_to_squash") != std::string::npos) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {
 				raw_data.back()[logic_name] = bin2hex(data.substr(1));

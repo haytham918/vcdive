@@ -1,9 +1,6 @@
 "use client";
 import {
-    BranchOperation,
     convert_hex_to_dec,
-    fifo_entry_color,
-    head_tail_comp,
     parse_instruction,
     process_values,
 } from "@/lib/utils";
@@ -15,7 +12,7 @@ const RS_SIZE = 16;
 
 // Entry color
 const rs_entry_color = (is_valid: boolean) => {
-    return is_valid ? "emerald" : "";
+    return is_valid ? "cyan" : "";
 };
 
 const ReservationStation: React.FC<{
@@ -142,10 +139,10 @@ const ReservationStation: React.FC<{
     // Extract rob squash_en and restore_tail
     const squash_en = reservation_station_data["RESERVATION_STATION.squash_en"];
     const is_squash = squash_en === "1";
-    const branch_to_squash = convert_hex_to_dec(
-        reservation_station_data["RESERVATION_STATION.branch_to_squash"]
-    );
+    const branch_to_squash =
+        reservation_station_data["RESERVATION_STATION.branch_to_squash"];
 
+    console.log(branch_to_squash);
     const subsection_comp = show_subsection ? (
         <div>
             {/* Squash Info */}
@@ -170,7 +167,7 @@ const ReservationStation: React.FC<{
 
                         {is_squash ? (
                             <p className="smallsection-text w-[100%] flex flex-row">
-                                Branch to Squash -&gt;
+                                Branch Squash:
                                 <span className="font-bold ml-auto text-[--color-accent]">
                                     {branch_to_squash}
                                 </span>
