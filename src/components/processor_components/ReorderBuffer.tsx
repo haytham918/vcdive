@@ -80,7 +80,7 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
 
                         {is_squash ? (
                             <p className="smallsection-text w-[100%] flex flex-row">
-                                Branch Tail -&gt;
+                                Branch Tail:
                                 <span className="font-bold ml-auto text-[--color-accent]">
                                     {branch_tail}
                                 </span>

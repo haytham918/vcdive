@@ -50,4 +50,3 @@ symbol_table_debug.json
 
 build
 src/parse/vcd_parser*
-uploads/

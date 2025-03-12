@@ -23,6 +23,67 @@ export const set_cookie = (name: string, value: string, days = 365) => {
         value
     )}; expires=${expires}; path=/`;
 };
+/* ---------------------------------------------------------------
+        Debugger Info
+-----------------------------------------------------------------*/
+// export enum AluOperation {
+//     ADD,
+//     SUB,
+//     AND,
+//     SLT,
+//     SLTU,
+//     OR,
+//     XOR,
+//     SRL,
+//     SLL,
+//     SRA,
+//     LUI,
+//     AUIPC,
+//     NOOP,
+// }
+
+// export enum MultOperation {
+//     MUL,
+//     MULH,
+//     MULHSU,
+//     MULHU,
+// }
+
+// export enum BranchOperation {
+//     BEQ,
+//     BNE,
+//     BLT,
+//     BGE,
+//     BLTU,
+//     BGEU,
+//     JAL,
+//     JALR,
+//     // Not real ALU but doesn't have a FU.
+//     WFI,
+//     ILLEGAL,
+// }
+
+// export enum LoadOperation {
+//     LB,
+//     LH,
+//     LW,
+//     LBU,
+//     LHU,
+// }
+// export enum StoreOperation {
+//     SB,
+//     SH,
+//     SW,
+// }
+
+// export enum FU_Index {
+//     ALU_IDX,
+//     MULT_IDX,
+//     LOAD_IDX,
+//     STORE_IDX,
+//     BRANCH_IDX,
+// }
+
 /* ---------------------------------------------------------------*/
 
 /*
@@ -31,6 +92,7 @@ export const set_cookie = (name: string, value: string, days = 365) => {
 // ---------------------------------------------------------------
 export interface DisplayInstruction {
     asm: string;
+    fmt: string;
     valid: boolean;
 }
 
@@ -41,11 +103,13 @@ export const parse_instruction = (instruction: string): DisplayInstruction => {
         console.log(inst);
         return {
             asm: inst.asm,
+            fmt: inst.fmt,
             valid: true,
         };
     } catch {
         return {
-            asm: "Invalid",
+            asm: "x",
+            fmt: "",
             valid: false,
         };
     }

@@ -4,7 +4,9 @@ import DebuggerHeader from "@/components/DebuggerHeader";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
+import ReservationStation from "@/components/processor_components/ReservationStation";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Instruction } from "@/lib/rvcodec.js/Instruction";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*
@@ -105,13 +107,17 @@ const DebuggerPage = () => {
         );
     };
 
-    // Filter READY_LIST data to pass
+    // Get all data for modules
     const ready_list_data = extract_data(cycle_data, "READY_LIST");
     const rob_data = extract_data(cycle_data, "ROB");
     const prf_data = extract_data(cycle_data, "REGFILE");
     const instruction_queue_data = extract_data(
         cycle_data,
         "INSTRUCTION_QUEUE"
+    );
+    const reservation_station_data = extract_data(
+        cycle_data,
+        "RESERVATION_STATION"
     );
 
     return (
@@ -136,6 +142,10 @@ const DebuggerPage = () => {
                         instruction_queue_data={instruction_queue_data}
                     />
                     <ReorderBuffer rob_data={rob_data} />
+                    <ReservationStation
+                        selected_number_system={selected_number_sys}
+                        reservation_station_data={reservation_station_data}
+                    />
                     <PRF_ReadyList
                         selected_number_sys={selected_number_sys}
                         ready_list_data={ready_list_data}
