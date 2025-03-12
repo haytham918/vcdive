@@ -81,18 +81,8 @@ const ReservationStation: React.FC<{
             destination_tags[i] = destination_tag;
         }
 
-        // Check if tag1 and tag2 are valid reg
-        const t1_valid =
-            reservation_station_data[
-                `RESERVATION_STATION.rs_table[${i}].t1_valid`
-            ] === "1";
-        const t2_valid =
-            reservation_station_data[
-                `RESERVATION_STATION.rs_table[${i}].t2_valid`
-            ] === "1";
-
-        // t1 is valid, display
-        if (t1_valid) {
+        // instruction is not U, J, then t1 is valid
+        if (instruction_type != "U-type" && instruction_type != "J-type") {
             const t1 = convert_hex_to_dec(
                 reservation_station_data[
                     `RESERVATION_STATION.rs_table[${i}].t1`
@@ -101,8 +91,12 @@ const ReservationStation: React.FC<{
             t1s[i] = t1;
         }
 
-        // t2 is valid, display
-        if (t2_valid) {
+        // If instruction is not I, U, J, then t2 is valid
+        if (
+            instruction_type != "I-type" &&
+            instruction_type != "U-type" &&
+            instruction_type != "J-type"
+        ) {
             const t2 = convert_hex_to_dec(
                 reservation_station_data[
                     `RESERVATION_STATION.rs_table[${i}].t2`
