@@ -39,9 +39,8 @@ const InstructionQueue: React.FC<{
         instruction_queue_data["INSTRUCTION_QUEUE.num_free"]
     );
 
-    // Get PC, instructions and Branch_masks
+    // Get instructions and Branch_masks
     const instructions: string[] = Array(IQ_SIZE).fill("");
-    const pcs: string[] = Array(IQ_SIZE).fill("");
     const branch_masks: string[] = Array(IQ_SIZE).fill("");
 
     // Update info if we have instruction_queue_data
@@ -57,16 +56,11 @@ const InstructionQueue: React.FC<{
             );
             instructions[i] = decoded_instruction.asm;
 
-            const pc = process_values(
-                instruction_queue_data[`INSTRUCTION_QUEUE.iq_data[${i}].pc`],
-                selected_number_sys
-            );
             const branch_mask =
                 instruction_queue_data[
                     `INSTRUCTION_QUEUE.iq_data[${i}].branch_mask`
                 ];
 
-            pcs[i] = pc;
             branch_masks[i] = branch_mask;
         }
     }
@@ -106,7 +100,6 @@ const InstructionQueue: React.FC<{
                             <tr>
                                 <th>h/t</th>
                                 <th>#</th>
-                                <th>PC</th>
                                 <th>Inst</th>
                                 <th>B_Mask</th>
                             </tr>
@@ -135,12 +128,6 @@ const InstructionQueue: React.FC<{
                                         </td>
                                         <td className={entry_color}>{i}</td>
                                         {/* If No color Or red(tail), then garbage vals */}
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? pcs[i]
-                                                : ""}
-                                        </td>
                                         <td className={entry_color}>
                                             {entry_color != "" &&
                                             entry_color != "red"

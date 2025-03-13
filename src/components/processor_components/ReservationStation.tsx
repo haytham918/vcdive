@@ -116,17 +116,27 @@ const ReservationStation: React.FC<{
             immediates[i] = immediate;
         }
 
-        // Get pc and branch_mask, display anyway
-        const pc = process_values(
-            reservation_station_data[`RESERVATION_STATION.rs_table[${i}].pc`],
-            selected_number_system
-        );
+        // Get pc and branch_mask
+        const is_pc =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].is_pc`
+            ] === "1";
+        if (is_pc) {
+            // Should only be Branch + AUIPC + JAL + JALR
+            const pc = process_values(
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].pc`
+                ],
+                selected_number_system
+            );
+            pcs[i] = pc;
+        }
+
         const branch_mask =
             reservation_station_data[
                 `RESERVATION_STATION.rs_table[${i}].branch_mask`
             ];
 
-        pcs[i] = pc;
         branch_masks[i] = branch_mask;
     }
 
@@ -179,12 +189,12 @@ const ReservationStation: React.FC<{
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>PC</th>
                                 <th>Inst</th>
                                 <th>T_dst</th>
                                 <th>T_1</th>
                                 <th>T_2</th>
                                 <th>Imm</th>
+                                <th>PC</th>
                                 <th>B_Mask</th>
                             </tr>
                         </thead>
@@ -198,9 +208,6 @@ const ReservationStation: React.FC<{
                                 return (
                                     <tr key={i}>
                                         <td className={entry_color}>{i}</td>
-                                        <td className={entry_color}>
-                                            {is_valid ? pcs[i] : ""}
-                                        </td>
                                         <td className={entry_color}>
                                             {is_valid ? instructions[i] : ""}
                                         </td>
@@ -217,6 +224,9 @@ const ReservationStation: React.FC<{
                                         </td>
                                         <td className={entry_color}>
                                             {is_valid ? immediates[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? pcs[i] : ""}
                                         </td>
                                         <td className={entry_color}>
                                             {is_valid ? branch_masks[i] : ""}
