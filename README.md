@@ -23,7 +23,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 1. **Make sure you are on U-M Wifi or VPN**
 2. Update `src/parse/main.py:debug_vcd_on_caen()` with your **uniqname** and **parent directory containing /vcd/**
-3. Set **SSH_CAEN_PASSWORD** in environmental variable with your U-M Password
+3. Set **SSH_CAEN_PASSWORD** in environmental variable with your U-M Password  
+    * `export $SSH_CAEN_PASSWORD=<your_password>`, you can also add to "\~/.bash_profile" or "\~/.zshrc"  
 4. Be ready for a DUO push
 
 ## Acknoledgement
