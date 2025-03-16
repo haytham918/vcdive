@@ -8,6 +8,7 @@ import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Instruction } from "@/lib/rvcodec.js/Instruction";
+import { reverse_string } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*
@@ -111,6 +112,10 @@ const DebuggerPage = () => {
     // Get all data for modules
     const ready_list_data = extract_data(cycle_data, "READY_LIST");
     const rob_data = extract_data(cycle_data, "ROB");
+    const retire_list_data = extract_data(
+        cycle_data,
+        "RETIRE_LIST.retire_state_mask"
+    );
     const prf_data = extract_data(cycle_data, "REGFILE");
     const instruction_queue_data = extract_data(
         cycle_data,
@@ -148,7 +153,11 @@ const DebuggerPage = () => {
                         selected_number_sys={selected_number_sys}
                         instruction_queue_data={instruction_queue_data}
                     />
-                    <ReorderBuffer rob_data={rob_data} />
+                    <ReorderBuffer
+                        selected_number_sys={selected_number_sys}
+                        rob_data={rob_data}
+                        retire_list_data={retire_list_data}
+                    />
                     <ReservationStation
                         selected_number_sys={selected_number_sys}
                         reservation_station_data={reservation_station_data}

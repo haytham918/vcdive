@@ -26,18 +26,18 @@ export interface MethodOption {
     icon: JSX.Element;
 }
 const available_methods: MethodOption[] = [
-    { label: "Drop", value: "drop", icon: <Upload size={25} weight="bold" /> },
     {
         label: "CAEN",
         value: "caen",
         icon: <FileCloud size={25} weight="bold" />,
     },
+    { label: "Drop", value: "drop", icon: <Upload size={25} weight="bold" /> },
     { label: "Local", value: "local", icon: <Files size={25} weight="bold" /> },
 ];
 
 const Home = () => {
     // State variable for the chosen method
-    const [chosen_method, setChosenMethod] = useState<Method>("drop");
+    const [chosen_method, setChosenMethod] = useState<Method>("caen");
 
     // File related state variables
     const [file_name, setFileName] = useState("cpu_test.vcd");

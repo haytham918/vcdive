@@ -121,15 +121,20 @@ export const convert_hex_to_dec = (hex: string) => {
 };
 
 // Process value based on the selected number system
-export const process_values = (value: string, number_system: NumberSystem) => {
-    if (!value || value == "" || value == " ") return "x";
+export const process_values = (
+    value: string,
+    number_system: NumberSystem,
+    is_npc: boolean = false
+) => {
+    if (!value || value == "" || value == " " || value == "x") return "x";
     // Remove leading zeros
     const trimmedValue = value.replace(/^0+/, "") || "0";
-
+    let val = parseInt(trimmedValue, 16); // Decimal of Val
+    if (is_npc) val -= 4; // If getting pc from npc
     if (number_system == "0d") {
-        return String(parseInt(trimmedValue, 16));
+        return String(val);
     }
-    return String(trimmedValue);
+    return is_npc ? val.toString(16) : String(trimmedValue);
 };
 
 // Reverse string method

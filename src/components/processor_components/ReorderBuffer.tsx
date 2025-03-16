@@ -4,13 +4,20 @@ import {
     fifo_entry_color,
     head_tail_comp,
     parse_instruction,
+    process_values,
+    reverse_string,
 } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
+import { NumberSystem } from "@/app/debugger/page";
 
 const ROB_SIZE = 32;
 
-const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
+const ReorderBuffer: React.FC<{
+    selected_number_sys: NumberSystem;
+    rob_data: any;
+    retire_list_data: any;
+}> = ({ selected_number_sys, rob_data, retire_list_data }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -26,13 +33,25 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
         setShowSquash(!show_squash);
     };
 
-    // Get instructions, destination tag and old tag
+    // Get instructions, pc, destination tag and old tag, retirable
     const instructions: string[] = Array(ROB_SIZE).fill("");
+    const pcs: string[] = Array(ROB_SIZE).fill("");
     const destination_tags: number[] = Array(ROB_SIZE).fill(0);
     const tag_olds: number[] = Array(ROB_SIZE).fill(0);
+    let retirables: string = reverse_string(
+        retire_list_data[`RETIRE_LIST.retire_state_mask`]
+    );
+
     for (let i = 0; i < ROB_SIZE; i++) {
         const destination_tag = convert_hex_to_dec(
             rob_data[`ROB.rob_data[${i}].destination_tag`]
+        );
+
+        // Get the current PC based on NPC
+        const pc = process_values(
+            rob_data[`ROB.rob_data[${i}].commit_packet.NPC`],
+            selected_number_sys,
+            true
         );
         const tag_old = convert_hex_to_dec(
             rob_data[`ROB.rob_data[${i}].tag_old`]
@@ -42,6 +61,7 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
         const decoded_instruction = parse_instruction(instruction_hex_string);
 
         instructions[i] = decoded_instruction.asm;
+        pcs[i] = pc;
         destination_tags[i] = destination_tag || 0;
         tag_olds[i] = tag_old || 0;
     }
@@ -99,9 +119,11 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
                             <tr>
                                 <th>h/t</th>
                                 <th>#</th>
+                                <th>PC</th>
                                 <th>Inst</th>
                                 <th>T_dst</th>
                                 <th>T_old</th>
+                                <th>Retirable</th>
                             </tr>
                         </thead>
 
@@ -120,30 +142,36 @@ const ReorderBuffer: React.FC<{ rob_data: any }> = ({ rob_data }) => {
                                     rob_head,
                                     rob_tail
                                 );
+
+                                let pc = "";
+                                let inst = "";
+                                let t_dst: string | number = "";
+                                let t_old: string | number = "";
+                                let is_ready_retire = "";
+                                if (
+                                    entry_color !== "" &&
+                                    entry_color !== "red"
+                                ) {
+                                    pc = pcs[i];
+                                    inst = instructions[i];
+                                    t_dst = destination_tags[i];
+                                    t_old = tag_olds[i];
+                                    is_ready_retire =
+                                        retirables[t_dst] == "1" ? "Y" : "N";
+                                }
                                 return (
                                     <tr key={i} className="blue">
                                         <td className={entry_color}>
                                             {head_tail}
                                         </td>
                                         <td className={entry_color}>{i}</td>
+                                        <td className={entry_color}>{pc}</td>
                                         {/* If No color Or red(tail), then garbage vals */}
+                                        <td className={entry_color}>{inst}</td>
+                                        <td className={entry_color}>{t_dst}</td>
+                                        <td className={entry_color}>{t_old}</td>
                                         <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? instructions[i]
-                                                : ""}
-                                        </td>
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? destination_tags[i]
-                                                : ""}
-                                        </td>
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? tag_olds[i]
-                                                : ""}
+                                            {is_ready_retire}
                                         </td>
                                     </tr>
                                 );
