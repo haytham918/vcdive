@@ -54,7 +54,8 @@ const Decoder: React.FC<{
                 decoder_data[`DECODER.pcs[${i}]`],
                 selected_number_sys
             );
-            if (pc != "x") pcs[i] = pc;
+            // If pc is valid and instruction is also valid
+            if (pc != "x" && instructions[i] != "") pcs[i] = pc;
         }
     }
 
