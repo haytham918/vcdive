@@ -25,7 +25,7 @@ const FileCaen: React.FC<{
             </h3>
             <input
                 className="input-filename"
-                defaultValue={"cpu_test.vcd"}
+                value={file_name}
                 onChange={inputHandler}
             ></input>
             <div className="flex w-[100%]">

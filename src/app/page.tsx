@@ -40,7 +40,7 @@ const Home = () => {
     const [chosen_method, setChosenMethod] = useState<Method>("drop");
 
     // File related state variables
-    const [file_name, setFileName] = useState("");
+    const [file_name, setFileName] = useState("cpu_test.vcd");
     const [uploaded_file_name, setUploadedFileName] = useState("");
     const [is_loading, setLoading] = useState(false);
 
