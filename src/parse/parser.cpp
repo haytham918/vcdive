@@ -235,10 +235,9 @@ class Parser {
 		while (std::getline(file_stream, line)) {
 			if (line.starts_with("#")) {
 				int t = std::stoi(line.substr(1));
-				// Ignore the #0
 				if (t != 0) {
 					// First non-zero, set the clock time
-					if (time_steps.empty()) {
+					if (multipler == -1) {
 						multipler = t;
 					}
 					if (t % multipler == 0) {
@@ -249,10 +248,14 @@ class Parser {
 						// if t can't be wholy divided by multiplier, then it's a fake clock
 						fake_clock = true;
 					}
+				} else {
+					// zero
+					time_steps.push_back(t);
+					raw_data.emplace_back();
 				}
 			} else {
-				// Only parse data line when time_steps is not empty (after #0) and not a fake clock
-				if (!time_steps.empty() && !fake_clock) {
+				// Only parse data line when time_steps is not a fake clock
+				if (!fake_clock) {
 					parse_data_line(line);
 				}
 			}

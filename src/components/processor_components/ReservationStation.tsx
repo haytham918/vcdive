@@ -16,9 +16,9 @@ const rs_entry_color = (is_valid: boolean) => {
 };
 
 const ReservationStation: React.FC<{
-    selected_number_system: NumberSystem;
+    selected_number_sys: NumberSystem;
     reservation_station_data: any;
-}> = ({ selected_number_system, reservation_station_data }) => {
+}> = ({ selected_number_sys, reservation_station_data }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -60,9 +60,8 @@ const ReservationStation: React.FC<{
                 `RESERVATION_STATION.rs_table[${i}].instruction`
             ];
 
-        // Check if it's noop, if so skip
-        if (instruction_hex_string === "00000013") {
-            instructions[i] = "noop";
+        // Check if it's all zero, if so skip
+        if (instruction_hex_string === "00000000") {
             continue;
         }
 
@@ -111,7 +110,7 @@ const ReservationStation: React.FC<{
                 reservation_station_data[
                     `RESERVATION_STATION.rs_table[${i}].imm`
                 ],
-                selected_number_system
+                selected_number_sys
             );
             immediates[i] = immediate;
         }
@@ -127,7 +126,7 @@ const ReservationStation: React.FC<{
                 reservation_station_data[
                     `RESERVATION_STATION.rs_table[${i}].pc`
                 ],
-                selected_number_system
+                selected_number_sys
             );
             pcs[i] = pc;
         }
@@ -194,7 +193,7 @@ const ReservationStation: React.FC<{
                                 <th>T_1</th>
                                 <th>T_2</th>
                                 <th>Imm</th>
-                                <th>PC</th>
+                                <th>PC_Val</th>
                                 <th>B_Mask</th>
                             </tr>
                         </thead>

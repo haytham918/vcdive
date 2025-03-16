@@ -50,6 +50,7 @@ const InstructionQueue: React.FC<{
                 instruction_queue_data[
                     `INSTRUCTION_QUEUE.iq_data[${i}].instruction`
                 ];
+
             // Parse the instruction
             const decoded_instruction = parse_instruction(
                 instruction_hex_string

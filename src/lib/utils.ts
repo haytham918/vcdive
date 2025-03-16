@@ -100,7 +100,6 @@ export interface DisplayInstruction {
 export const parse_instruction = (instruction: string): DisplayInstruction => {
     try {
         const inst = new Instruction(instruction);
-        console.log(inst);
         return {
             asm: inst.asm,
             fmt: inst.fmt,

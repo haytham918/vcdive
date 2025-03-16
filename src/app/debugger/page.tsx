@@ -1,6 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
+import Decoder from "@/components/processor_components/Decoder";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
@@ -99,9 +100,9 @@ const DebuggerPage = () => {
             Object.entries(cycle_data)
                 .filter(([key, _]) => key.includes(module))
                 .map(([key, val]) => {
-                    const dotindex = key.indexOf(".");
+                    const module_index = key.indexOf(module);
                     const new_key =
-                        dotindex >= 0 ? key.substring(dotindex + 1) : key;
+                        module_index >= 0 ? key.substring(module_index) : key;
                     return [new_key, val];
                 })
         );
@@ -120,6 +121,8 @@ const DebuggerPage = () => {
         "RESERVATION_STATION"
     );
 
+    const decoder_data = extract_data(cycle_data, "DECODER");
+
     return (
         <>
             <header>
@@ -137,13 +140,17 @@ const DebuggerPage = () => {
             </header>
             <main>
                 <div className="ml-8 mr-8 flex flex-row flex-wrap">
+                    <Decoder
+                        selected_number_sys={selected_number_sys}
+                        decoder_data={decoder_data}
+                    />
                     <InstructionQueue
                         selected_number_sys={selected_number_sys}
                         instruction_queue_data={instruction_queue_data}
                     />
                     <ReorderBuffer rob_data={rob_data} />
                     <ReservationStation
-                        selected_number_system={selected_number_sys}
+                        selected_number_sys={selected_number_sys}
                         reservation_station_data={reservation_station_data}
                     />
                     <PRF_ReadyList
