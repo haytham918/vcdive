@@ -15,7 +15,6 @@ const Decoder: React.FC<{
     if (decoder_data["DECODER.MAX_DECODE"]) {
         DECODER_SIZE = convert_hex_to_dec(decoder_data["DECODER.MAX_DECODE"]);
     }
-    console.log(DECODER_SIZE);
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
     const handleHeaderClick = (event: MouseEvent) => {

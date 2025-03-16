@@ -72,13 +72,12 @@ def parse_vcd_from_local():
         if not is_existed:
             return jsonify({"error": "No such file in /inputs/ "}), 400
 
-        # Parse the vcd contents if not same
-        if file_name != data["file_name"]:
-            file_name = data["file_name"]
-            parser = vcd_parser.VCDParser(file_path)
-            num_pos_clocks = parser.get_pos_clock_numbers()
-            num_neg_clocks = parser.get_neg_clock_numbers()
-            first_clk_value = parser.get_first_clk_value()
+        # Parse the vcd contents
+        file_name = data["file_name"]
+        parser = vcd_parser.VCDParser(file_path)
+        num_pos_clocks = parser.get_pos_clock_numbers()
+        num_neg_clocks = parser.get_neg_clock_numbers()
+        first_clk_value = parser.get_first_clk_value()
 
         return jsonify({"file_name": file_name, "num_pos_clocks": num_pos_clocks, "num_neg_clocks": num_neg_clocks})
     except Exception as e:
@@ -102,9 +101,9 @@ def parse_vcd():
         return jsonify({"error": "No content provided"}), 400
 
     file = request.files["file"]
-    # If the same file has been parsed
-    if file.filename == file_name:
-        return jsonify({"file_name": file_name, "num_pos_clocks": num_pos_clocks, "num_neg_clocks": num_neg_clocks})
+    # # If the same file has been parsed
+    # if file.filename == file_name:
+    #     return jsonify({"file_name": file_name, "num_pos_clocks": num_pos_clocks, "num_neg_clocks": num_neg_clocks})
 
     # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:

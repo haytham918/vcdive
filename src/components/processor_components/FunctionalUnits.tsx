@@ -8,17 +8,21 @@ import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
 
-const RS_SIZE = 16;
+const ALU_SIZE = 2;
+const MULT_SIZE = 2;
+const CONTROL_SIZE = 1;
 
 // Entry color
 const rs_entry_color = (is_valid: boolean) => {
     return is_valid ? "cyan" : "";
 };
 
-const ReservationStation: React.FC<{
+const FunctionalUnits: React.FC<{
     selected_number_sys: NumberSystem;
-    reservation_station_data: any;
-}> = ({ selected_number_sys, reservation_station_data }) => {
+    alu_data: any;
+    mult_data: any;
+    control_data: any;
+}> = ({ selected_number_sys, alu_data, mult_data, control_data }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -145,6 +149,7 @@ const ReservationStation: React.FC<{
     const branch_to_squash =
         reservation_station_data["RESERVATION_STATION.branch_to_squash"];
 
+    console.log(branch_to_squash);
     const subsection_comp = show_subsection ? (
         <div>
             {/* Squash Info */}
@@ -180,14 +185,14 @@ const ReservationStation: React.FC<{
             </div>
 
             <div className="section sub-section">
-                <h2 className="subsection-header">RS</h2>
+                <h2 className="subsection-header">ALU</h2>
                 <div className="flex flex-row gap-x-1">
                     {/* Table */}
                     <table>
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Inst</th>
+                                <th>OP</th>
                                 <th>T_dst</th>
                                 <th>T_1</th>
                                 <th>T_2</th>
@@ -242,11 +247,11 @@ const ReservationStation: React.FC<{
     return (
         <div className="section main-section">
             <a onClick={handleHeaderClick}>
-                <h1 className="mainsection-header">Reservation Station</h1>
+                <h1 className="mainsection-header">Functional Units</h1>
             </a>
             {subsection_comp}
         </div>
     );
 };
 
-export default ReservationStation;
+export default FunctionalUnits;
