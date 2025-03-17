@@ -35,8 +35,10 @@ def ssh_caen_with_duo(username: str, remote_commands: str) -> None:
     if not ssh_password:
         raise ValueError(
             "No SSH_CAEN_PASSWORD found in the environment variables.")
-
-    ssh_cmd = f"ssh {username}@login-course.engin.umich.edu -R 8080:127.0.0.1:5000"
+    if (os.environ.get("USE_WITHOUT_COURSE")):
+        ssh_cmd = f"ssh {username}@login.engin.umich.edu -R 8080:127.0.0.1:5000"
+    else:
+        ssh_cmd = f"ssh {username}@login-course.engin.umich.edu -R 8080:127.0.0.1:5000"
     child = pexpect.spawn(ssh_cmd, encoding='utf-8')
     child.logfile = sys.stderr
 
