@@ -23,8 +23,8 @@ const Decoder: React.FC<{
     };
 
     // Get number of input instructions
-    const num_instructions =
-        convert_hex_to_dec(decoder_data[`DECODER.num_instructions`]) || 0;
+    const num_legal_instructions =
+        convert_hex_to_dec(decoder_data[`DECODER.num_legal_instructions`]) || 0;
 
     // Get instructions and pcs
     let instructions: string[] = Array(DECODER_SIZE).fill("");
@@ -33,7 +33,7 @@ const Decoder: React.FC<{
     // Update info if we have decoder data
     if (decoder_data) {
         // If i is less than the num_instructions of input
-        for (let i = 0; i < DECODER_SIZE && i < num_instructions; i++) {
+        for (let i = 0; i < DECODER_SIZE && i < num_legal_instructions; i++) {
             const instruction_hex_string =
                 decoder_data[`DECODER.instructions[${i}].inst`];
 

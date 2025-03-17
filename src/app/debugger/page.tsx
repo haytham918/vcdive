@@ -128,6 +128,17 @@ const DebuggerPage = () => {
 
     const decoder_data = extract_data(cycle_data, "DECODER");
 
+    const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
+    const issue_data = extract_data(cycle_data, "ISSUE");
+    const dispatch_data = extract_data(cycle_data, "DISPATCH");
+    // console.log(dispatch_data);
+    console.log(control_data);
+    //  console.log(reservation_station_data);
+    //   console.log(decoder_data);
+    // console.log(issue_data);
+    //  console.log(instruction_queue_data);
+    // console.log(reservation_station_data);
+
     return (
         <>
             <header>
