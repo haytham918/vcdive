@@ -41,7 +41,6 @@ const InstructionQueue: React.FC<{
 
     // Get instructions and Branch_masks
     const instructions: string[] = Array(IQ_SIZE).fill("");
-    const branch_masks: string[] = Array(IQ_SIZE).fill("");
 
     // Update info if we have instruction_queue_data
     if (instruction_queue_data) {
@@ -56,13 +55,6 @@ const InstructionQueue: React.FC<{
                 instruction_hex_string
             );
             instructions[i] = decoded_instruction.asm;
-
-            const branch_mask =
-                instruction_queue_data[
-                    `INSTRUCTION_QUEUE.iq_data[${i}].branch_mask`
-                ];
-
-            branch_masks[i] = branch_mask;
         }
     }
 
@@ -102,7 +94,6 @@ const InstructionQueue: React.FC<{
                                 <th>h/t</th>
                                 <th>#</th>
                                 <th>Inst</th>
-                                <th>B_Mask</th>
                             </tr>
                         </thead>
 
@@ -133,12 +124,6 @@ const InstructionQueue: React.FC<{
                                             {entry_color != "" &&
                                             entry_color != "red"
                                                 ? instructions[i]
-                                                : ""}
-                                        </td>
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? branch_masks[i]
                                                 : ""}
                                         </td>
                                     </tr>
