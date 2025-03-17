@@ -131,14 +131,18 @@ const DebuggerPage = () => {
     const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
     const issue_data = extract_data(cycle_data, "ISSUE");
     const dispatch_data = extract_data(cycle_data, "DISPATCH");
+
+    const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
+    const is_squash = squash_en === "1";
+
     // console.log(dispatch_data);
-    console.log(control_data);
+    // console.log(control_data);
     //  console.log(reservation_station_data);
     //   console.log(decoder_data);
     // console.log(issue_data);
     //  console.log(instruction_queue_data);
     // console.log(reservation_station_data);
-
+    // console.log(rob_data);
     return (
         <>
             <header>
@@ -155,6 +159,21 @@ const DebuggerPage = () => {
                 <ThemeToggle />
             </header>
             <main>
+                {/* Squash Info */}
+                <div className="section small-section ml-8">
+                    <h2 className="subsection-header">
+                        Squash Enable:{" "}
+                        <span
+                            className={`font-bold ${
+                                is_squash
+                                    ? "text-[--color-primary]"
+                                    : "text-[--color-accent]"
+                            }`}
+                        >
+                            {is_squash ? "True" : "False"}
+                        </span>
+                    </h2>
+                </div>
                 <div className="ml-8 mr-8 flex flex-row flex-wrap">
                     <Decoder
                         selected_number_sys={selected_number_sys}
@@ -168,10 +187,12 @@ const DebuggerPage = () => {
                         selected_number_sys={selected_number_sys}
                         rob_data={rob_data}
                         retire_list_data={retire_list_data}
+                        is_squash={is_squash}
                     />
                     <ReservationStation
                         selected_number_sys={selected_number_sys}
                         reservation_station_data={reservation_station_data}
+                        is_squash={is_squash}
                     />
                     <PRF_ReadyList
                         selected_number_sys={selected_number_sys}

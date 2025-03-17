@@ -17,7 +17,8 @@ const ReorderBuffer: React.FC<{
     selected_number_sys: NumberSystem;
     rob_data: any;
     retire_list_data: any;
-}> = ({ selected_number_sys, rob_data, retire_list_data }) => {
+    is_squash: boolean;
+}> = ({ selected_number_sys, rob_data, retire_list_data, is_squash }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -72,43 +73,21 @@ const ReorderBuffer: React.FC<{
     const rob_num_free = convert_hex_to_dec(rob_data["ROB.num_free"]);
 
     // Extract rob squash_en and restore_tail
-    const squash_en = rob_data["ROB.squash_en"];
-    const is_squash = squash_en === "1";
     const branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]);
 
     const subsection_comp = show_subsection ? (
         <div>
-            {/* Squash Info */}
-            <div className="section small-section">
-                <a onClick={handleSquashClick}>
-                    <h3 className="smallsection-header">Squash</h3>
-                </a>
-                {show_squash ? (
-                    <>
-                        <p className="smallsection-text">
-                            Squash Enable:{" "}
-                            <span
-                                className={`font-bold ${
-                                    is_squash
-                                        ? "text-[--color-primary]"
-                                        : "text-[--color-accent]"
-                                }`}
-                            >
-                                {is_squash ? "True" : "False"}
-                            </span>
-                        </p>
-
-                        {is_squash ? (
-                            <p className="smallsection-text w-[100%] flex flex-row">
-                                Branch Tail:
-                                <span className="font-bold ml-auto text-[--color-accent]">
-                                    {branch_tail}
-                                </span>
-                            </p>
-                        ) : null}
-                    </>
-                ) : null}
-            </div>
+            {/* Branch Tail Info */}
+            {is_squash ? (
+                <div className="section small-section">
+                    <p className="smallsection-text w-[100%] flex flex-row">
+                        Branch Tail:
+                        <span className="font-bold ml-2 text-[--color-accent]">
+                            {branch_tail}
+                        </span>
+                    </p>
+                </div>
+            ) : null}
 
             <div className="section sub-section">
                 <h2 className="subsection-header">ROB</h2>

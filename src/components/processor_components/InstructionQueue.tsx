@@ -70,83 +70,61 @@ const InstructionQueue: React.FC<{
     const is_squash = squash_en === "1";
 
     const subsection_comp = show_subsection ? (
-        <div>
-            {/* Squash Info */}
-            <div className="section small-section">
-                <a onClick={handleSquashClick}>
-                    <h3 className="smallsection-header">Squash</h3>
-                </a>
-                {show_squash ? (
-                    <p className="smallsection-text">
-                        Squash Enable:{" "}
-                        <span
-                            className={`font-bold ${
-                                is_squash
-                                    ? "text-[--color-primary]"
-                                    : "text-[--color-accent]"
-                            }`}
-                        >
-                            {is_squash ? "True" : "False"}
-                        </span>
-                    </p>
-                ) : null}
-            </div>
-            <div className="section sub-section">
-                <h2 className="subsection-header">IQ Data</h2>
+        <div className="section sub-section">
+            <h2 className="subsection-header">IQ Data</h2>
 
-                <div className="flex flex-row gap-x-1">
-                    {/* Table */}
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>h/t</th>
-                                <th>#</th>
-                                <th>PC</th>
-                                <th>Inst</th>
-                            </tr>
-                        </thead>
+            <div className="flex flex-row gap-x-1">
+                {/* Table */}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>h/t</th>
+                            <th>#</th>
+                            <th>PC</th>
+                            <th>Inst</th>
+                        </tr>
+                    </thead>
 
-                        {/* IQ Rows */}
-                        <tbody>
-                            {Array.from({ length: IQ_SIZE }, (_, i) => {
-                                // Head Tail Info
-                                const head_tail_val = head_tail_comp(
-                                    i,
-                                    iq_head,
-                                    iq_tail
-                                );
-                                const entry_color = fifo_entry_color(
-                                    i,
-                                    iq_head,
-                                    iq_tail,
-                                    iq_num_free,
-                                    IQ_SIZE
-                                );
-                                return (
-                                    <tr key={i}>
-                                        <td className={entry_color}>
-                                            {head_tail_val}
-                                        </td>
-                                        <td className={entry_color}>{i}</td>
-                                        {/* If No color Or red(tail), then garbage vals */}
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? pcs[i]
-                                                : ""}
-                                        </td>
-                                        <td className={entry_color}>
-                                            {entry_color != "" &&
-                                            entry_color != "red"
-                                                ? instructions[i]
-                                                : ""}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                    {/* IQ Rows */}
+                    <tbody>
+                        {Array.from({ length: IQ_SIZE }, (_, i) => {
+                            // Head Tail Info
+                            const head_tail_val = head_tail_comp(
+                                i,
+                                iq_head,
+                                iq_tail
+                            );
+                            const entry_color = fifo_entry_color(
+                                i,
+                                iq_head,
+                                iq_tail,
+                                iq_num_free,
+                                IQ_SIZE
+                            );
+                            return (
+                                <tr key={i}>
+                                    <td className={entry_color}>
+                                        {head_tail_val}
+                                    </td>
+                                    <td className={entry_color}>{i}</td>
+                                    {/* If No color Or red(tail), then garbage vals */}
+                                    <td className={entry_color}>
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? pcs[i]
+                                            : ""}
+                                    </td>
+                                    <td className={entry_color}>
+                                        {entry_color != "" &&
+                                        entry_color != "red"
+                                            ? instructions[i]
+                                            : ""}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
         </div>
     ) : null;

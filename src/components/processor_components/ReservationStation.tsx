@@ -18,7 +18,8 @@ const rs_entry_color = (is_valid: boolean) => {
 const ReservationStation: React.FC<{
     selected_number_sys: NumberSystem;
     reservation_station_data: any;
-}> = ({ selected_number_sys, reservation_station_data }) => {
+    is_squash: boolean;
+}> = ({ selected_number_sys, reservation_station_data, is_squash }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -131,44 +132,22 @@ const ReservationStation: React.FC<{
     }
 
     // Extract rob squash_en and restore_tail
-    const squash_en = reservation_station_data["RESERVATION_STATION.squash_en"];
-    const is_squash = squash_en === "1";
     const branch_to_squash =
         reservation_station_data["RESERVATION_STATION.branch_to_squash"];
 
     const subsection_comp = show_subsection ? (
         <div>
-            {/* Squash Info */}
-            <div className="section small-section">
-                <a onClick={handleSquashClick}>
-                    <h3 className="smallsection-header">Squash</h3>
-                </a>
-                {show_squash ? (
-                    <>
-                        <p className="smallsection-text">
-                            Squash Enable:{" "}
-                            <span
-                                className={`font-bold ${
-                                    is_squash
-                                        ? "text-[--color-primary]"
-                                        : "text-[--color-accent]"
-                                }`}
-                            >
-                                {is_squash ? "True" : "False"}
-                            </span>
-                        </p>
-
-                        {is_squash ? (
-                            <p className="smallsection-text w-[100%] flex flex-row">
-                                Branch Squash:
-                                <span className="font-bold ml-auto text-[--color-accent]">
-                                    {branch_to_squash}
-                                </span>
-                            </p>
-                        ) : null}
-                    </>
-                ) : null}
-            </div>
+            {/* Branch To Squash Info */}
+            {is_squash ? (
+                <div className="section small-section">
+                    <p className="smallsection-text w-[100%] flex flex-row">
+                        Branch To Squash:
+                        <span className="font-bold ml-2 text-[--color-accent]">
+                            {branch_to_squash}
+                        </span>
+                    </p>
+                </div>
+            ) : null}
 
             <div className="section sub-section">
                 <h2 className="subsection-header">RS</h2>
