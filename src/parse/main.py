@@ -38,8 +38,11 @@ def parse_vcd_on_cane():
         if not data or "file_name" not in data:
             return jsonify({"error": "No data or file_name being sent"}), 400
         caen_file_name = data['file_name']
-        debug_vcd_on_caen(
-            "yunxuant", "~/eecs470/p4-w25.group11/", caen_file_name)
+        if not os.getenv("UNIQUE_NAME"):
+            return jsonify({"error": "Warning unset UNIQUE_NAME. Export enviroment variable!"}), 400
+        if not os.getenv("CAEN_REPO_PATH"):
+            return jsonify({"error": "Warning unset CAEN_REPO_PATH. Export enviroment variable!"}), 400
+        debug_vcd_on_caen(os.getenv("UNIQUE_NAME"), os.getenv("CAEN_REPO_PATH"), caen_file_name)
         return jsonify({"message": "Works succesfully on CAEN"})  # It works
     except Exception as e:  # Some error happens
         return jsonify({"error": str(e)}), 500

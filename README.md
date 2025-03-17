@@ -24,8 +24,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. **Make sure you are on U-M Wifi or VPN**
 2. Update `src/parse/main.py:debug_vcd_on_caen()` with your **uniqname** and **parent directory containing /vcd/**
 3. Set **SSH_CAEN_PASSWORD** in environmental variable with your U-M Password  
-    * `export $SSH_CAEN_PASSWORD=<your_password>`, you can also add to "\~/.bash_profile" or "\~/.zshrc"  
-4. Be ready for a DUO push
+    * `export SSH_CAEN_PASSWORD=<your_password>`, you can also add to "\~/.bash_profile" or "\~/.zshrc"  
+4. Set **UNIQUE_NAME** in environmental variable with your U-M Uniqname  
+    * `export UNIQUE_NAME=<your_uniqname>`
+5. Set **CAEN_REPO_PATH** in environmental variable with your CAEN path  
+    * `export CAEN_REPO_PATH=<your_caen_path>` (e.g. `/home/<unique_name>/eecs470/p4-w25.group11`)
+6. Be ready for a DUO push
 
 ## Acknoledgement
 We get our inspiration from [Deric Dinu Danel's visual debugger](https://github.com/dericdinudaniel/eecs470-p4-gui-debugger.git). We appreciate him sharing his work with us and explaining some workflow. 
