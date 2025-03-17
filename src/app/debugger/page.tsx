@@ -135,7 +135,7 @@ const DebuggerPage = () => {
     const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
     const is_squash = squash_en === "1";
 
-    // console.log(dispatch_data);
+    //  console.log(dispatch_data);
     // console.log(control_data);
     //  console.log(reservation_station_data);
     //   console.log(decoder_data);

@@ -39,6 +39,7 @@ const ReorderBuffer: React.FC<{
     const pcs: string[] = Array(ROB_SIZE).fill("");
     const destination_tags: number[] = Array(ROB_SIZE).fill(0);
     const tag_olds: number[] = Array(ROB_SIZE).fill(0);
+    const branch_ids: string[] = Array(ROB_SIZE).fill("-");
     let retirables: string = reverse_string(
         retire_list_data[`RETIRE_LIST.retire_state_mask`]
     );
@@ -126,6 +127,7 @@ const ReorderBuffer: React.FC<{
                                 let inst = "";
                                 let t_dst: string | number = "";
                                 let t_old: string | number = "";
+                                let branch_id: string = "";
                                 let is_ready_retire = "";
                                 if (
                                     entry_color !== "" &&
@@ -135,6 +137,7 @@ const ReorderBuffer: React.FC<{
                                     inst = instructions[i];
                                     t_dst = destination_tags[i];
                                     t_old = tag_olds[i];
+                                    branch_id = branch_ids[i];
                                     is_ready_retire =
                                         retirables[t_dst] == "1" ? "Y" : "N";
                                 }

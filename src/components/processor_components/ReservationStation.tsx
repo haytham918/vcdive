@@ -44,6 +44,7 @@ const ReservationStation: React.FC<{
     const t2s: (string | number)[] = Array(RS_SIZE).fill("-");
     const immediates: (string | number)[] = Array(RS_SIZE).fill("-");
     const pcs: string[] = Array(RS_SIZE).fill("-");
+    const branch_ids: string[] = Array(RS_SIZE).fill("-");
     const branch_masks: string[] = Array(RS_SIZE).fill("-");
     for (let i = 0; i < RS_SIZE; i++) {
         // Check if this row is valid
@@ -123,12 +124,27 @@ const ReservationStation: React.FC<{
         );
         pcs[i] = pc;
 
+        // Get Dest Fu
+        const dest_fu =
+            reservation_station_data[
+                `RESERVATION_STATION.rs_table[${i}].dest_fu`
+            ];
+        // If dest_fu is 4, then it's branch_idx
+        if (dest_fu == 4 && decoded_instruction.asm !== "wfi") {
+            const branch_id =
+                reservation_station_data[
+                    `RESERVATION_STATION.rs_table[${i}].branch_id`
+                ];
+            branch_ids[i] = branch_id;
+        }
+
         const branch_mask =
             reservation_station_data[
                 `RESERVATION_STATION.rs_table[${i}].branch_mask`
             ];
 
         branch_masks[i] = branch_mask;
+        console.log(instruction_type);
     }
 
     // Extract rob squash_en and restore_tail
@@ -163,6 +179,7 @@ const ReservationStation: React.FC<{
                                 <th>T_1</th>
                                 <th>T_2</th>
                                 <th>Imm</th>
+                                <th>B_ID</th>
                                 <th>B_Mask</th>
                             </tr>
                         </thead>
@@ -195,6 +212,9 @@ const ReservationStation: React.FC<{
                                         </td>
                                         <td className={entry_color}>
                                             {is_valid ? immediates[i] : ""}
+                                        </td>
+                                        <td className={entry_color}>
+                                            {is_valid ? branch_ids[i] : ""}
                                         </td>
                                         <td className={entry_color}>
                                             {is_valid ? branch_masks[i] : ""}

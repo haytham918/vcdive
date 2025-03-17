@@ -59,11 +59,11 @@
 }
 
 .decoder-table {
-    min-width: 220px;
+    min-width: 230px;
 }
 
 .iq-table {
-    min-width: 220px;
+    min-width: 235px;
 }
 
 .rob-table {
@@ -71,7 +71,7 @@
 }
 
 .rs-table {
-    min-width: 450px;
+    min-width: 460px;
 }
 
 .read-write-table {
