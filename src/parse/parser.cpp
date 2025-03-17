@@ -206,7 +206,8 @@ class Parser {
 				-- contains mask (mask set)
 				-- branch_to_squash
 			*/
-			if (logic_name.ends_with("_oht") || logic_name.find("mask") != std::string::npos ||
+			if (logic_name.ends_with("_oht") || logic_name.ends_with("en") ||
+				logic_name.find("mask") != std::string::npos ||
 				logic_name.find("branch_to_squash") != std::string::npos) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {

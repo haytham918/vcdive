@@ -168,6 +168,22 @@ export const segment_mask_table = (size: number, mask: string) => {
     return segments;
 };
 
+// Create segments of indexes that can cover total_length
+// (4, 9)  => [[0,1,2,3], [4,5,6,7], [8, 9, 10, 11]]
+export const segment_idx = (segment_size: number, total_length: number) => {
+    const segments = [];
+    let i = 0;
+    while (i < total_length) {
+        const segment = [];
+        for (let j = i; j < i + segment_size; j++) {
+            segment.push(j);
+        }
+        i += segment_size;
+        segments.push(segment);
+    }
+    return segments;
+};
+
 // Assign if head or tail basd on index
 export const head_tail_comp = (i: number, head: number, tail: number) => {
     if (head === i && tail === i) return "h&t";
