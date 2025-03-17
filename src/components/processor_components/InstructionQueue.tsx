@@ -39,8 +39,9 @@ const InstructionQueue: React.FC<{
         instruction_queue_data["INSTRUCTION_QUEUE.num_free"]
     );
 
-    // Get instructions and Branch_masks
+    // Get instructions and pc
     const instructions: string[] = Array(IQ_SIZE).fill("");
+    const pcs: string[] = Array(IQ_SIZE).fill("");
 
     // Update info if we have instruction_queue_data
     if (instruction_queue_data) {
@@ -55,6 +56,13 @@ const InstructionQueue: React.FC<{
                 instruction_hex_string
             );
             instructions[i] = decoded_instruction.asm;
+
+            const pc = process_values(
+                instruction_queue_data[`INSTRUCTION_QUEUE.iq_data[${i}].pc`],
+                selected_number_sys
+            );
+
+            pcs[i] = pc;
         }
     }
 
@@ -93,6 +101,7 @@ const InstructionQueue: React.FC<{
                             <tr>
                                 <th>h/t</th>
                                 <th>#</th>
+                                <th>PC</th>
                                 <th>Inst</th>
                             </tr>
                         </thead>
@@ -120,6 +129,12 @@ const InstructionQueue: React.FC<{
                                         </td>
                                         <td className={entry_color}>{i}</td>
                                         {/* If No color Or red(tail), then garbage vals */}
+                                        <td className={entry_color}>
+                                            {entry_color != "" &&
+                                            entry_color != "red"
+                                                ? pcs[i]
+                                                : ""}
+                                        </td>
                                         <td className={entry_color}>
                                             {entry_color != "" &&
                                             entry_color != "red"
