@@ -7,6 +7,7 @@ import {
 } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
+import "./Section.css"
 const Decoder: React.FC<{
     selected_number_sys: NumberSystem;
     decoder_data: any;
@@ -66,7 +67,7 @@ const Decoder: React.FC<{
 
                 <div className="flex flex-row gap-x-1">
                     {/* Table */}
-                    <table>
+                    <table className="decoder-table">
                         <thead>
                             <tr>
                                 <th>#</th>

@@ -78,7 +78,7 @@ const PRF_ReadyList: React.FC<{
     // Write Ports Table layout
     const write_ports_tables = write_ports_segment_index.map(
         (segment, segment_index) => (
-            <table key={segment_index}>
+            <table key={segment_index} className="read-write-table">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -148,7 +148,7 @@ const PRF_ReadyList: React.FC<{
     // Read Ports Table Layout
     const read_ports_tables = read_ports_segment_index.map(
         (segment, segment_index) => (
-            <table key={segment_index}>
+            <table key={segment_index} className="read-write-table">
                 <thead>
                     <tr>
                         <th>#</th>

@@ -75,7 +75,7 @@ const InstructionQueue: React.FC<{
 
             <div className="flex flex-row gap-x-1">
                 {/* Table */}
-                <table>
+                <table className="iq-table">
                     <thead>
                         <tr>
                             <th>h/t</th>

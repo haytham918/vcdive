@@ -33,7 +33,7 @@ const DebuggerHeader: React.FC<{
   const router = useRouter();
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === "b") {
         router.push("/");
       }
     };

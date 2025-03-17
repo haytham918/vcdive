@@ -93,7 +93,7 @@ const ReorderBuffer: React.FC<{
                 <h2 className="subsection-header">ROB</h2>
                 <div className="flex flex-row gap-x-1">
                     {/* Table */}
-                    <table>
+                    <table className="rob-table">
                         <thead>
                             <tr>
                                 <th>h/t</th>

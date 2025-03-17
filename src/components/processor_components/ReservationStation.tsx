@@ -153,7 +153,7 @@ const ReservationStation: React.FC<{
                 <h2 className="subsection-header">RS</h2>
                 <div className="flex flex-row gap-x-1">
                     {/* Table */}
-                    <table>
+                    <table className="rs-table">
                         <thead>
                             <tr>
                                 <th>#</th>

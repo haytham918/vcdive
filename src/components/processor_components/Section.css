@@ -57,3 +57,23 @@
     padding: 0.1rem;
     line-height: 0.9rem;
 }
+
+.decoder-table {
+    min-width: 220px;
+}
+
+.iq-table {
+    min-width: 220px;
+}
+
+.rob-table {
+    min-width: 440px;
+}
+
+.rs-table {
+    min-width: 450px;
+}
+
+.read-write-table {
+    min-width: 130px;
+}
