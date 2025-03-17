@@ -28,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 4. Set **UNIQUE_NAME** in environmental variable with your U-M Uniqname  
     * `export UNIQUE_NAME=<your_uniqname>`
 5. Set **CAEN_REPO_PATH** in environmental variable with your CAEN path  
-    * `export CAEN_REPO_PATH=<your_caen_path>` (e.g. `/home/<unique_name>/eecs470/p4-w25.group11`)
+    * `export CAEN_REPO_PATH=<your_caen_path>` (e.g. `/home/<unique_name>/eecs470/p4-w25.group11/`), the **ending /** is necessary
 6. Be ready for a DUO push
 
 ## Acknoledgement
