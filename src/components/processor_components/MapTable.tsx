@@ -20,16 +20,18 @@ const MapTable: React.FC<{
 
     const current_map_values: number[] = Array(MAP_TABLE_SIZE).fill(0);
     for (let i = 0; i < MAP_TABLE_SIZE; i++) {
-        current_map_values[i] = convert_hex_to_dec(
-            map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`]
-        );
+        if (map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`])
+            current_map_values[i] = convert_hex_to_dec(
+                map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`]
+            );
     }
 
     const next_map_values: number[] = Array(MAP_TABLE_SIZE).fill(0);
     for (let i = 0; i < MAP_TABLE_SIZE; i++) {
-        next_map_values[i] = convert_hex_to_dec(
-            map_table_data[`MAP_TABLE_BRAT_WORKER.next_state[${i}]`]
-        );
+        if (map_table_data[`MAP_TABLE_BRAT_WORKER.next_state[${i}]`])
+            next_map_values[i] = convert_hex_to_dec(
+                map_table_data[`MAP_TABLE_BRAT_WORKER.next_state[${i}]`]
+            );
     }
     // Segment Map Tables
     const map_tables = index_segments.map((segment, segment_idx) => (
@@ -37,7 +39,7 @@ const MapTable: React.FC<{
             <thead>
                 <tr>
                     <th>Arc</th>
-                    <th>Current</th>
+                    <th>Curr</th>
                     <th>Next</th>
                 </tr>
             </thead>
