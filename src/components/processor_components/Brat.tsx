@@ -1,0 +1,279 @@
+"use client";
+import { NumberSystem } from "@/app/debugger/page";
+import "./Section.css";
+import { MouseEvent, useState } from "react";
+import {
+    convert_hex_to_dec,
+    process_values,
+    reverse_string,
+    segment_idx,
+    segment_mask_table,
+} from "@/lib/utils";
+import {
+    MAP_TABLE_INDEX_SEGMENTS,
+    MAP_TABLE_SEGMENT_SIZE,
+    MAP_TABLE_SIZE,
+} from "./MapTable";
+import {
+    PRF_INDEX_SEGMENTS,
+    PRF_SEGMENT_SIZE,
+    PRF_SIZE,
+} from "./PRF_Ready_Free";
+
+const Brat: React.FC<{
+    free_ids_mask: string;
+    free_list_data: any;
+    map_table_data: any;
+    rob_tail_data: any;
+}> = ({ free_ids_mask, free_list_data, map_table_data, rob_tail_data }) => {
+    let CHECKPOINT_LENGTH = 4;
+    if (free_ids_mask) {
+        CHECKPOINT_LENGTH = free_ids_mask.length;
+    }
+
+    // Display
+    const [show_subsection, setShowSubsection] = useState(true);
+    const [show_checkpoint, setShowCheckPoint] = useState(
+        Array(CHECKPOINT_LENGTH).fill(false)
+    );
+
+    // Open/Close checkpoint
+    const handleCheckpointDisplay = (event: MouseEvent, index: number) => {
+        const copy = [...show_checkpoint];
+        copy[index] = !copy[index];
+        setShowCheckPoint(copy);
+    };
+
+    // Open / Close subsection when clicking the header
+    const handleHeaderClick = (event: MouseEvent) => {
+        event.preventDefault();
+        setShowSubsection(!show_subsection);
+    };
+
+    // Reverse free_ids_mask
+    let reversed_free_ids_mask: string = "1111";
+    if (free_ids_mask) reversed_free_ids_mask = reverse_string(free_ids_mask);
+
+    const free_id_mask_display = (
+        <h3 className="font-bold">
+            Free BRAT MASK:{" "}
+            {free_ids_mask
+                ? Array.from({ length: CHECKPOINT_LENGTH }, (_, i) => {
+                      let color = "text-[--color-primary]";
+                      if (free_ids_mask && free_ids_mask[i] === "0") {
+                          color = "text-[--color-accent]";
+                      }
+                      return (
+                          <span className={color} key={i}>
+                              {free_ids_mask[i]}
+                          </span>
+                      );
+                  })
+                : "0000"}
+        </h3>
+    );
+
+    const checkpoint_tables = (
+        // Container to contain all checkpoints
+        <div className="flex gap-x-4">
+            {Array.from({ length: CHECKPOINT_LENGTH }, (_, original_index) => {
+                const reverse_index = CHECKPOINT_LENGTH - original_index - 1;
+                const is_display = show_checkpoint[original_index];
+                // If current checkpoint is still free, display nothing
+                if (reversed_free_ids_mask[reverse_index] == "1") return null;
+
+                // Get checkpoint id use original index
+                let id: string = "0".repeat(CHECKPOINT_LENGTH);
+                id =
+                    id.substring(0, original_index) +
+                    "1" +
+                    id.substring(original_index + 1);
+                const checkpoint_id_display = (
+                    <h2 className="subsection-header underline-text">
+                        Checkpoint:{" "}
+                        {Array.from({ length: CHECKPOINT_LENGTH }, (_, i) => {
+                            let color = "";
+                            if (id[i] === "1") {
+                                color = "text-[--color-accent]";
+                            }
+                            return (
+                                <span className={color} key={i}>
+                                    {id[i]}
+                                </span>
+                            );
+                        })}
+                    </h2>
+                );
+
+                // Get Rob Tail
+                const checkpoint_rob_tail = convert_hex_to_dec(
+                    rob_tail_data[
+                        `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                    ]
+                );
+
+                // Map Table ---------------------------------------------------
+                const checkpoint_map_table_valeus: number[] =
+                    Array(MAP_TABLE_SIZE).fill(0);
+                // Read the map table values from checkpoint
+                for (let i = 0; i < MAP_TABLE_SIZE; i++) {
+                    checkpoint_map_table_valeus[i] = convert_hex_to_dec(
+                        map_table_data[
+                            `MAP_TABLE_BRAT_WORKER.checkpoint_data[${reverse_index}][${i}]`
+                        ]
+                    );
+                }
+
+                // Segment Map Tables
+                const checkpoint_map_table = MAP_TABLE_INDEX_SEGMENTS.map(
+                    (segment, segment_idx) => (
+                        <table key={segment_idx}>
+                            <thead>
+                                <tr>
+                                    <th>Arc</th>
+                                    <th>Phys</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Array.from(
+                                    { length: MAP_TABLE_SEGMENT_SIZE },
+                                    (_, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <td className="cyan">
+                                                    {segment[i]}
+                                                </td>
+                                                <td className="">
+                                                    {
+                                                        checkpoint_map_table_valeus[
+                                                            segment[i]
+                                                        ]
+                                                    }
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
+                            </tbody>
+                        </table>
+                    )
+                );
+
+                // -------------------------------------------------------------
+
+                // ---------------------- Free List ---------------------------
+                // Reversed free list string of the checkpoint
+                const checkpoint_reversed_free_list_values: string =
+                    reverse_string(
+                        free_list_data[
+                            `FREE_LIST_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                        ]
+                    );
+                console.log(checkpoint_reversed_free_list_values);
+
+                // Free List Segment
+                const checkpoint_free_list = PRF_INDEX_SEGMENTS.map(
+                    (segment, segment_idx) => (
+                        <table key={segment_idx}>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Free</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Array.from(
+                                    { length: PRF_SEGMENT_SIZE },
+                                    (_, i) => {
+                                        let color = "red";
+                                        let free_val = "N";
+                                        if (
+                                            checkpoint_reversed_free_list_values[
+                                                segment[i]
+                                            ] === "1"
+                                        ) {
+                                            free_val = "Y";
+                                            color = "emerald";
+                                        }
+                                        return (
+                                            <tr key={i}>
+                                                <td>{segment[i]}</td>
+                                                <td className={color}>
+                                                    {free_val}
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
+                            </tbody>
+                        </table>
+                    )
+                );
+
+                // ------------------------------------------------------------
+
+                return (
+                    <div className="section sub-section" key={original_index}>
+                        <a
+                            onClick={(e) =>
+                                handleCheckpointDisplay(e, original_index)
+                            }
+                        >
+                            {checkpoint_id_display}
+                        </a>
+                        {is_display ? (
+                            <div className="w-[100%] flex flex-col gap-y-3">
+                                <h3 className="smallsection-text font-bold">
+                                    ROB Tail:{" "}
+                                    <span className="text-[--color-primary]">
+                                        {checkpoint_rob_tail}
+                                    </span>
+                                </h3>
+
+                                {/* Map Table Part */}
+                                <div className="inner-section section">
+                                    <h3 className="smallsection-text font-bold mb-2">
+                                        Map Table
+                                    </h3>
+                                    <div className="flex gap-x-1">
+                                        {checkpoint_map_table}
+                                    </div>
+                                </div>
+
+                                {/* Free List Part */}
+                                <div className="inner-section section">
+                                    <h3 className="smallsection-text font-bold mb-2">
+                                        Free List
+                                    </h3>
+                                    <div className="flex gap-x-1">
+                                        {checkpoint_free_list}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
+                );
+            })}
+        </div>
+    );
+
+    const subsection_comp = show_subsection ? (
+        <div className="items-center justify-center flex flex-col">
+            {free_id_mask_display}
+
+            {/* Each Checkpoint Info */}
+            {checkpoint_tables}
+        </div>
+    ) : null;
+
+    return (
+        <div className="section main-section">
+            <a onClick={handleHeaderClick}>
+                <h1 className="mainsection-header">BRAT</h1>
+            </a>
+            {subsection_comp}
+        </div>
+    );
+};
+
+export default Brat;

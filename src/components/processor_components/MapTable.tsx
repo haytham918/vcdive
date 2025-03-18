@@ -3,14 +3,16 @@ import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, segment_idx } from "@/lib/utils";
+
+export const MAP_TABLE_SIZE = 32;
+export const MAP_TABLE_SEGMENT_SIZE = 8;
+export const MAP_TABLE_INDEX_SEGMENTS = segment_idx(
+    MAP_TABLE_SEGMENT_SIZE,
+    MAP_TABLE_SIZE
+);
 const MapTable: React.FC<{
     map_table_data: any;
 }> = ({ map_table_data }) => {
-    const MAP_TABLE_SIZE = 32;
-    const MAP_TABLE_SEGMENT_SIZE = 8;
-
-    const index_segments = segment_idx(MAP_TABLE_SEGMENT_SIZE, MAP_TABLE_SIZE);
-
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
     const handleHeaderClick = (event: MouseEvent) => {
@@ -34,7 +36,7 @@ const MapTable: React.FC<{
             );
     }
     // Segment Map Tables
-    const map_tables = index_segments.map((segment, segment_idx) => (
+    const map_tables = MAP_TABLE_INDEX_SEGMENTS.map((segment, segment_idx) => (
         <table key={segment_idx}>
             <thead>
                 <tr>
@@ -55,7 +57,7 @@ const MapTable: React.FC<{
                     }
                     return (
                         <tr key={i}>
-                            <td className={entry_color}>{segment[i]}</td>
+                            <td className="cyan">{segment[i]}</td>
                             <td className={entry_color}>
                                 {current_map_values[segment[i]]}
                             </td>

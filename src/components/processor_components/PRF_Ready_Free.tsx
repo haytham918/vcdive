@@ -10,7 +10,9 @@ import {
     segment_mask_table,
 } from "@/lib/utils";
 
-const PRF_SEGMENT_SIZE = 16;
+export const PRF_SIZE = 64;
+export const PRF_SEGMENT_SIZE = 16;
+export const PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
 const READ_WRITE_SEGMENT_SIZE = 5;
 
 const PRF_Ready_Free: React.FC<{

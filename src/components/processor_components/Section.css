@@ -58,6 +58,16 @@
     line-height: 0.9rem;
 }
 
+.inner-section {
+    background: var(--mainsection-bg-color);
+}
+
+.underline-text {
+    border: 3px solid;
+    border-color: transparent transparent var(--foreground) transparent;
+    margin-bottom: 0.5rem;
+}
+
 .decoder-table {
     min-width: 230px;
 }

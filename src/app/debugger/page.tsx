@@ -1,6 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
+import Brat from "@/components/processor_components/Brat";
 import Decoder from "@/components/processor_components/Decoder";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import MapTable from "@/components/processor_components/MapTable";
@@ -129,9 +130,9 @@ const DebuggerPage = () => {
 
     const decoder_data = extract_data(cycle_data, "DECODER");
 
-    const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
-    const issue_data = extract_data(cycle_data, "ISSUE");
-    const dispatch_data = extract_data(cycle_data, "DISPATCH");
+    // const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
+    // const issue_data = extract_data(cycle_data, "ISSUE");
+    // const dispatch_data = extract_data(cycle_data, "DISPATCH");
 
     const free_list_data: any = extract_data(
         cycle_data,
@@ -141,9 +142,14 @@ const DebuggerPage = () => {
         free_list_data["FREE_LIST_BRAT_WORKER.current_state"]
     );
 
-    const coordinator_data = extract_data(cycle_data, "COORDINATOR");
+    let free_ids_mask: string = "";
+    {
+        const coordinator_data: any = extract_data(cycle_data, "COORDINATOR");
+        free_ids_mask = coordinator_data["COORDINATOR.free_ids_mask"];
+    }
+    console.log(free_ids_mask);
     const map_table_data = extract_data(cycle_data, "MAP_TABLE_BRAT_WORKER");
-    console.log(map_table_data);
+    const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
     // Squash Data
@@ -219,6 +225,12 @@ const DebuggerPage = () => {
                         ready_list_data={ready_list_data}
                         prf_data={prf_data}
                         current_free_list={current_free_list}
+                    />
+                    <Brat
+                        free_ids_mask={free_ids_mask}
+                        free_list_data={free_list_data}
+                        rob_tail_data={rob_tail_data}
+                        map_table_data={map_table_data}
                     />
                 </div>
             </main>
