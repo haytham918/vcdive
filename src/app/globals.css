@@ -38,6 +38,7 @@
     --table-entry-red: #f98379f3;
     --table-entry-yellow: #fce9b0;
     --table-entry-cyan: #b2dfdb;
+    --table-entry-beige: #fdeabe;
 }
 
 /* Dark Theme */
@@ -75,6 +76,7 @@
         --table-entry-red: #991b24;
         --table-entry-yellow: #b8860b;
         --table-entry-cyan: #006666;
+        --table-entry-beige: #9f8c76;
     }
 }
 
@@ -113,6 +115,7 @@
     --table-entry-red: #991b24;
     --table-entry-yellow: #b8860b;
     --table-entry-cyan: #006666;
+    --table-entry-beige: #9f8c76;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
@@ -184,6 +187,10 @@ td.cyan {
 
 td.yellow {
     background-color: var(--table-entry-yellow) !important;
+}
+
+td.beige {
+    background-color: var(--table-entry-beige) !important;
 }
 
 .btn {

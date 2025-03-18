@@ -3,6 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import Decoder from "@/components/processor_components/Decoder";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
+import MapTable from "@/components/processor_components/MapTable";
 import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
@@ -141,8 +142,9 @@ const DebuggerPage = () => {
     );
 
     const coordinator_data = extract_data(cycle_data, "COORDINATOR");
-    console.log(coordinator_data);
-  //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
+    const map_table_data = extract_data(cycle_data, "MAP_TABLE_BRAT_WORKER");
+    console.log(map_table_data);
+    //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
     // Squash Data
     const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
@@ -188,14 +190,19 @@ const DebuggerPage = () => {
                     </h2>
                 </div>
                 <div className="ml-4 mr-4 flex flex-row flex-wrap">
-                    <Decoder
-                        selected_number_sys={selected_number_sys}
-                        decoder_data={decoder_data}
-                    />
-                    <InstructionQueue
-                        selected_number_sys={selected_number_sys}
-                        instruction_queue_data={instruction_queue_data}
-                    />
+                    <div>
+                        <div className="flex">
+                            <Decoder
+                                selected_number_sys={selected_number_sys}
+                                decoder_data={decoder_data}
+                            />
+                            <InstructionQueue
+                                selected_number_sys={selected_number_sys}
+                                instruction_queue_data={instruction_queue_data}
+                            />
+                        </div>
+                        <MapTable map_table_data={map_table_data} />
+                    </div>
                     <ReorderBuffer
                         selected_number_sys={selected_number_sys}
                         rob_data={rob_data}
