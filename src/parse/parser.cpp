@@ -205,10 +205,15 @@ class Parser {
 				-- end with _oht (One Hot)
 				-- contains mask (mask set)
 				-- branch_to_squash
+				-- free_list_brat's current state
+				-- free_list_brat's checkpooint data
 			*/
-			if (logic_name.ends_with("_oht") || logic_name.ends_with("write_en") || logic_name.ends_with("branch_id") ||
-				logic_name.find("mask") != std::string::npos ||
-				logic_name.find("branch_to_squash") != std::string::npos) {
+			bool display_binary = logic_name.ends_with("_oht") || logic_name.ends_with("write_en") ||
+								  logic_name.ends_with("branch_id") || logic_name.find("mask") != std::string::npos ||
+								  logic_name.find("branch_to_squash") != std::string::npos ||
+								  logic_name.ends_with("FREE_LIST_BRAT_WORKER.current_state")
+								  || logic_name.find("FREE_LIST_BRAT_WORKER.checkpoint_data") != std::string::npos;
+			if (display_binary) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {
 				raw_data.back()[logic_name] = bin2hex(data.substr(1));

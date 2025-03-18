@@ -3,7 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import Decoder from "@/components/processor_components/Decoder";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
-import PRF_ReadyList from "@/components/processor_components/PRF_ReadyList";
+import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -132,6 +132,19 @@ const DebuggerPage = () => {
     const issue_data = extract_data(cycle_data, "ISSUE");
     const dispatch_data = extract_data(cycle_data, "DISPATCH");
 
+    const free_list_data: any = extract_data(
+        cycle_data,
+        "FREE_LIST_BRAT_WORKER"
+    );
+    const current_free_list: string = reverse_string(
+        free_list_data["FREE_LIST_BRAT_WORKER.current_state"]
+    );
+
+    const coordinator_data = extract_data(cycle_data, "COORDINATOR");
+    console.log(coordinator_data);
+  //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
+
+    // Squash Data
     const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
     const is_squash = squash_en === "1";
 
@@ -174,7 +187,7 @@ const DebuggerPage = () => {
                         </span>
                     </h2>
                 </div>
-                <div className="ml-8 mr-8 flex flex-row flex-wrap">
+                <div className="ml-4 mr-4 flex flex-row flex-wrap">
                     <Decoder
                         selected_number_sys={selected_number_sys}
                         decoder_data={decoder_data}
@@ -194,10 +207,11 @@ const DebuggerPage = () => {
                         reservation_station_data={reservation_station_data}
                         is_squash={is_squash}
                     />
-                    <PRF_ReadyList
+                    <PRF_Ready_Free
                         selected_number_sys={selected_number_sys}
                         ready_list_data={ready_list_data}
                         prf_data={prf_data}
+                        current_free_list={current_free_list}
                     />
                 </div>
             </main>

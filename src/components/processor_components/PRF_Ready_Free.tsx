@@ -13,11 +13,17 @@ import {
 const PRF_SEGMENT_SIZE = 16;
 const READ_WRITE_SEGMENT_SIZE = 5;
 
-const PRF_ReadyList: React.FC<{
+const PRF_Ready_Free: React.FC<{
     selected_number_sys: NumberSystem;
     ready_list_data: any;
     prf_data: any;
-}> = ({ selected_number_sys, ready_list_data, prf_data }) => {
+    current_free_list: string;
+}> = ({
+    selected_number_sys,
+    ready_list_data,
+    prf_data,
+    current_free_list,
+}) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_read, setShowRead] = useState(true);
@@ -224,6 +230,7 @@ const PRF_ReadyList: React.FC<{
                     <th>#</th>
                     <th>Value</th>
                     <th>Ready</th>
+                    <th>Free</th>
                 </tr>
             </thead>
 
@@ -234,18 +241,32 @@ const PRF_ReadyList: React.FC<{
                     const reg_index = segment_index * PRF_SEGMENT_SIZE + i;
                     const value =
                         reg_index < prf_vals.length ? prf_vals[reg_index] : "x";
-                    const is_emerald = ready === "Y" && value !== "x"; // Green: Ready and val not "x"
-                    const is_red = value === "x"; // Red: value is "x"
-                    // Determine cell color
-                    let color;
-                    if (is_emerald) color = "emerald";
-                    else if (is_red) color = "red";
-                    else color = "";
+                    let free = "x";
+                    if (reg_index < prf_vals.length) {
+                        free = current_free_list[reg_index] === "1" ? "Y" : "N";
+                    }
+
+                    // Determine Cell Color
+                    let color = "";
+                    // If Ready and Value is not x
+                    if (ready === "Y" && value !== "x") {
+                        color = "emerald";
+                    }
+                    // If it's free
+                    else if (free === "Y") {
+                        color = "yellow";
+                    }
+                    // If value is x
+                    else if (value == "x") {
+                        color = "red";
+                    }
+
                     return (
                         <tr key={i}>
                             <td className={color}>{reg_index}</td>
                             <td className={color}>{value}</td>
                             <td className={color}>{ready}</td>
+                            <td className={color}>{free}</td>
                         </tr>
                     );
                 })}
@@ -293,7 +314,7 @@ const PRF_ReadyList: React.FC<{
         <div className="section main-section">
             <a onClick={handleHeaderClick}>
                 <h1 className="mainsection-header">
-                    Physical Registers + Ready List
+                    Physical Registers + Ready + Free
                 </h1>
             </a>
             {subsection_comp}
@@ -301,4 +322,4 @@ const PRF_ReadyList: React.FC<{
     );
 };
 
-export default PRF_ReadyList;
+export default PRF_Ready_Free;

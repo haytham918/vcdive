@@ -144,7 +144,6 @@ const ReservationStation: React.FC<{
             ];
 
         branch_masks[i] = branch_mask;
-        console.log(instruction_type);
     }
 
     // Extract rob squash_en and restore_tail
