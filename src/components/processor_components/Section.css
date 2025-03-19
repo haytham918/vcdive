@@ -91,7 +91,7 @@
 .terminal-container {
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 75%;
     padding: 0.5rem;
     border-radius: 4px;
     box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
@@ -153,8 +153,8 @@
 }
 
 .dialog-box {
-    width: 45%;
-    height: 35%;
+    min-width: 45%;
+    min-height: 35%;
     border: 3px solid;
     border-color: var(--dropzone-border);
     border-radius: 3px;
@@ -166,35 +166,36 @@
     color: var(--color-babyblue);
 }
 
-.dialog-header{
+.dialog-header {
     font-size: 1.2rem;
     line-height: 1rem;
 }
-.dialog-text{
+.dialog-text {
     font-weight: bold;
 }
 
-.checkbox-container{
+.checkbox-container {
     margin-top: 2rem;
     display: flex;
     flex-direction: row;
     column-gap: 2.5rem;
+    margin-bottom: 1rem;
 }
 
-.checkbox-subcontainer{
+.checkbox-subcontainer {
     display: flex;
     flex-direction: column;
     row-gap: 0.4rem;
     width: max-content;
 }
 
-.checkbox-item{
+.checkbox-item {
     display: flex;
     column-gap: 0.3rem;
     align-items: center;
 }
 
-.checkbox-input{
-   width: 1.2rem;
-   height: 1.2rem;
+.checkbox-input {
+    width: 1.2rem;
+    height: 1.2rem;
 }
