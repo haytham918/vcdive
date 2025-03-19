@@ -87,3 +87,114 @@
 .read-write-table {
     min-width: 185px;
 }
+
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
+    background-color: var(--mainsection-bg-color);
+    margin-left: 2rem;
+    margin-top: 2rem;
+}
+
+.terminal-header {
+    border: 3px solid;
+    border-color: transparent transparent var(--foreground) transparent;
+
+    width: fit-content;
+}
+
+.terminal-header-text {
+    font-size: 1.2rem;
+    line-height: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.terminal-data-section {
+    max-height: 520px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--foreground) var(--mainsection-bg-color);
+}
+
+.terminal-data-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-data-section::-webkit-scrollbar-thumb {
+    background-color: var(--foreground);
+    border-radius: 10px;
+}
+
+.terminal-data-section::-webkit-scrollbar-track {
+    background: var(--mainsection-bg-color);
+}
+
+.individual-data-section {
+    border: 3px solid;
+    border-color: transparent transparent var(--foreground) transparent;
+
+    width: 100%;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-box {
+    width: 45%;
+    height: 35%;
+    border: 3px solid;
+    border-color: var(--dropzone-border);
+    border-radius: 3px;
+    z-index: 10;
+    background-color: beige;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-babyblue);
+}
+
+.dialog-header{
+    font-size: 1.2rem;
+    line-height: 1rem;
+}
+.dialog-text{
+    font-weight: bold;
+}
+
+.checkbox-container{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    column-gap: 2.5rem;
+}
+
+.checkbox-subcontainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.4rem;
+    width: max-content;
+}
+
+.checkbox-item{
+    display: flex;
+    column-gap: 0.3rem;
+    align-items: center;
+}
+
+.checkbox-input{
+   width: 1.2rem;
+   height: 1.2rem;
+}

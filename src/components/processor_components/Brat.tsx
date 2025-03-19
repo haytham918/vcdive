@@ -1,24 +1,12 @@
-"use client";
-import { NumberSystem } from "@/app/debugger/page";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
-import {
-    convert_hex_to_dec,
-    process_values,
-    reverse_string,
-    segment_idx,
-    segment_mask_table,
-} from "@/lib/utils";
+import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
 import {
     MAP_TABLE_INDEX_SEGMENTS,
     MAP_TABLE_SEGMENT_SIZE,
     MAP_TABLE_SIZE,
 } from "./MapTable";
-import {
-    PRF_INDEX_SEGMENTS,
-    PRF_SEGMENT_SIZE,
-    PRF_SIZE,
-} from "./PRF_Ready_Free";
+import { PRF_INDEX_SEGMENTS, PRF_SEGMENT_SIZE } from "./PRF_Ready_Free";
 
 const Brat: React.FC<{
     free_ids_mask: string;
@@ -169,7 +157,6 @@ const Brat: React.FC<{
                             `FREE_LIST_BRAT_WORKER.checkpoint_data[${reverse_index}]`
                         ]
                     );
-                console.log(checkpoint_reversed_free_list_values);
 
                 // Free List Segment
                 const checkpoint_free_list = PRF_INDEX_SEGMENTS.map(

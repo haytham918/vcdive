@@ -8,8 +8,9 @@ import MapTable from "@/components/processor_components/MapTable";
 import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
+import Terminal from "@/components/processor_components/Terminal";
+import TerminalDialog from "@/components/processor_components/TerminalDialog";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Instruction } from "@/lib/rvcodec.js/Instruction";
 import { reverse_string } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -19,6 +20,27 @@ import toast, { Toaster } from "react-hot-toast";
 
 */
 export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
+
+// Decide which to show and not to show
+export interface TerminalSettings {
+    file_fetch: { show: boolean; label: "File Fetch" };
+    decoder: { show: boolean; label: "Decoder" };
+    instruction_queue: { show: boolean; label: "Instruction Queue" };
+    dispatch: { show: boolean; label: "Dispatch" };
+    rob: { show: boolean; label: "Reorder Buffer" };
+    rs: { show: boolean; label: "Reservation Station" };
+    issue: { show: boolean; label: "Issue" };
+    alu: { show: boolean; label: "ALU" };
+    mult: { show: boolean; label: "MULT" };
+    control: { show: boolean; label: "Control" };
+    regfile: { show: boolean; label: "Regfile" };
+    ready_list: { show: boolean; label: "Ready List" };
+    coordinator: { show: boolean; label: "BRAT - Coordinator" };
+    map_table: { show: boolean; label: "BRAT - Map Table" };
+    free_list: { show: boolean; label: "BRAT - Free List" };
+    rob_tail: { show: boolean; label: "BRAT - ROB Tail" };
+    retire_list: { show: boolean; label: "Retire List" };
+}
 
 const DebuggerPage = () => {
     const [selected_number_sys, setNumberSys] = useState<NumberSystem>("0x"); // Number System
@@ -103,9 +125,19 @@ const DebuggerPage = () => {
             Object.entries(cycle_data)
                 .filter(([key, _]) => key.includes(module))
                 .map(([key, val]) => {
-                    const module_index = key.indexOf(module);
+                    let start_str: string = module;
+                    // If FU, then there are multiple
+                    if (
+                        module === "ALU" ||
+                        module === "MULT" ||
+                        module === "CONTROL"
+                    ) {
+                        start_str = "gen";
+                    }
+                    const start_index = key.indexOf(start_str);
+
                     const new_key =
-                        module_index >= 0 ? key.substring(module_index) : key;
+                        start_index >= 0 ? key.substring(start_index) : key;
                     return [new_key, val];
                 })
         );
@@ -114,10 +146,10 @@ const DebuggerPage = () => {
     // Get all data for modules
     const ready_list_data = extract_data(cycle_data, "READY_LIST");
     const rob_data = extract_data(cycle_data, "ROB");
-    const retire_list_data = extract_data(
-        cycle_data,
-        "RETIRE_LIST.retire_state_mask"
-    );
+    const retire_list_data = extract_data(cycle_data, "RETIRE_LIST");
+
+    const retire_list_state_mask: any =
+        retire_list_data["RETIRE_LIST.retire_state_mask"];
     const prf_data = extract_data(cycle_data, "REGFILE");
     const instruction_queue_data = extract_data(
         cycle_data,
@@ -129,10 +161,15 @@ const DebuggerPage = () => {
     );
 
     const decoder_data = extract_data(cycle_data, "DECODER");
+    const file_fetch_data = extract_data(cycle_data, "FILE_FETCH");
 
     // const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
-    // const issue_data = extract_data(cycle_data, "ISSUE");
-    // const dispatch_data = extract_data(cycle_data, "DISPATCH");
+    const issue_data = extract_data(cycle_data, "ISSUE");
+    const dispatch_data = extract_data(cycle_data, "DISPATCH");
+
+    const alu_data = extract_data(cycle_data, "ALU");
+    const control_data = extract_data(cycle_data, "CONTROL");
+    const mult_data = extract_data(cycle_data, "MULT");
 
     const free_list_data: any = extract_data(
         cycle_data,
@@ -142,12 +179,9 @@ const DebuggerPage = () => {
         free_list_data["FREE_LIST_BRAT_WORKER.current_state"]
     );
 
-    let free_ids_mask: string = "";
-    {
-        const coordinator_data: any = extract_data(cycle_data, "COORDINATOR");
-        free_ids_mask = coordinator_data["COORDINATOR.free_ids_mask"];
-    }
-    console.log(free_ids_mask);
+    const coordinator_data: any = extract_data(cycle_data, "COORDINATOR");
+    const free_ids_mask = coordinator_data["COORDINATOR.free_ids_mask"];
+
     const map_table_data = extract_data(cycle_data, "MAP_TABLE_BRAT_WORKER");
     const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
@@ -156,14 +190,62 @@ const DebuggerPage = () => {
     const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
     const is_squash = squash_en === "1";
 
-    //  console.log(dispatch_data);
-    // console.log(control_data);
-    //  console.log(reservation_station_data);
-    //   console.log(decoder_data);
-    // console.log(issue_data);
-    //  console.log(instruction_queue_data);
-    // console.log(reservation_station_data);
-    // console.log(rob_data);
+    // Handle Terminal Dialog -------------------------------------------
+    const [show_dialog, setShowDialog] = useState(false);
+    const handleOpenDialog = () => {
+        const main_element = document.querySelector("main");
+        if (main_element) {
+            main_element.classList.add("opacity-20");
+        }
+        setShowDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        const main_element = document.querySelector("main");
+        if (main_element) {
+            main_element.classList.remove("opacity-20");
+        }
+        console.log("SHIT");
+        setShowDialog(false);
+    };
+
+    const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
+        {
+            file_fetch: {
+                show: false,
+                label: "File Fetch",
+            },
+            decoder: { show: false, label: "Decoder" },
+            instruction_queue: {
+                show: false,
+                label: "Instruction Queue",
+            },
+            dispatch: { show: false, label: "Dispatch" },
+            rob: { show: false, label: "Reorder Buffer" },
+            rs: {
+                show: false,
+                label: "Reservation Station",
+            },
+            issue: { show: false, label: "Issue" },
+            alu: { show: false, label: "ALU" },
+            mult: { show: false, label: "MULT" },
+            control: { show: false, label: "Control" },
+            regfile: { show: false, label: "Regfile" },
+            ready_list: { show: false, label: "Ready List" },
+            coordinator: { show: false, label: "BRAT - Coordinator" },
+            map_table: { show: false, label: "BRAT - Map Table" },
+            free_list: { show: false, label: "BRAT - Free List" },
+            rob_tail: { show: false, label: "BRAT - ROB Tail" },
+            retire_list: { show: false, label: "Retire List" },
+        }
+    );
+
+    const handleTerminalSettings = (module: string, set_value: boolean) => {
+        const updated: any = { ...terminal_settings };
+        updated[module].show = set_value;
+        setTerminalSettings(updated);
+    };
+
     return (
         <>
             <header>
@@ -212,7 +294,7 @@ const DebuggerPage = () => {
                     <ReorderBuffer
                         selected_number_sys={selected_number_sys}
                         rob_data={rob_data}
-                        retire_list_data={retire_list_data}
+                        retire_list_state_mask={retire_list_state_mask}
                         is_squash={is_squash}
                     />
                     <ReservationStation
@@ -233,7 +315,34 @@ const DebuggerPage = () => {
                         map_table_data={map_table_data}
                     />
                 </div>
+                <Terminal
+                    file_fetch_data={file_fetch_data}
+                    decoder_data={decoder_data}
+                    instruction_queue_data={instruction_queue_data}
+                    reservation_station_data={reservation_station_data}
+                    rob_data={rob_data}
+                    issue_data={issue_data}
+                    dispatch_data={dispatch_data}
+                    alu_data={alu_data}
+                    mult_data={mult_data}
+                    control_data={control_data}
+                    ready_list_data={ready_list_data}
+                    coordinator_data={coordinator_data}
+                    prf_data={prf_data}
+                    free_list_data={free_list_data}
+                    map_table_data={map_table_data}
+                    rob_tail_data={rob_tail_data}
+                    retire_list_data={retire_list_data}
+                    terminal_settings={terminal_settings}
+                    handleOpenDialog={handleOpenDialog}
+                />
             </main>
+            <TerminalDialog
+                show_dialog={show_dialog}
+                handleCloseDialog={handleCloseDialog}
+                terminal_settings={terminal_settings}
+                handleTerminalSettings={handleTerminalSettings}
+            />
             <Toaster
                 position="bottom-right"
                 toastOptions={{

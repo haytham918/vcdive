@@ -1,4 +1,3 @@
-"use client";
 import { NumberSystem } from "@/app/debugger/page";
 import {
     convert_hex_to_dec,

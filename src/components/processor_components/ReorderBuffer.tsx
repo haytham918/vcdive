@@ -16,9 +16,9 @@ const ROB_SIZE = 32;
 const ReorderBuffer: React.FC<{
     selected_number_sys: NumberSystem;
     rob_data: any;
-    retire_list_data: any;
+    retire_list_state_mask: string;
     is_squash: boolean;
-}> = ({ selected_number_sys, rob_data, retire_list_data, is_squash }) => {
+}> = ({ selected_number_sys, rob_data, retire_list_state_mask, is_squash }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -40,9 +40,7 @@ const ReorderBuffer: React.FC<{
     const destination_tags: number[] = Array(ROB_SIZE).fill(0);
     const tag_olds: number[] = Array(ROB_SIZE).fill(0);
     const branch_ids: string[] = Array(ROB_SIZE).fill("-");
-    let retirables: string = reverse_string(
-        retire_list_data[`RETIRE_LIST.retire_state_mask`]
-    );
+    let retirables: string = reverse_string(retire_list_state_mask);
 
     for (let i = 0; i < ROB_SIZE; i++) {
         const destination_tag = convert_hex_to_dec(
