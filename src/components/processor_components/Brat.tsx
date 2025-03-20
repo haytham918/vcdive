@@ -67,8 +67,11 @@ const Brat: React.FC<{
             {Array.from({ length: CHECKPOINT_LENGTH }, (_, original_index) => {
                 const reverse_index = CHECKPOINT_LENGTH - original_index - 1;
                 const is_display = show_checkpoint[original_index];
-                // If current checkpoint is still free, display nothing
-                if (reversed_free_ids_mask[reverse_index] == "1") return null;
+                // If current checkpoint is still free, grey out by set opacity
+                let show_opacity: string = "opacity-100";
+                if (reversed_free_ids_mask[reverse_index] == "1") {
+                    show_opacity = "opacity-25";
+                }
 
                 // Get checkpoint id use original index
                 let id: string = "0".repeat(CHECKPOINT_LENGTH);
@@ -200,7 +203,10 @@ const Brat: React.FC<{
                 // ------------------------------------------------------------
 
                 return (
-                    <div className="section sub-section" key={original_index}>
+                    <div
+                        className={`section sub-section ${show_opacity}`}
+                        key={original_index}
+                    >
                         <a
                             onClick={(e) =>
                                 handleCheckpointDisplay(e, original_index)

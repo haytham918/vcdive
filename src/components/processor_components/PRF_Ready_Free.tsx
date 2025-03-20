@@ -13,7 +13,7 @@ import {
 export const PRF_SIZE = 64;
 export const PRF_SEGMENT_SIZE = 16;
 export const PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
-const READ_WRITE_SEGMENT_SIZE = 5;
+let READ_WRITE_SEGMENT_SIZE = 5;
 
 const PRF_Ready_Free: React.FC<{
     selected_number_sys: NumberSystem;
@@ -58,6 +58,10 @@ const PRF_Ready_Free: React.FC<{
     if (prf_data["REGFILE.WRITE_PORTS"]) {
         WRITE_PORTS_SIZE = convert_hex_to_dec(prf_data["REGFILE.WRITE_PORTS"]);
     }
+    // 3 columns at most
+    READ_WRITE_SEGMENT_SIZE = Math.ceil(
+        Math.max(READ_PORTS_SIZE, WRITE_PORTS_SIZE) / 3
+    );
     // Get Write port related info
     let write_en: string = "0".repeat(WRITE_PORTS_SIZE);
     let write_idx: (number | string)[] = Array(WRITE_PORTS_SIZE).fill("");
@@ -99,7 +103,7 @@ const PRF_Ready_Free: React.FC<{
                 <tbody>
                     {Array.from({ length: READ_WRITE_SEGMENT_SIZE }, (_, i) => {
                         const is_valid = segment[i] < WRITE_PORTS_SIZE;
-                        const idx = is_valid ? segment[i] : "";
+                        const idx = is_valid ? segment[i] : "-";
                         let color = "";
 
                         let write_index: string | number = "";
