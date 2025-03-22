@@ -18,8 +18,8 @@ const rs_entry_color = (is_valid: boolean) => {
 const ReservationStation: React.FC<{
     selected_number_sys: NumberSystem;
     reservation_station_data: any;
-    is_squash: boolean;
-}> = ({ selected_number_sys, reservation_station_data, is_squash }) => {
+    branch_status: string;
+}> = ({ selected_number_sys, reservation_station_data, branch_status }) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -147,18 +147,24 @@ const ReservationStation: React.FC<{
     }
 
     // Extract rob squash_en and restore_tail
-    const branch_to_squash =
-        reservation_station_data["RESERVATION_STATION.branch_to_squash"];
+    const resolved_branch_id =
+        reservation_station_data["RESERVATION_STATION.resolved_branch_id"];
 
     const subsection_comp = show_subsection ? (
         <div>
             {/* Branch To Squash Info */}
-            {is_squash ? (
+            {branch_status !== "0" ? (
                 <div className="section small-section">
                     <p className="smallsection-text w-[100%] flex flex-row">
-                        Branch To Squash:
-                        <span className="font-bold ml-2 text-[--color-accent]">
-                            {branch_to_squash}
+                        Resolved Branch:
+                        <span
+                            className={`font-bold ml-2 ${
+                                branch_status === "1"
+                                    ? `text-[--color-accent]`
+                                    : `text-[--color-primary]`
+                            }`}
+                        >
+                            {resolved_branch_id}
                         </span>
                     </p>
                 </div>

@@ -11,7 +11,7 @@ import ReservationStation from "@/components/processor_components/ReservationSta
 import Terminal from "@/components/processor_components/Terminal";
 import TerminalDialog from "@/components/processor_components/TerminalDialog";
 import ThemeToggle from "@/components/ThemeToggle";
-import { reverse_string } from "@/lib/utils";
+import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*
@@ -187,8 +187,18 @@ const DebuggerPage = () => {
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
     // Squash Data
-    const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
-    const is_squash = squash_en === "1";
+
+    const branch_status: any =
+        reservation_station_data["RESERVATION_STATION.branch_status"];
+    let branch_color = "";
+    let branch_text = "NONE";
+    if (branch_status === "1") {
+        branch_color = "text-[--color-accent]"; // Mispredict
+        branch_text = "MISPREDICT";
+    } else if (branch_status === "2") {
+        branch_color = "text-[--color-primary]"; // Correct
+        branch_text = "CORRECT";
+    }
 
     // Handle Terminal Dialog -------------------------------------------
     const [show_dialog, setShowDialog] = useState(false);
@@ -205,7 +215,6 @@ const DebuggerPage = () => {
         if (main_element) {
             main_element.classList.remove("opacity-20");
         }
-        console.log("SHIT");
         setShowDialog(false);
     };
 
@@ -265,15 +274,9 @@ const DebuggerPage = () => {
                 {/* Squash Info */}
                 <div className="section small-section ml-8">
                     <h2 className="subsection-header">
-                        Squash Enable:{" "}
-                        <span
-                            className={`font-bold ${
-                                is_squash
-                                    ? "text-[--color-primary]"
-                                    : "text-[--color-accent]"
-                            }`}
-                        >
-                            {is_squash ? "True" : "False"}
+                        Branch Status:{" "}
+                        <span className={`font-bold ${branch_color}`}>
+                            {branch_text}
                         </span>
                     </h2>
                 </div>
@@ -295,12 +298,12 @@ const DebuggerPage = () => {
                         selected_number_sys={selected_number_sys}
                         rob_data={rob_data}
                         retire_list_state_mask={retire_list_state_mask}
-                        is_squash={is_squash}
+                        branch_status={branch_status}
                     />
                     <ReservationStation
                         selected_number_sys={selected_number_sys}
                         reservation_station_data={reservation_station_data}
-                        is_squash={is_squash}
+                        branch_status={branch_status}
                     />
                     <PRF_Ready_Free
                         selected_number_sys={selected_number_sys}

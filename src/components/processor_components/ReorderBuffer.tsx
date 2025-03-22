@@ -17,8 +17,13 @@ const ReorderBuffer: React.FC<{
     selected_number_sys: NumberSystem;
     rob_data: any;
     retire_list_state_mask: string;
-    is_squash: boolean;
-}> = ({ selected_number_sys, rob_data, retire_list_state_mask, is_squash }) => {
+    branch_status: string;
+}> = ({
+    selected_number_sys,
+    rob_data,
+    retire_list_state_mask,
+    branch_status,
+}) => {
     const [show_subsection, setShowSubsection] = useState(true);
     const [show_squash, setShowSquash] = useState(true);
 
@@ -77,7 +82,7 @@ const ReorderBuffer: React.FC<{
     const subsection_comp = show_subsection ? (
         <div>
             {/* Branch Tail Info */}
-            {is_squash ? (
+            {branch_status === "1" ? (
                 <div className="section small-section">
                     <p className="smallsection-text w-[100%] flex flex-row">
                         Branch Tail:
