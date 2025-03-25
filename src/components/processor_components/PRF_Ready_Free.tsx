@@ -58,10 +58,16 @@ const PRF_Ready_Free: React.FC<{
     if (prf_data["REGFILE.WRITE_PORTS"]) {
         WRITE_PORTS_SIZE = convert_hex_to_dec(prf_data["REGFILE.WRITE_PORTS"]);
     }
+
     // 3 columns at most
-    READ_WRITE_SEGMENT_SIZE = Math.ceil(
+    const three_ceil = Math.ceil(
         Math.max(READ_PORTS_SIZE, WRITE_PORTS_SIZE) / 3
     );
+    // If odd, we add 1 to even
+    if (three_ceil % 2) {
+        READ_WRITE_SEGMENT_SIZE = three_ceil + 1;
+    } else READ_WRITE_SEGMENT_SIZE = three_ceil;
+
     // Get Write port related info
     let write_en: string = "0".repeat(WRITE_PORTS_SIZE);
     let write_idx: (number | string)[] = Array(WRITE_PORTS_SIZE).fill("");
