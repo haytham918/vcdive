@@ -20,6 +20,8 @@ const Terminal: React.FC<{
     rob_tail_data: any;
     map_table_data: any;
     prf_data: any;
+    gshare_data: any;
+    gbhr_checkpoint_data: any;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -40,7 +42,8 @@ const Terminal: React.FC<{
     rob_tail_data,
     map_table_data,
     prf_data,
-
+    gshare_data,
+    gbhr_checkpoint_data,
     terminal_settings,
     handleOpenDialog,
 }) => {
@@ -122,6 +125,14 @@ const Terminal: React.FC<{
             }
             case "Retire List": {
                 data = retire_list_data;
+                break;
+            }
+            case "Gshare": {
+                data = gshare_data;
+                break;
+            }
+            case "BRAT - Gshare": {
+                data = gbhr_checkpoint_data;
                 break;
             }
             default:

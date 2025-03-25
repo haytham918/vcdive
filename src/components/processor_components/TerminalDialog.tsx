@@ -48,6 +48,17 @@ const TerminalDialog: React.FC<{
                             File Fetch
                         </span>
 
+                        {/* Gshare */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.gshare.show}
+                                onChange={(e) => handleCheck(e, "gshare")}
+                            />
+                            Gshare
+                        </span>
+
                         {/* Decoder */}
                         <span className="checkbox-item">
                             <input
@@ -106,7 +117,9 @@ const TerminalDialog: React.FC<{
                             />
                             Reservation Station
                         </span>
+                    </div>
 
+                    <div className="checkbox-subcontainer">
                         {/* Issue */}
                         <span className="checkbox-item">
                             <input
@@ -139,9 +152,7 @@ const TerminalDialog: React.FC<{
                             />
                             MULT
                         </span>
-                    </div>
 
-                    <div className="checkbox-subcontainer">
                         {/* Control */}
                         <span className="checkbox-item">
                             <input
@@ -175,6 +186,19 @@ const TerminalDialog: React.FC<{
                             Ready List
                         </span>
 
+                        {/* Retire List */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.retire_list.show}
+                                onChange={(e) => handleCheck(e, "retire_list")}
+                            />
+                            Retire List
+                        </span>
+                    </div>
+
+                    <div className="checkbox-subcontainer">
                         {/* BRAT Coordinator */}
                         <span className="checkbox-item">
                             <input
@@ -184,6 +208,28 @@ const TerminalDialog: React.FC<{
                                 onChange={(e) => handleCheck(e, "coordinator")}
                             />
                             BRAT - Coordinator
+                        </span>
+
+                        {/* BRAT - ROB Tail */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.rob_tail.show}
+                                onChange={(e) => handleCheck(e, "rob_tail")}
+                            />
+                            BRAT - ROB Tail
+                        </span>
+
+                        {/* BRAT - Gshare */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.brat_gshare.show}
+                                onChange={(e) => handleCheck(e, "brat_gshare")}
+                            />
+                            BRAT - Gshare
                         </span>
 
                         {/* BRAT-Map Table */}
@@ -206,28 +252,6 @@ const TerminalDialog: React.FC<{
                                 onChange={(e) => handleCheck(e, "free_list")}
                             />
                             BRAT - Free List
-                        </span>
-
-                        {/* BRAT - ROB Tail */}
-                        <span className="checkbox-item">
-                            <input
-                                type="checkbox"
-                                className="checkbox-input"
-                                checked={terminal_settings.rob_tail.show}
-                                onChange={(e) => handleCheck(e, "rob_tail")}
-                            />
-                            BRAT - ROB Tail
-                        </span>
-
-                        {/* Retire List */}
-                        <span className="checkbox-item">
-                            <input
-                                type="checkbox"
-                                className="checkbox-input"
-                                checked={terminal_settings.retire_list.show}
-                                onChange={(e) => handleCheck(e, "retire_list")}
-                            />
-                            Retire List
                         </span>
                     </div>
                 </div>

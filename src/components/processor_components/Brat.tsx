@@ -7,13 +7,21 @@ import {
     MAP_TABLE_SIZE,
 } from "./MapTable";
 import { PRF_INDEX_SEGMENTS, PRF_SEGMENT_SIZE } from "./PRF_Ready_Free";
+import { GSHARE_LENGTH } from "./BranchGshare";
 
 const Brat: React.FC<{
     free_ids_mask: string;
     free_list_data: any;
     map_table_data: any;
     rob_tail_data: any;
-}> = ({ free_ids_mask, free_list_data, map_table_data, rob_tail_data }) => {
+    gbhr_checkpoint_data: any;
+}> = ({
+    free_ids_mask,
+    free_list_data,
+    map_table_data,
+    rob_tail_data,
+    gbhr_checkpoint_data,
+}) => {
     let CHECKPOINT_LENGTH = 4;
     if (free_ids_mask) {
         CHECKPOINT_LENGTH = free_ids_mask.length;
@@ -96,12 +104,18 @@ const Brat: React.FC<{
                     </h2>
                 );
 
-                // Get Rob Tail
+                // Get Rob Tail ----------------------------------------------
                 const checkpoint_rob_tail = convert_hex_to_dec(
                     rob_tail_data[
                         `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
                     ]
                 );
+
+                // Get Checkpoint GBHR --------------------------------------
+                const checkpoint_gbhr =
+                    gbhr_checkpoint_data[
+                        `GBHR_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                    ];
 
                 // Map Table ---------------------------------------------------
                 const checkpoint_map_table_valeus: number[] =
@@ -216,12 +230,45 @@ const Brat: React.FC<{
                         </a>
                         {is_display ? (
                             <div className="w-[100%] flex flex-col gap-y-3">
+                                {/* Rob Tail Info */}
                                 <h3 className="smallsection-text font-bold">
                                     ROB Tail:{" "}
                                     <span className="text-[--color-primary]">
                                         {checkpoint_rob_tail}
                                     </span>
                                 </h3>
+
+                                {/* Gshare Info */}
+                                <div className="flex smallsection-text font-bold">
+                                    Gshare:{" "}
+                                    <div className="ml-2">
+                                        {Array.from(
+                                            { length: GSHARE_LENGTH },
+                                            (_, i) => {
+                                                let history_color = "";
+                                                if (
+                                                    checkpoint_gbhr[i] === "0"
+                                                ) {
+                                                    history_color =
+                                                        "text-[--color-accent]";
+                                                } else {
+                                                    history_color =
+                                                        "text-[--color-primary]";
+                                                }
+                                                return (
+                                                    <span
+                                                        className={
+                                                            history_color
+                                                        }
+                                                        key={i}
+                                                    >
+                                                        {checkpoint_gbhr[i]}
+                                                    </span>
+                                                );
+                                            }
+                                        )}
+                                    </div>
+                                </div>
 
                                 {/* Map Table Part */}
                                 <div className="inner-section section">

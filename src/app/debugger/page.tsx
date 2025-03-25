@@ -1,6 +1,7 @@
 "use client";
 
 import DebuggerHeader from "@/components/DebuggerHeader";
+import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
 import Decoder from "@/components/processor_components/Decoder";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
@@ -40,6 +41,8 @@ export interface TerminalSettings {
     free_list: { show: boolean; label: "BRAT - Free List" };
     rob_tail: { show: boolean; label: "BRAT - ROB Tail" };
     retire_list: { show: boolean; label: "Retire List" };
+    gshare: { show: boolean; label: "Gshare" };
+    brat_gshare: { show: boolean; label: "BRAT - Gshare" };
 }
 
 const DebuggerPage = () => {
@@ -186,19 +189,21 @@ const DebuggerPage = () => {
     const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
-    // Squash Data
+    // gshare
+    const gshare_data: any = extract_data(cycle_data, "GSHARE");
 
+    const gshare_gbhr: any = gshare_data["GSHARE.global_history"];
+    const gbhr_checkpoint_data: any = extract_data(
+        cycle_data,
+        "GBHR_BRAT_WORKER"
+    );
+
+    console.log(gshare_data);
+    console.log(gbhr_checkpoint_data);
+
+    // Squash Data
     const branch_status: any =
         reservation_station_data["RESERVATION_STATION.branch_status"];
-    let branch_color = "";
-    let branch_text = "NONE";
-    if (branch_status === "1") {
-        branch_color = "text-[--color-accent]"; // Mispredict
-        branch_text = "MISPREDICT";
-    } else if (branch_status === "2") {
-        branch_color = "text-[--color-primary]"; // Correct
-        branch_text = "CORRECT";
-    }
 
     // Handle Terminal Dialog -------------------------------------------
     const [show_dialog, setShowDialog] = useState(false);
@@ -246,6 +251,8 @@ const DebuggerPage = () => {
             free_list: { show: false, label: "BRAT - Free List" },
             rob_tail: { show: false, label: "BRAT - ROB Tail" },
             retire_list: { show: false, label: "Retire List" },
+            gshare: { show: false, label: "Gshare" },
+            brat_gshare: { show: false, label: "BRAT - Gshare" },
         }
     );
 
@@ -271,15 +278,11 @@ const DebuggerPage = () => {
                 <ThemeToggle />
             </header>
             <main>
-                {/* Squash Info */}
-                <div className="section small-section ml-8">
-                    <h2 className="subsection-header">
-                        Branch Status:{" "}
-                        <span className={`font-bold ${branch_color}`}>
-                            {branch_text}
-                        </span>
-                    </h2>
-                </div>
+                <BranchGshare
+                    branch_status={branch_status}
+                    gshare_gbhr={gshare_gbhr}
+                    control_data={control_data}
+                />
                 <div className="ml-4 mr-4 flex flex-row flex-wrap">
                     <div>
                         <div className="flex">
@@ -316,6 +319,7 @@ const DebuggerPage = () => {
                         free_list_data={free_list_data}
                         rob_tail_data={rob_tail_data}
                         map_table_data={map_table_data}
+                        gbhr_checkpoint_data={gbhr_checkpoint_data}
                     />
                 </div>
                 <Terminal
@@ -336,6 +340,8 @@ const DebuggerPage = () => {
                     map_table_data={map_table_data}
                     rob_tail_data={rob_tail_data}
                     retire_list_data={retire_list_data}
+                    gshare_data={gshare_data}
+                    gbhr_checkpoint_data={gbhr_checkpoint_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />

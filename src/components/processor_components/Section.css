@@ -62,6 +62,12 @@
     background: var(--mainsection-bg-color);
 }
 
+.branch-section {
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
+}
+
 .underline-text {
     border: 3px solid;
     border-color: transparent transparent var(--foreground) transparent;
