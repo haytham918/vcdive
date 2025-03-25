@@ -278,18 +278,20 @@ const DebuggerPage = () => {
                 <ThemeToggle />
             </header>
             <main>
-                <BranchGshare
-                    branch_status={branch_status}
-                    gshare_gbhr={gshare_gbhr}
-                    control_data={control_data}
-                />
                 <div className="ml-4 mr-4 flex flex-row flex-wrap">
                     <div>
                         <div className="flex">
-                            <Decoder
-                                selected_number_sys={selected_number_sys}
-                                decoder_data={decoder_data}
-                            />
+                            <div>
+                                <Decoder
+                                    selected_number_sys={selected_number_sys}
+                                    decoder_data={decoder_data}
+                                />
+                                <BranchGshare
+                                    branch_status={branch_status}
+                                    gshare_gbhr={gshare_gbhr}
+                                    control_data={control_data}
+                                />
+                            </div>
                             <InstructionQueue
                                 selected_number_sys={selected_number_sys}
                                 instruction_queue_data={instruction_queue_data}

@@ -133,7 +133,7 @@ const BranchGshare: React.FC<{
     );
 
     return (
-        <div className="ml-4">
+        <div>
             <div className="section main-section">
                 <a onClick={handleHeaderClick}>
                     <h1 className="mainsection-header">Branch + Gshare</h1>
