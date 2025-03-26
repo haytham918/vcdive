@@ -112,10 +112,13 @@ const Brat: React.FC<{
                 );
 
                 // Get Checkpoint GBHR --------------------------------------
-                const checkpoint_gbhr =
-                    gbhr_checkpoint_data[
-                        `GBHR_BRAT_WORKER.checkpoint_data[${reverse_index}]`
-                    ];
+                let checkpoint_gbhr = "0".repeat(GSHARE_LENGTH);
+                if (gbhr_checkpoint_data) {
+                    checkpoint_gbhr =
+                        gbhr_checkpoint_data[
+                            `GBHR_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                        ];
+                }
 
                 // Map Table ---------------------------------------------------
                 const checkpoint_map_table_valeus: number[] =

@@ -78,7 +78,7 @@ const BranchGshare: React.FC<{
     // Resolved PHT:
     resolved_comp = (
         <div
-            className={`inner-section branch-section w-[100%] mt-1 ${
+            className={`inner-section branch-section partial-info-section w-[100%] mt-1 ${
                 is_resolved ? "" : "opacity-10"
             }`}
         >
@@ -101,7 +101,7 @@ const BranchGshare: React.FC<{
 
     const subsection_comp = (
         // Branch Info
-        <div className="branch-section sub-section font-bold">
+        <div className="branch-section partial-info-section sub-section font-bold">
             <div className="flex">
                 Current Gshare:{" "}
                 <div className="ml-auto">

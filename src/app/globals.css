@@ -135,7 +135,7 @@ header {
     border: 1px;
     border-radius: 0px 0px 10px 10px;
     box-shadow: 3px 3px 3px var(--box-shadow-color);
-    margin-bottom: 2rem;
+    margin-bottom: 0.25rem;
     align-items: center;
     justify-content: center;
 }

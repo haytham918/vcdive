@@ -62,11 +62,18 @@
     background: var(--mainsection-bg-color);
 }
 
-.branch-section {
+.partial-info-section{
     padding: 0.5rem;
     border-radius: 4px;
     box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
+}
+
+.branch-section {
     min-width: 245px;
+}
+
+.new-pc-section{
+    min-width: 100px;
 }
 
 .underline-text {

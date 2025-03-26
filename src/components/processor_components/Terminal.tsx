@@ -138,7 +138,7 @@ const Terminal: React.FC<{
             default:
                 break;
         }
-        return (
+        return data ? (
             <div key={name}>
                 <p className="subsection-header mt-4">&gt; {name}</p>
                 <div className="individual-data-section">
@@ -154,7 +154,7 @@ const Terminal: React.FC<{
                     ))}
                 </div>
             </div>
-        );
+        ) : null;
     };
 
     return (

@@ -4,6 +4,7 @@ import DebuggerHeader from "@/components/DebuggerHeader";
 import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
 import Decoder from "@/components/processor_components/Decoder";
+import FileFetch from "@/components/processor_components/FileFetch";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import MapTable from "@/components/processor_components/MapTable";
 import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
@@ -282,20 +283,28 @@ const DebuggerPage = () => {
                     <div>
                         <div className="flex">
                             <div>
-                                <Decoder
-                                    selected_number_sys={selected_number_sys}
-                                    decoder_data={decoder_data}
-                                />
                                 <BranchGshare
                                     branch_status={branch_status}
                                     gshare_gbhr={gshare_gbhr}
                                     control_data={control_data}
                                 />
+                                <FileFetch
+                                    file_fetch_data={file_fetch_data}
+                                    selected_number_sys={selected_number_sys}
+                                />
                             </div>
-                            <InstructionQueue
-                                selected_number_sys={selected_number_sys}
-                                instruction_queue_data={instruction_queue_data}
-                            />
+                            <div>
+                                <Decoder
+                                    selected_number_sys={selected_number_sys}
+                                    decoder_data={decoder_data}
+                                />
+                                <InstructionQueue
+                                    selected_number_sys={selected_number_sys}
+                                    instruction_queue_data={
+                                        instruction_queue_data
+                                    }
+                                />
+                            </div>
                         </div>
                         <MapTable map_table_data={map_table_data} />
                     </div>
