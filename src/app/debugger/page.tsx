@@ -6,6 +6,7 @@ import Brat from "@/components/processor_components/Brat";
 import Decoder from "@/components/processor_components/Decoder";
 import FileFetch from "@/components/processor_components/FileFetch";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
+import LoadStore from "@/components/processor_components/LoadStore";
 import MapTable from "@/components/processor_components/MapTable";
 import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
@@ -44,6 +45,7 @@ export interface TerminalSettings {
     retire_list: { show: boolean; label: "Retire List" };
     gshare: { show: boolean; label: "Gshare" };
     brat_gshare: { show: boolean; label: "BRAT - Gshare" };
+    store_queue: { show: boolean; label: "Store Queue" };
 }
 
 const DebuggerPage = () => {
@@ -190,6 +192,7 @@ const DebuggerPage = () => {
     const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
+    const store_queue_data = extract_data(cycle_data, "STORE_QUEUE");
     // gshare
     const gshare_data: any = extract_data(cycle_data, "GSHARE");
 
@@ -254,6 +257,7 @@ const DebuggerPage = () => {
             retire_list: { show: false, label: "Retire List" },
             gshare: { show: false, label: "Gshare" },
             brat_gshare: { show: false, label: "BRAT - Gshare" },
+            store_queue: { show: false, label: "Store Queue" },
         }
     );
 
@@ -280,8 +284,11 @@ const DebuggerPage = () => {
             </header>
             <main>
                 <div className="ml-4 mr-4 flex flex-row flex-wrap">
+                    {/* Group Here */}
                     <div>
+                        {/* Group Here */}
                         <div className="flex">
+                            {/* Group Here */}
                             <div>
                                 <BranchGshare
                                     branch_status={branch_status}
@@ -293,6 +300,7 @@ const DebuggerPage = () => {
                                     selected_number_sys={selected_number_sys}
                                 />
                             </div>
+                            {/* Group Here */}
                             <div>
                                 <Decoder
                                     selected_number_sys={selected_number_sys}
@@ -314,6 +322,7 @@ const DebuggerPage = () => {
                         retire_list_state_mask={retire_list_state_mask}
                         branch_status={branch_status}
                     />
+
                     <ReservationStation
                         selected_number_sys={selected_number_sys}
                         reservation_station_data={reservation_station_data}
@@ -324,6 +333,11 @@ const DebuggerPage = () => {
                         ready_list_data={ready_list_data}
                         prf_data={prf_data}
                         current_free_list={current_free_list}
+                    />
+                    <LoadStore
+                        selected_number_sys={selected_number_sys}
+                        store_queue_data={store_queue_data}
+                        branch_status={branch_status}
                     />
                     <Brat
                         free_ids_mask={free_ids_mask}
@@ -353,6 +367,7 @@ const DebuggerPage = () => {
                     retire_list_data={retire_list_data}
                     gshare_data={gshare_data}
                     gbhr_checkpoint_data={gbhr_checkpoint_data}
+                    store_queue_data={store_queue_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />

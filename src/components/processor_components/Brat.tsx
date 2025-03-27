@@ -113,7 +113,9 @@ const Brat: React.FC<{
 
                 // Get Checkpoint GBHR --------------------------------------
                 let checkpoint_gbhr = "0".repeat(GSHARE_LENGTH);
-                if (gbhr_checkpoint_data) {
+                if (
+                    gbhr_checkpoint_data[`GBHR_BRAT_WORKER.checkpoint_data[0]`]
+                ) {
                     checkpoint_gbhr =
                         gbhr_checkpoint_data[
                             `GBHR_BRAT_WORKER.checkpoint_data[${reverse_index}]`

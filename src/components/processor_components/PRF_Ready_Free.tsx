@@ -301,7 +301,7 @@ const PRF_Ready_Free: React.FC<{
                     ) : null}
                 </div>
 
-                <div className="section small-section ml-4">
+                <div className="section write-section ml-4">
                     <a onClick={handleWriteClick}>
                         <h3 className="smallsection-header">Write Ports</h3>
                     </a>

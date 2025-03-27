@@ -45,6 +45,13 @@
     width: max-content;
 }
 
+.write-section {
+    background: var(--subsection-bg-color);
+    margin-top: 0.2rem;
+    margin-bottom: 0.8rem;
+    width: 100%;
+}
+
 .smallsection-header {
     border: 3px solid;
     border-color: transparent transparent var(--foreground) transparent;
@@ -62,7 +69,7 @@
     background: var(--mainsection-bg-color);
 }
 
-.partial-info-section{
+.partial-info-section {
     padding: 0.5rem;
     border-radius: 4px;
     box-shadow: 1px 1px 2px 2px var(--box-shadow-color);
@@ -72,7 +79,7 @@
     min-width: 245px;
 }
 
-.new-pc-section{
+.new-pc-section {
     min-width: 100px;
 }
 
@@ -100,6 +107,10 @@
 
 .read-write-table {
     min-width: 150px;
+}
+
+.sq-table{
+    min-width: 690px;
 }
 
 .terminal-container {

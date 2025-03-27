@@ -22,6 +22,7 @@ const Terminal: React.FC<{
     prf_data: any;
     gshare_data: any;
     gbhr_checkpoint_data: any;
+    store_queue_data: any;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -44,6 +45,7 @@ const Terminal: React.FC<{
     prf_data,
     gshare_data,
     gbhr_checkpoint_data,
+    store_queue_data,
     terminal_settings,
     handleOpenDialog,
 }) => {
@@ -133,6 +135,10 @@ const Terminal: React.FC<{
             }
             case "BRAT - Gshare": {
                 data = gbhr_checkpoint_data;
+                break;
+            }
+            case "Store Queue": {
+                data = store_queue_data;
                 break;
             }
             default:

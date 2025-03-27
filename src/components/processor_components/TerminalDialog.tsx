@@ -117,6 +117,17 @@ const TerminalDialog: React.FC<{
                             />
                             Reservation Station
                         </span>
+
+                        {/* Store Queue */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.store_queue.show}
+                                onChange={(e) => handleCheck(e, "store_queue")}
+                            />
+                            Store Queue
+                        </span>
                     </div>
 
                     <div className="checkbox-subcontainer">

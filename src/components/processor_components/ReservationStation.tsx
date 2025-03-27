@@ -21,18 +21,11 @@ const ReservationStation: React.FC<{
     branch_status: string;
 }> = ({ selected_number_sys, reservation_station_data, branch_status }) => {
     const [show_subsection, setShowSubsection] = useState(true);
-    const [show_squash, setShowSquash] = useState(true);
 
     // Open / Close subsection when clicking the header
     const handleHeaderClick = (event: MouseEvent) => {
         event.preventDefault();
         setShowSubsection(!show_subsection);
-    };
-
-    // Open / Close Squash info
-    const handleSquashClick = (event: MouseEvent) => {
-        event.preventDefault();
-        setShowSquash(!show_squash);
     };
 
     // Get RS info

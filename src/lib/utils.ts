@@ -189,7 +189,7 @@ export const head_tail_comp = (i: number, head: number, tail: number) => {
     if (head === i && tail === i) return "h&t";
     else if (head === i) return "h";
     else if (tail === i) return "t";
-    return null;
+    return "";
 };
 
 // Assign entry color based on head, tail, index, free
