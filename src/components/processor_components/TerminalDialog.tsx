@@ -118,19 +118,6 @@ const TerminalDialog: React.FC<{
                             Reservation Station
                         </span>
 
-                        {/* Store Queue */}
-                        <span className="checkbox-item">
-                            <input
-                                type="checkbox"
-                                className="checkbox-input"
-                                checked={terminal_settings.store_queue.show}
-                                onChange={(e) => handleCheck(e, "store_queue")}
-                            />
-                            Store Queue
-                        </span>
-                    </div>
-
-                    <div className="checkbox-subcontainer">
                         {/* Issue */}
                         <span className="checkbox-item">
                             <input
@@ -141,7 +128,9 @@ const TerminalDialog: React.FC<{
                             />
                             Issue
                         </span>
+                    </div>
 
+                    <div className="checkbox-subcontainer">
                         {/* ALU */}
                         <span className="checkbox-item">
                             <input
@@ -206,6 +195,28 @@ const TerminalDialog: React.FC<{
                                 onChange={(e) => handleCheck(e, "retire_list")}
                             />
                             Retire List
+                        </span>
+
+                        {/* Load Buffer */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.load_buffer.show}
+                                onChange={(e) => handleCheck(e, "load_buffer")}
+                            />
+                            Load Buffer
+                        </span>
+
+                        {/* Store Queue */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.store_queue.show}
+                                onChange={(e) => handleCheck(e, "store_queue")}
+                            />
+                            Store Queue
                         </span>
                     </div>
 

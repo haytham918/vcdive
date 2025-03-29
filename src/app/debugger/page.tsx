@@ -46,6 +46,7 @@ export interface TerminalSettings {
     gshare: { show: boolean; label: "Gshare" };
     brat_gshare: { show: boolean; label: "BRAT - Gshare" };
     store_queue: { show: boolean; label: "Store Queue" };
+    load_buffer: { show: boolean; label: "Load Buffer" };
 }
 
 const DebuggerPage = () => {
@@ -192,7 +193,10 @@ const DebuggerPage = () => {
     const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
+    // Load + Store
+    const load_buffer_data = extract_data(cycle_data, "LOAD_BUFFER");
     const store_queue_data = extract_data(cycle_data, "STORE_QUEUE");
+
     // gshare
     const gshare_data: any = extract_data(cycle_data, "GSHARE");
 
@@ -258,6 +262,7 @@ const DebuggerPage = () => {
             gshare: { show: false, label: "Gshare" },
             brat_gshare: { show: false, label: "BRAT - Gshare" },
             store_queue: { show: false, label: "Store Queue" },
+            load_buffer: { show: false, label: "Load Buffer" },
         }
     );
 
@@ -368,6 +373,7 @@ const DebuggerPage = () => {
                     gshare_data={gshare_data}
                     gbhr_checkpoint_data={gbhr_checkpoint_data}
                     store_queue_data={store_queue_data}
+                    load_buffer_data={load_buffer_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />
