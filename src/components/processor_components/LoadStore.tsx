@@ -11,12 +11,19 @@ import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
 
 let SQ_SIZE = 16;
+let LB_SIZE = 16;
 
 const LoadStore: React.FC<{
     selected_number_sys: NumberSystem;
     store_queue_data: any;
+    load_buffer_data: any;
     branch_status: string;
-}> = ({ selected_number_sys, store_queue_data, branch_status }) => {
+}> = ({
+    selected_number_sys,
+    store_queue_data,
+    load_buffer_data,
+    branch_status,
+}) => {
     // Display Info
     const [show_subsection, setShowSubsection] = useState(true);
     // Open / Close subsection when clicking the header
@@ -35,7 +42,6 @@ const LoadStore: React.FC<{
     const store_memory_addrs: string[] = Array(SQ_SIZE).fill("");
     const store_banks: (string | number)[] = Array(SQ_SIZE).fill("");
     const store_addr_readys: string[] = Array(SQ_SIZE).fill("");
-    const store_byte_masks: string[] = Array(SQ_SIZE).fill("");
     const store_retireds: string[] = Array(SQ_SIZE).fill("");
     const store_writtens: string[] = Array(SQ_SIZE).fill("");
     const store_head_tails: string[] = Array(SQ_SIZE).fill("");
@@ -72,25 +78,11 @@ const LoadStore: React.FC<{
                 store_queue_data[`STORE_QUEUE.queue[${i}].instruction`]
             ).asm;
 
-            // // Operation
-            // const op = store_queue_data[`STORE_QUEUE.queue[${i}].op`];
-            // if (op === "0") {
-            //     store_ops[i] = "SB";
-            // } else if (op === "1") {
-            //     store_ops[i] = "SH";
-            // } else {
-            //     store_ops[i] = "SW";
-            // }
-
             // Store Data
             store_memory_datas[i] = process_values(
                 store_queue_data[`STORE_QUEUE.queue[${i}].store_queue_data`],
                 selected_number_sys
             );
-
-            // Byte Mask
-            store_byte_masks[i] =
-                store_queue_data[`STORE_QUEUE.queue[${i}].store_byte_mask`];
 
             // If Address is Ready
             const addr_ready: boolean =
@@ -139,97 +131,373 @@ const LoadStore: React.FC<{
         }
     }
 
+    // Load Buffer Data
+    if (load_buffer_data["LOAD_BUFFER.SIZE"]) {
+        LB_SIZE = convert_hex_to_dec(load_buffer_data["LOAD_BUFFER.SIZE"]);
+    }
+    const load_instructions: string[] = Array(LB_SIZE).fill("");
+    const load_branch_masks: string[] = Array(LB_SIZE).fill("");
+    const load_destination_tags: (string | number)[] = Array(LB_SIZE).fill("");
+    const load_corresponding_store_tails: (string | number)[] =
+        Array(LB_SIZE).fill("");
+    const load_memory_addrs: string[] = Array(LB_SIZE).fill("");
+    const load_states: string[] = Array(LB_SIZE).fill("");
+    const load_has_requested_cache: string[] = Array(LB_SIZE).fill("");
+    const load_has_granted_cache: string[] = Array(LB_SIZE).fill("");
+    const load_datas: string[] = Array(LB_SIZE).fill("");
+    const load_entry_colors: string[] = Array(LB_SIZE).fill("");
+    const resolved_branch_id: string =
+        load_buffer_data["LOAD_BUFFER.resolved_branch_id"];
+    const load_banks: (string | number)[] = Array(LB_SIZE).fill("");
+
+    if (load_buffer_data["LOAD_BUFFER.SIZE"]) {
+        // Get each entry information
+        for (let i = 0; i < LB_SIZE; i++) {
+            // Get state
+            const entry_state =
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].state`
+                ];
+            // If entry state is 0 (No Load), then it's empty
+            if (entry_state === "0") continue;
+
+            // Set states
+            if (entry_state === "1") {
+                load_states[i] = "WAIT_FU";
+            } else if (entry_state === "2") {
+                load_states[i] = "WAIT_VAL";
+            } else {
+                load_states[i] = "REQ_OUT";
+            }
+
+            // Set color
+            load_entry_colors[i] = "cyan";
+
+            // Set instructions
+            load_instructions[i] = parse_instruction(
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.instruction`
+                ]
+            ).asm;
+
+            // Set branch_mask
+            load_branch_masks[i] =
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.branch_mask`
+                ];
+
+            // Set destination_tag
+            load_destination_tags[i] =
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.destination_tag`
+                ];
+
+            // Set store tail
+            load_corresponding_store_tails[i] =
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail`
+                ];
+
+            // Set memory_addr if not waiting for FU
+            // Set has_requested_cache
+            // Set has_granted_cache
+            if (entry_state !== "1") {
+                load_memory_addrs[i] =
+                    load_buffer_data[
+                        `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].memory_addr`
+                    ];
+
+                // Get bank
+                let binary_address;
+                if (selected_number_sys === "0x") {
+                    binary_address = parseInt(store_memory_addrs[i], 16);
+                } else {
+                    binary_address = parseInt(store_memory_addrs[i], 10);
+                }
+                const bank = (binary_address >> 3) & 0b1;
+                load_banks[i] = bank;
+
+                // Set has requested cache and if cache is granted if waitng for VAL
+                if (entry_state === "2") {
+                    load_has_requested_cache[i] =
+                        load_buffer_data[
+                            `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].has_requested_cache`
+                        ] === "1"
+                            ? "Y"
+                            : "N";
+
+                    if (load_has_requested_cache[i] === "Y") {
+                        load_has_granted_cache[i] =
+                            load_buffer_data[
+                                `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].cache_req_gnt`
+                            ] === "1"
+                                ? "Y"
+                                : "N";
+                    } else {
+                        load_has_granted_cache[i] = "-";
+                    }
+                } else {
+                    // Not in state 2, we are either before requesting or had all
+                    load_has_requested_cache[i] = "-";
+                    load_has_granted_cache[i] = "-";
+                }
+
+                // If requesting output, set data
+                if (entry_state === "3") {
+                    load_datas[i] =
+                        load_buffer_data[
+                            `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].output_data`
+                        ];
+                } else {
+                    load_datas[i] = "-";
+                }
+            } else {
+                load_memory_addrs[i] = "-";
+                load_has_requested_cache[i] = "-";
+                load_has_granted_cache[i] = "-";
+                load_datas[i] = "-";
+            }
+        }
+    }
+
+    // branch info opacity
+    let resolved_branch_opacity = "opacity-10";
+    let store_branch_tail_opacity = "opacity-10";
+    if (branch_status !== "0") {
+        resolved_branch_opacity = "opacity-100";
+        if (branch_status === "1") {
+            store_branch_tail_opacity = "opacity-100";
+        }
+    }
+
     const subsection_comp = show_subsection ? (
         <div>
-            {/* Branch To Squash Info */}
-            {/* {branch_status !== "0" ? (
-                <div className="section small-section">
-                    <p className="smallsection-text w-[100%] flex flex-row">
-                        Resolved Branch:
-                        <span
-                            className={`font-bold ml-2 ${
-                                branch_status === "1"
-                                    ? `text-[--color-accent]`
-                                    : `text-[--color-primary]`
-                            }`}
-                        >
-                            {resolved_branch_id}
-                        </span>
-                    </p>
-                </div>
-            ) : null} */}
+            <div className="section small-section">
+                <p
+                    className={`smallsection-text w-[100%] flex flex-row ${resolved_branch_opacity}`}
+                >
+                    Resolved Branch:
+                    <span
+                        className={`font-bold ml-2 ${
+                            branch_status === "1"
+                                ? `text-[--color-accent]`
+                                : `text-[--color-primary]`
+                        }`}
+                    >
+                        {resolved_branch_id}
+                    </span>
+                </p>
 
-            {/* Store Queue */}
-            <div className="section sub-section">
-                {/* Branch Tail Info */}
-                {branch_status === "1" ? (
-                    <div className="section small-section">
-                        <p className="smallsection-text w-[100%] flex flex-row">
-                            Branch Tail:
-                            <span className="font-bold ml-2 text-[--color-accent]">
-                                {store_branch_tail}
-                            </span>
-                        </p>
+                {/* Display SQ branch tail if mispredicted */}
+                <p
+                    className={`smallsection-text w-[100%] flex flex-row ${store_branch_tail_opacity}
+                    mt-1`}
+                >
+                    SQ Branch Tail:
+                    <span className="font-bold ml-2 text-[--color-accent]">
+                        {store_branch_tail}
+                    </span>
+                </p>
+            </div>
+
+            {/* Load Buffer and Store Queue */}
+            <div className="flex gap-x-4">
+                {/* Load Buffer */}
+                <div className="section sub-section">
+                    <h2 className="subsection-header">Load Buffer</h2>
+                    <div className="flex flex-row gap-x-1">
+                        {/* LB Table */}
+                        <table className="lb-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Inst</th>
+                                    <th>T_dst</th>
+                                    <th>SQ_Tail</th>
+                                    <th>B_MASK</th>
+                                    <th>State</th>
+                                    <th>Addr</th>
+                                    <th>Req_$?</th>
+                                    <th>Gnt_$?</th>
+                                    <th>Data</th>
+                                    <th>Bank</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {Array.from({ length: LB_SIZE }, (_, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {i}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_instructions[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_destination_tags[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {
+                                                    load_corresponding_store_tails[
+                                                        i
+                                                    ]
+                                                }
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_branch_masks[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_states[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_memory_addrs[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_has_requested_cache[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_has_granted_cache[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_datas[i]}
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_banks[i]}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     </div>
-                ) : null}
-                <h2 className="subsection-header">Store Queue</h2>
-                <div className="flex flex-row gap-x-1">
-                    {/* SQ Table */}
-                    <table className="sq-table">
-                        <thead>
-                            <tr>
-                                <th>h/t</th>
-                                <th>#</th>
-                                <th>Inst</th>
-                                <th>By_Mask</th>
-                                <th>Data</th>
-                                <th>Addr</th>
-                                <th>A_Ready</th>
-                                <th>Retired</th>
-                                <th>Written</th>
-                                <th>Bank</th>
-                            </tr>
-                        </thead>
+                </div>
 
-                        <tbody>
-                            {Array.from({ length: SQ_SIZE }, (_, i) => {
-                                return (
-                                    <tr key={i}>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_head_tails[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {i}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_instructions[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_byte_masks[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_memory_datas[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_memory_addrs[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_addr_readys[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_retireds[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_writtens[i]}
-                                        </td>
-                                        <td className={store_entry_colors[i]}>
-                                            {store_banks[i]}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                {/* Store Queue */}
+                <div className="section sub-section">
+                    <h2 className="subsection-header">Store Queue</h2>
+                    <div className="flex flex-row gap-x-1">
+                        {/* SQ Table */}
+                        <table className="sq-table">
+                            <thead>
+                                <tr>
+                                    <th>h/t</th>
+                                    <th>#</th>
+                                    <th>Inst</th>
+                                    <th>Data</th>
+                                    <th>Addr</th>
+                                    <th>A_Ready</th>
+                                    <th>Retired</th>
+                                    <th>Written</th>
+                                    <th>Bank</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {Array.from({ length: SQ_SIZE }, (_, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_head_tails[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {i}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_instructions[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_memory_datas[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_memory_addrs[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_addr_readys[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_retireds[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_writtens[i]}
+                                            </td>
+                                            <td
+                                                className={
+                                                    store_entry_colors[i]
+                                                }
+                                            >
+                                                {store_banks[i]}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

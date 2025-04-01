@@ -79,19 +79,22 @@ const ReorderBuffer: React.FC<{
     // Extract rob squash_en and restore_tail
     const branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]);
 
+    // Branch Info Opacity
+    let branch_info_opacity = "opacity-10";
+    if (branch_status === "1") {
+        branch_info_opacity = "opacity-100";
+    }
+
     const subsection_comp = show_subsection ? (
         <div>
-            {/* Branch Tail Info */}
-            {branch_status === "1" ? (
-                <div className="section small-section">
-                    <p className="smallsection-text w-[100%] flex flex-row">
-                        Branch Tail:
-                        <span className="font-bold ml-2 text-[--color-accent]">
-                            {branch_tail}
-                        </span>
-                    </p>
-                </div>
-            ) : null}
+            <div className={`section small-section ${branch_info_opacity}`}>
+                <p className="smallsection-text w-[100%] flex flex-row">
+                    Branch Tail:
+                    <span className="font-bold ml-2 text-[--color-accent]">
+                        {branch_tail}
+                    </span>
+                </p>
+            </div>
 
             <div className="section sub-section">
                 <h2 className="subsection-header">ROB</h2>

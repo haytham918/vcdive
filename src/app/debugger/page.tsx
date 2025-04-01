@@ -27,6 +27,7 @@ export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
 // Decide which to show and not to show
 export interface TerminalSettings {
     file_fetch: { show: boolean; label: "File Fetch" };
+    gshare: { show: boolean; label: "Gshare" };
     decoder: { show: boolean; label: "Decoder" };
     instruction_queue: { show: boolean; label: "Instruction Queue" };
     dispatch: { show: boolean; label: "Dispatch" };
@@ -38,15 +39,15 @@ export interface TerminalSettings {
     control: { show: boolean; label: "Control" };
     regfile: { show: boolean; label: "Regfile" };
     ready_list: { show: boolean; label: "Ready List" };
+    retire_list: { show: boolean; label: "Retire List" };
+    load_buffer: { show: boolean; label: "Load Buffer" };
+    store_queue: { show: boolean; label: "Store Queue" };
     coordinator: { show: boolean; label: "BRAT - Coordinator" };
+    rob_tail: { show: boolean; label: "BRAT - ROB Tail" };
+    brat_store_queue: { show: boolean; label: "BRAT - Store Queue" };
+    brat_gshare: { show: boolean; label: "BRAT - Gshare" };
     map_table: { show: boolean; label: "BRAT - Map Table" };
     free_list: { show: boolean; label: "BRAT - Free List" };
-    rob_tail: { show: boolean; label: "BRAT - ROB Tail" };
-    retire_list: { show: boolean; label: "Retire List" };
-    gshare: { show: boolean; label: "Gshare" };
-    brat_gshare: { show: boolean; label: "BRAT - Gshare" };
-    store_queue: { show: boolean; label: "Store Queue" };
-    load_buffer: { show: boolean; label: "Load Buffer" };
 }
 
 const DebuggerPage = () => {
@@ -191,6 +192,7 @@ const DebuggerPage = () => {
 
     const map_table_data = extract_data(cycle_data, "MAP_TABLE_BRAT_WORKER");
     const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
+    const sq_tail_data = extract_data(cycle_data, "SQ_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
     // Load + Store
@@ -261,8 +263,9 @@ const DebuggerPage = () => {
             retire_list: { show: false, label: "Retire List" },
             gshare: { show: false, label: "Gshare" },
             brat_gshare: { show: false, label: "BRAT - Gshare" },
-            store_queue: { show: false, label: "Store Queue" },
             load_buffer: { show: false, label: "Load Buffer" },
+            store_queue: { show: false, label: "Store Queue" },
+            brat_store_queue: { show: false, label: "BRAT - Store Queue" },
         }
     );
 
@@ -342,6 +345,7 @@ const DebuggerPage = () => {
                     <LoadStore
                         selected_number_sys={selected_number_sys}
                         store_queue_data={store_queue_data}
+                        load_buffer_data={load_buffer_data}
                         branch_status={branch_status}
                     />
                     <Brat
@@ -374,6 +378,7 @@ const DebuggerPage = () => {
                     gbhr_checkpoint_data={gbhr_checkpoint_data}
                     store_queue_data={store_queue_data}
                     load_buffer_data={load_buffer_data}
+                    sq_tail_data={sq_tail_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />

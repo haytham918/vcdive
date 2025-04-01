@@ -236,7 +236,7 @@ const PRF_Ready_Free: React.FC<{
     }
 
     const prf_tables = ready_segments.map((ready_segment, segment_index) => (
-        <table key={segment_index}>
+        <table key={segment_index} className="prf-table">
             <thead>
                 <tr>
                     <th>#</th>

@@ -24,6 +24,7 @@ const Terminal: React.FC<{
     gbhr_checkpoint_data: any;
     store_queue_data: any;
     load_buffer_data: any;
+    sq_tail_data: any;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -48,6 +49,7 @@ const Terminal: React.FC<{
     gbhr_checkpoint_data,
     store_queue_data,
     load_buffer_data,
+    sq_tail_data,
     terminal_settings,
     handleOpenDialog,
 }) => {
@@ -139,12 +141,16 @@ const Terminal: React.FC<{
                 data = gbhr_checkpoint_data;
                 break;
             }
+            case "Load Buffer": {
+                data = load_buffer_data;
+                break;
+            }
             case "Store Queue": {
                 data = store_queue_data;
                 break;
             }
-            case "Load Buffer": {
-                data = load_buffer_data;
+            case "BRAT - Store Queue": {
+                data = sq_tail_data;
                 break;
             }
             default:

@@ -143,25 +143,28 @@ const ReservationStation: React.FC<{
     const resolved_branch_id =
         reservation_station_data["RESERVATION_STATION.resolved_branch_id"];
 
+    // Branch info opacity
+    let branch_info_opacity = "opacity-10";
+    if (branch_status !== "0") {
+        branch_info_opacity = "opacity-100";
+    }
+
     const subsection_comp = show_subsection ? (
         <div>
-            {/* Branch To Squash Info */}
-            {branch_status !== "0" ? (
-                <div className="section small-section">
-                    <p className="smallsection-text w-[100%] flex flex-row">
-                        Resolved Branch:
-                        <span
-                            className={`font-bold ml-2 ${
-                                branch_status === "1"
-                                    ? `text-[--color-accent]`
-                                    : `text-[--color-primary]`
-                            }`}
-                        >
-                            {resolved_branch_id}
-                        </span>
-                    </p>
-                </div>
-            ) : null}
+            <div className={`section small-section ${branch_info_opacity}`}>
+                <p className="smallsection-text w-[100%] flex flex-row">
+                    Resolved Branch:
+                    <span
+                        className={`font-bold ml-2 ${
+                            branch_status === "1"
+                                ? `text-[--color-accent]`
+                                : `text-[--color-primary]`
+                        }`}
+                    >
+                        {resolved_branch_id}
+                    </span>
+                </p>
+            </div>
 
             <div className="section sub-section">
                 <h2 className="subsection-header">RS</h2>

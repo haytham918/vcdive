@@ -243,6 +243,21 @@ const TerminalDialog: React.FC<{
                             BRAT - ROB Tail
                         </span>
 
+                        {/* BRAT - Store Queue */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={
+                                    terminal_settings.brat_store_queue.show
+                                }
+                                onChange={(e) =>
+                                    handleCheck(e, "brat_store_queue")
+                                }
+                            />
+                            BRAT - Store Queue
+                        </span>
+
                         {/* BRAT - Gshare */}
                         <span className="checkbox-item">
                             <input
