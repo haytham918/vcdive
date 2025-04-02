@@ -188,16 +188,18 @@ const LoadStore: React.FC<{
                 ];
 
             // Set destination_tag
-            load_destination_tags[i] =
+            load_destination_tags[i] = convert_hex_to_dec(
                 load_buffer_data[
                     `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.destination_tag`
-                ];
+                ]
+            );
 
             // Set store tail
-            load_corresponding_store_tails[i] =
+            load_corresponding_store_tails[i] = convert_hex_to_dec(
                 load_buffer_data[
                     `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail.pointer`
-                ];
+                ]
+            );
             // Set store tail parity
             load_parities[i] =
                 load_buffer_data[
@@ -208,10 +210,12 @@ const LoadStore: React.FC<{
             // Set has_requested_cache
             // Set has_granted_cache
             if (entry_state !== "1") {
-                load_memory_addrs[i] =
+                load_memory_addrs[i] = process_values(
                     load_buffer_data[
                         `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].memory_addr`
-                    ];
+                    ],
+                    selected_number_sys
+                );
 
                 // Get bank
                 let binary_address;
@@ -250,10 +254,12 @@ const LoadStore: React.FC<{
 
                 // If requesting output, set data
                 if (entry_state === "3") {
-                    load_datas[i] =
+                    load_datas[i] = process_values(
                         load_buffer_data[
                             `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].output_data`
-                        ];
+                        ],
+                        selected_number_sys
+                    );
                 } else {
                     load_datas[i] = "-";
                 }
@@ -323,7 +329,7 @@ const LoadStore: React.FC<{
                                     <th>Parity</th>
                                     <th>B_MASK</th>
                                     <th>State</th>
-                                    <th>Addr</th>
+                                    <th>Base_Addr</th>
                                     <th>Req_$?</th>
                                     <th>Gnt_$?</th>
                                     <th>Data</th>
@@ -430,7 +436,7 @@ const LoadStore: React.FC<{
                                     <th>#</th>
                                     <th>Inst</th>
                                     <th>Data</th>
-                                    <th>Addr</th>
+                                    <th>Base_Addr</th>
                                     <th>A_Ready</th>
                                     <th>Retired</th>
                                     <th>Written</th>

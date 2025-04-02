@@ -124,11 +124,14 @@ export const convert_hex_to_dec = (hex: string) => {
 export const process_values = (
     value: string,
     number_system: NumberSystem,
-    is_npc: boolean = false
+    is_npc: boolean = false,
+    drop_zero: boolean = true
 ) => {
     if (!value || value == "" || value == " " || value == "x") return "x";
     // Remove leading zeros
-    const trimmedValue = value.replace(/^0+/, "") || "0";
+    let trimmedValue = value;
+    if (drop_zero) 
+        trimmedValue = value.replace(/^0+/, "") || "0";
     let val = parseInt(trimmedValue, 16); // Decimal of Val
     if (is_npc) val -= 4; // If getting pc from npc
     if (number_system == "0d") {
