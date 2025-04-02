@@ -59,6 +59,42 @@ const Icache: React.FC<{
 
         const eviction_opacity = is_evict ? "opacity-100" : "opacity-15";
 
+        // Check if read request valid and what
+        let read_granted = false;
+        let read_address = "0".repeat(8);
+        if (icache_data["ICACHE.bank_read_request_granted"]) {
+            read_granted =
+                icache_data["ICACHE.bank_read_request_granted"][
+                    ICACHE_NUM_BANKS - 1 - bank_index
+                ] === "1";
+
+            if (read_granted) {
+                let binary_addr =
+                    icache_data[
+                        `ICACHE.bank_read_request_address[${bank_index}].tag`
+                    ] +
+                    icache_data[
+                        `ICACHE.bank_read_request_address[${bank_index}].set_index`
+                    ] +
+                    icache_data[
+                        `ICACHE.bank_read_request_address[${bank_index}].bank_number`
+                    ] +
+                    icache_data[
+                        `ICACHE.bank_read_request_address[${bank_index}].offset`
+                    ];
+                binary_addr = parseInt(binary_addr, 2);
+                const hex_addr = binary_addr.toString(16).padStart(8, "0");
+                read_address = process_values(
+                    hex_addr,
+                    select_number_sys,
+                    false,
+                    false
+                );
+            }
+        }
+
+        const read_opacity = read_granted ? "opacity-100" : "opacity-15";
+
         // Check each data val
         for (let i = 0; i < ICACHE_BANK_ENTRY_SIZE; i++) {
             const set = Math.floor(i / ICACHE_NUM_WAYS); // Get the set index
@@ -113,17 +149,28 @@ const Icache: React.FC<{
             }
         }
         return (
-            <div className="section sub-section">
+            <div className="section sub-section" key={bank_index}>
                 <h2 className="subsection-header">Bank {bank_index}</h2>
-                <div
-                    className={`section inner-section ${eviction_opacity} mb-2`}
-                >
-                    <p className="smallsection-text w-[100%] flex flex-row">
-                        Eviction Enable:
-                        <span className="font-bold ml-2 text-[--color-babyblue]">
-                            {is_evict ? "1" : "0"}
-                        </span>
-                    </p>
+                <div className="mb-2 flex flex-row w-[100%] ml-4 gap-x-4">
+                    <div
+                        className={`section inner-section ${eviction_opacity}`}
+                    >
+                        <p className="smallsection-text flex flex-row">
+                            Eviction En:
+                            <span className="font-bold ml-2 text-[--color-primary]">
+                                {is_evict ? "1" : "0"}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div className={`section inner-section ${read_opacity}`}>
+                        <p className="smallsection-text w-[12rem] flex flex-row">
+                            Read Addr:
+                            <span className="font-bold ml-auto text-[--color-babyblue]">
+                                {read_address}
+                            </span>
+                        </p>
+                    </div>
                 </div>
                 <table className="icache-table">
                     <thead>
@@ -191,7 +238,9 @@ const Icache: React.FC<{
                     icache_data[
                         `ICACHE.MSHR_TABLE.mshr_table[${i}].base_address`
                     ],
-                    select_number_sys
+                    select_number_sys,
+                    false,
+                    false
                 );
                 mshr_valid_masks[i] =
                     icache_data[

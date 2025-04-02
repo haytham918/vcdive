@@ -93,7 +93,9 @@ const LoadStore: React.FC<{
                 // Get actual address
                 store_memory_addrs[i] = process_values(
                     store_queue_data[`STORE_QUEUE.queue[${i}].memory_addr`],
-                    selected_number_sys
+                    selected_number_sys,
+                    false,
+                    false
                 );
 
                 // Get bank
@@ -214,7 +216,9 @@ const LoadStore: React.FC<{
                     load_buffer_data[
                         `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].memory_addr`
                     ],
-                    selected_number_sys
+                    selected_number_sys,
+                    false,
+                    false
                 );
 
                 // Get bank

@@ -215,7 +215,12 @@ class Parser {
 								  logic_name.find("FREE_LIST_BRAT_WORKER.checkpoint_data") != std::string::npos ||
 								  logic_name.ends_with("global_history") ||
 								  logic_name.find("GBHR_BRAT_WORKER.checkpoint_data") != std::string::npos ||
-								  logic_name.ends_with("referenced") || logic_name.ends_with("evict_en");
+								  logic_name.ends_with("referenced") || logic_name.ends_with("evict_en") ||
+								  logic_name.find("bank_read_request_granted") != std::string::npos ||
+								  logic_name.ends_with("bank_number") ||
+								  logic_name.ends_with("offset") ||
+								  logic_name.ends_with("set_index") ||
+								  logic_name.ends_with("tag");
 			if (display_binary) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {
