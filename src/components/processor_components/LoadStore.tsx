@@ -261,8 +261,8 @@ const LoadStore: React.FC<{
     }
 
     // branch info opacity
-    let resolved_branch_opacity = "opacity-10";
-    let store_branch_tail_opacity = "opacity-10";
+    let resolved_branch_opacity = "opacity-15";
+    let store_branch_tail_opacity = "opacity-15";
     if (branch_status !== "0") {
         resolved_branch_opacity = "opacity-100";
         if (branch_status === "1") {

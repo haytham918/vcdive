@@ -214,7 +214,8 @@ class Parser {
 								  logic_name.ends_with("FREE_LIST_BRAT_WORKER.current_state") ||
 								  logic_name.find("FREE_LIST_BRAT_WORKER.checkpoint_data") != std::string::npos ||
 								  logic_name.ends_with("global_history") ||
-								  logic_name.find("GBHR_BRAT_WORKER.checkpoint_data") != std::string::npos;
+								  logic_name.find("GBHR_BRAT_WORKER.checkpoint_data") != std::string::npos ||
+								  logic_name.ends_with("referenced") || logic_name.ends_with("evict_en");
 			if (display_binary) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {

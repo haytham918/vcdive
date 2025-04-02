@@ -39,6 +39,15 @@
     --table-entry-yellow: #fce9b0;
     --table-entry-cyan: #b2dfdb;
     --table-entry-beige: #fdeabe;
+
+    --set-color-0: #dbf2dd;
+    --set-color-1: #fce4ec;
+    --set-color-2: #f7c5bf;
+    --set-color-3: #fffde7;
+    --set-color-4: #b2dfdb;
+    --set-color-5: #fdeabe;
+    --set-color-6: #cfd8dc;
+    --set-color-7: #f3e5f5;
 }
 
 /* Dark Theme */
@@ -77,6 +86,15 @@
         --table-entry-yellow: #b8860b;
         --table-entry-cyan: #006666;
         --table-entry-beige: #9f8c76;
+
+        --set-color-0: #324b3c; /* Dark muted mint – a deep, earthy green */
+        --set-color-1: #7f4c56; /* Dark muted rose – a dusty, subdued pink */
+        --set-color-2: #7a4b47; /* Dark muted coral – a warm, deep coral tone */
+        --set-color-3: #7a7a55; /* Dark muted yellow – an olive/dusty mustard */
+        --set-color-4: #3b7a74; /* Dark muted teal – a deeper, richer teal */
+        --set-color-5: #7a6c52; /* Dark muted peach – a warm, brownish peach */
+        --set-color-6: #49535a; /* Dark muted blue-grey – a softened slate blue-grey */
+        --set-color-7: #6a4a6e; /* Dark muted lavender – a deep, subdued lavender */
     }
 }
 
@@ -116,6 +134,19 @@
     --table-entry-yellow: #b8860b;
     --table-entry-cyan: #006666;
     --table-entry-beige: #9f8c76;
+
+    --set-color-0: #324b3c; /* Dark muted mint – a deep, earthy green */
+    --set-color-1: #7f4c56; /* Dark muted rose – a dusty, subdued pink */
+    --set-color-2: #7a4b47; /* Dark muted coral – a warm, deep coral tone */
+    --set-color-3: #7a7a55; /* Dark muted yellow – an olive/dusty mustard */
+    --set-color-4: #3b7a74; /* Dark muted teal – a deeper, richer teal */
+    --set-color-5: #7a6c52; /* Dark muted peach – a warm, brownish peach */
+    --set-color-6: #49535a; /* Dark muted blue-grey – a softened slate blue-grey */
+    --set-color-7: #6a4a6e; /* Dark muted lavender – a deep, subdued lavender */
+}
+
+html {
+    scrollbar-width: none;
 }
 
 /* Apply base styles to the body using Tailwind utilities */
@@ -191,6 +222,38 @@ td.yellow {
 
 td.beige {
     background-color: var(--table-entry-beige) !important;
+}
+
+td.set0 {
+    background-color: var(--set-color-0) !important;
+}
+
+td.set1 {
+    background-color: var(--set-color-1) !important;
+}
+
+td.set2 {
+    background-color: var(--set-color-2) !important;
+}
+
+td.set3 {
+    background-color: var(--set-color-3) !important;
+}
+
+td.set4 {
+    background-color: var(--set-color-4) !important;
+}
+
+td.set5 {
+    background-color: var(--set-color-5) !important;
+}
+
+td.set6 {
+    background-color: var(--set-color-6) !important;
+}
+
+td.set7 {
+    background-color: var(--set-color-7) !important;
 }
 
 .btn {

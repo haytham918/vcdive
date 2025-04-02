@@ -5,6 +5,7 @@ import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
 import Decoder from "@/components/processor_components/Decoder";
 import FileFetch from "@/components/processor_components/FileFetch";
+import Icache from "@/components/processor_components/Icache";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import LoadStore from "@/components/processor_components/LoadStore";
 import MapTable from "@/components/processor_components/MapTable";
@@ -24,7 +25,7 @@ import toast, { Toaster } from "react-hot-toast";
 */
 export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
 
-// Decide which to show and not to show
+// Decide which to show and not to show for Terminal
 export interface TerminalSettings {
     file_fetch: { show: boolean; label: "File Fetch" };
     gshare: { show: boolean; label: "Gshare" };
@@ -208,9 +209,6 @@ const DebuggerPage = () => {
         "GBHR_BRAT_WORKER"
     );
 
-    console.log(gshare_data);
-    console.log(gbhr_checkpoint_data);
-
     // Squash Data
     const branch_status: any =
         reservation_station_data["RESERVATION_STATION.branch_status"];
@@ -233,12 +231,16 @@ const DebuggerPage = () => {
         setShowDialog(false);
     };
 
+    // Icache
+    const icache_data = extract_data(cycle_data, "ICACHE");
+
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             file_fetch: {
                 show: false,
                 label: "File Fetch",
             },
+            gshare: { show: false, label: "Gshare" },
             decoder: { show: false, label: "Decoder" },
             instruction_queue: {
                 show: false,
@@ -261,7 +263,6 @@ const DebuggerPage = () => {
             free_list: { show: false, label: "BRAT - Free List" },
             rob_tail: { show: false, label: "BRAT - ROB Tail" },
             retire_list: { show: false, label: "Retire List" },
-            gshare: { show: false, label: "Gshare" },
             brat_gshare: { show: false, label: "BRAT - Gshare" },
             load_buffer: { show: false, label: "Load Buffer" },
             store_queue: { show: false, label: "Store Queue" },
@@ -292,35 +293,31 @@ const DebuggerPage = () => {
             </header>
             <main>
                 <div className="ml-4 mr-4 flex flex-row flex-wrap">
+                    <Icache
+                        select_number_sys={selected_number_sys}
+                        icache_data={icache_data}
+                    />
+
                     {/* Group Here */}
                     <div>
                         {/* Group Here */}
                         <div className="flex">
                             {/* Group Here */}
                             <div>
+                                <Decoder
+                                    selected_number_sys={selected_number_sys}
+                                    decoder_data={decoder_data}
+                                />
                                 <BranchGshare
                                     branch_status={branch_status}
                                     gshare_gbhr={gshare_gbhr}
                                     control_data={control_data}
                                 />
-                                <FileFetch
-                                    file_fetch_data={file_fetch_data}
-                                    selected_number_sys={selected_number_sys}
-                                />
                             </div>
-                            {/* Group Here */}
-                            <div>
-                                <Decoder
-                                    selected_number_sys={selected_number_sys}
-                                    decoder_data={decoder_data}
-                                />
-                                <InstructionQueue
-                                    selected_number_sys={selected_number_sys}
-                                    instruction_queue_data={
-                                        instruction_queue_data
-                                    }
-                                />
-                            </div>
+                            <InstructionQueue
+                                selected_number_sys={selected_number_sys}
+                                instruction_queue_data={instruction_queue_data}
+                            />
                         </div>
                         <MapTable map_table_data={map_table_data} />
                     </div>
@@ -354,6 +351,7 @@ const DebuggerPage = () => {
                         rob_tail_data={rob_tail_data}
                         map_table_data={map_table_data}
                         gbhr_checkpoint_data={gbhr_checkpoint_data}
+                        sq_tail_data={sq_tail_data}
                     />
                 </div>
                 <Terminal

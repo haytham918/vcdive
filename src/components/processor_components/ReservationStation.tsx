@@ -144,7 +144,7 @@ const ReservationStation: React.FC<{
         reservation_station_data["RESERVATION_STATION.resolved_branch_id"];
 
     // Branch info opacity
-    let branch_info_opacity = "opacity-10";
+    let branch_info_opacity = "opacity-15";
     if (branch_status !== "0") {
         branch_info_opacity = "opacity-100";
     }

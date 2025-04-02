@@ -121,6 +121,14 @@
     min-width: 680px;
 }
 
+.icache-table {
+    min-width: 385px;
+}
+
+.mshr-table {
+    min-width: 400px;
+}
+
 .terminal-container {
     display: flex;
     flex-direction: column;
@@ -231,4 +239,11 @@
 .checkbox-input {
     width: 1.2rem;
     height: 1.2rem;
+}
+
+.cache-container {
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
 }

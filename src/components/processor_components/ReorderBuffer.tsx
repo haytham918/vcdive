@@ -80,7 +80,7 @@ const ReorderBuffer: React.FC<{
     const branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]);
 
     // Branch Info Opacity
-    let branch_info_opacity = "opacity-10";
+    let branch_info_opacity = "opacity-15";
     if (branch_status === "1") {
         branch_info_opacity = "opacity-100";
     }

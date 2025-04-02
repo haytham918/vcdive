@@ -15,12 +15,14 @@ const Brat: React.FC<{
     map_table_data: any;
     rob_tail_data: any;
     gbhr_checkpoint_data: any;
+    sq_tail_data: any;
 }> = ({
     free_ids_mask,
     free_list_data,
     map_table_data,
     rob_tail_data,
     gbhr_checkpoint_data,
+    sq_tail_data,
 }) => {
     let CHECKPOINT_LENGTH = 4;
     if (free_ids_mask) {
@@ -110,6 +112,16 @@ const Brat: React.FC<{
                         `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
                     ]
                 );
+
+                // Get SQ Tail -----------------------------------------------
+                let checkpoint_sq_tail = 0;
+                if (sq_tail_data["SQ_TAIL_BRAT_WORKER.checkpoint_data[0]"]) {
+                    checkpoint_sq_tail = convert_hex_to_dec(
+                        sq_tail_data[
+                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                        ]
+                    );
+                }
 
                 // Get Checkpoint GBHR --------------------------------------
                 let checkpoint_gbhr = "0".repeat(GSHARE_LENGTH);
@@ -240,6 +252,14 @@ const Brat: React.FC<{
                                     ROB Tail:{" "}
                                     <span className="text-[--color-primary]">
                                         {checkpoint_rob_tail}
+                                    </span>
+                                </h3>
+
+                                {/* SQ Tail Info */}
+                                <h3 className="smallsection-text font-bold">
+                                    SQ Tail:{" "}
+                                    <span className="text-[--color-babyblue]">
+                                        {checkpoint_sq_tail}
                                     </span>
                                 </h3>
 
