@@ -4,6 +4,7 @@ import { MouseEvent, useState } from "react";
 
 const Terminal: React.FC<{
     icache_data: any;
+    fetch_data: any;
     decoder_data: any;
     instruction_queue_data: any;
     dispatch_data: any;
@@ -29,6 +30,7 @@ const Terminal: React.FC<{
     handleOpenDialog: () => void;
 }> = ({
     icache_data,
+    fetch_data,
     decoder_data,
     instruction_queue_data,
     dispatch_data,
@@ -151,6 +153,10 @@ const Terminal: React.FC<{
             }
             case "BRAT - Store Queue": {
                 data = sq_tail_data;
+                break;
+            }
+            case "Fetch": {
+                data = fetch_data;
                 break;
             }
             default:

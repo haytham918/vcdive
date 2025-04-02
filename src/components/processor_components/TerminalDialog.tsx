@@ -48,6 +48,17 @@ const TerminalDialog: React.FC<{
                             I-Cache
                         </span>
 
+                        {/* Fetch */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.fetch.show}
+                                onChange={(e) => handleCheck(e, "fetch")}
+                            />
+                            Fetch
+                        </span>
+
                         {/* Gshare */}
                         <span className="checkbox-item">
                             <input

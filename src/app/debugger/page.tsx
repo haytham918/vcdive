@@ -28,6 +28,7 @@ export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
 // Decide which to show and not to show for Terminal
 export interface TerminalSettings {
     icache: { show: boolean; label: "I-Cache" };
+    fetch: { show: boolean; label: "Fetch" };
     gshare: { show: boolean; label: "Gshare" };
     decoder: { show: boolean; label: "Decoder" };
     instruction_queue: { show: boolean; label: "Instruction Queue" };
@@ -234,11 +235,18 @@ const DebuggerPage = () => {
     // Icache
     const icache_data = extract_data(cycle_data, "ICACHE");
 
+    // Fetch
+    const fetch_data = extract_data(cycle_data, "FETCH");
+
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             icache: {
                 show: false,
                 label: "I-Cache",
+            },
+            fetch: {
+                show: false,
+                label: "Fetch",
             },
             gshare: { show: false, label: "Gshare" },
             decoder: { show: false, label: "Decoder" },
@@ -356,6 +364,7 @@ const DebuggerPage = () => {
                 </div>
                 <Terminal
                     icache_data={icache_data}
+                    fetch_data={fetch_data}
                     decoder_data={decoder_data}
                     instruction_queue_data={instruction_queue_data}
                     reservation_station_data={reservation_station_data}
