@@ -37,15 +37,15 @@ const TerminalDialog: React.FC<{
                 </h2>
                 <div className="checkbox-container dialog-text">
                     <div className="checkbox-subcontainer">
-                        {/* File Fetch */}
+                        {/* I-Cache */}
                         <span className="checkbox-item">
                             <input
                                 type="checkbox"
                                 className="checkbox-input"
-                                checked={terminal_settings.file_fetch.show}
-                                onChange={(e) => handleCheck(e, "file_fetch")}
+                                checked={terminal_settings.icache.show}
+                                onChange={(e) => handleCheck(e, "icache")}
                             />
-                            File Fetch
+                            I-Cache
                         </span>
 
                         {/* Gshare */}

@@ -3,7 +3,7 @@ import { Gear, TerminalWindow } from "phosphor-react";
 import { MouseEvent, useState } from "react";
 
 const Terminal: React.FC<{
-    file_fetch_data: any;
+    icache_data: any;
     decoder_data: any;
     instruction_queue_data: any;
     dispatch_data: any;
@@ -28,7 +28,7 @@ const Terminal: React.FC<{
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
-    file_fetch_data,
+    icache_data,
     decoder_data,
     instruction_queue_data,
     dispatch_data,
@@ -65,8 +65,8 @@ const Terminal: React.FC<{
         if (!is_show) return null;
         let data: any;
         switch (name) {
-            case "File Fetch": {
-                data = file_fetch_data;
+            case "I-Cache": {
+                data = icache_data;
                 break;
             }
             case "Decoder": {
