@@ -140,6 +140,7 @@ const LoadStore: React.FC<{
     const load_destination_tags: (string | number)[] = Array(LB_SIZE).fill("");
     const load_corresponding_store_tails: (string | number)[] =
         Array(LB_SIZE).fill("");
+    const load_parities: string[] = Array(LB_SIZE).fill("");
     const load_memory_addrs: string[] = Array(LB_SIZE).fill("");
     const load_states: string[] = Array(LB_SIZE).fill("");
     const load_has_requested_cache: string[] = Array(LB_SIZE).fill("");
@@ -195,7 +196,12 @@ const LoadStore: React.FC<{
             // Set store tail
             load_corresponding_store_tails[i] =
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail`
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail.pointer`
+                ];
+            // Set store tail parity
+            load_parities[i] =
+                load_buffer_data[
+                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail.parity`
                 ];
 
             // Set memory_addr if not waiting for FU
@@ -314,6 +320,7 @@ const LoadStore: React.FC<{
                                     <th>Inst</th>
                                     <th>T_dst</th>
                                     <th>SQ_Tail</th>
+                                    <th>Parity</th>
                                     <th>B_MASK</th>
                                     <th>State</th>
                                     <th>Addr</th>
@@ -354,6 +361,12 @@ const LoadStore: React.FC<{
                                                         i
                                                     ]
                                                 }
+                                            </td>
+
+                                            <td
+                                                className={load_entry_colors[i]}
+                                            >
+                                                {load_parities[i]}
                                             </td>
 
                                             <td
