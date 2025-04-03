@@ -24,9 +24,7 @@ const Icache: React.FC<{
     // Set parametes
     if (icache_data["ICACHE.NUM_BANKS"]) {
         ICACHE_NUM_BANKS = convert_hex_to_dec(icache_data["ICACHE.NUM_BANKS"]);
-        ICACHE_NUM_SETS = convert_hex_to_dec(
-            icache_data["ICACHE.NUM_SETS_PER_BANK"]
-        );
+        ICACHE_NUM_SETS = convert_hex_to_dec(icache_data["ICACHE.NUM_SETS"]);
         ICACHE_NUM_WAYS = convert_hex_to_dec(
             icache_data["ICACHE.ASSOCIATIVITY"]
         );
