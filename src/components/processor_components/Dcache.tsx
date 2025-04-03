@@ -38,7 +38,7 @@ const Dcache: React.FC<{
     }
 
     // Function to generate each bank's information
-    const generate_icache_bank = (bank_index: number) => {
+    const generate_dcache_bank = (bank_index: number) => {
         const set_nums: (string | number)[] = Array(
             DCACHE_BANK_ENTRY_SIZE
         ).fill("");
@@ -727,7 +727,7 @@ const Dcache: React.FC<{
             {/* Generate Banks Information */}
             <div className="cache-container">
                 {Array.from({ length: DCACHE_NUM_BANKS }, (_, i) =>
-                    generate_icache_bank(i)
+                    generate_dcache_bank(i)
                 )}
             </div>
         </div>
