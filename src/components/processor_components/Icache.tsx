@@ -303,7 +303,7 @@ const Icache: React.FC<{
     );
 
     const subsection_comp = show_subsection ? (
-        <div>
+        <div className="flex flex-col gap-y-2">
             <div className="section sub-section">
                 <h2 className="subsection-header">MSHR</h2>
                 <div className="flex flex-row gap-x-1">{mshr_tables}</div>

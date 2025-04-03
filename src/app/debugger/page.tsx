@@ -3,6 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
+import Dcache from "@/components/processor_components/Dcache";
 import Decoder from "@/components/processor_components/Decoder";
 import FileFetch from "@/components/processor_components/FileFetch";
 import Icache from "@/components/processor_components/Icache";
@@ -16,6 +17,7 @@ import Terminal from "@/components/processor_components/Terminal";
 import TerminalDialog from "@/components/processor_components/TerminalDialog";
 import ThemeToggle from "@/components/ThemeToggle";
 import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
+import { Label } from "@headlessui/react";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*
@@ -50,6 +52,7 @@ export interface TerminalSettings {
     brat_gshare: { show: boolean; label: "BRAT - Gshare" };
     map_table: { show: boolean; label: "BRAT - Map Table" };
     free_list: { show: boolean; label: "BRAT - Free List" };
+    dcache: { show: boolean; label: "D-Cache" };
 }
 
 const DebuggerPage = () => {
@@ -235,6 +238,9 @@ const DebuggerPage = () => {
     // Icache
     const icache_data = extract_data(cycle_data, "ICACHE");
 
+    // Dcache
+    const dcache_data = extract_data(cycle_data, "DCACHE");
+
     // Fetch
     const fetch_data = extract_data(cycle_data, "FETCH");
 
@@ -275,6 +281,7 @@ const DebuggerPage = () => {
             load_buffer: { show: false, label: "Load Buffer" },
             store_queue: { show: false, label: "Store Queue" },
             brat_store_queue: { show: false, label: "BRAT - Store Queue" },
+            dcache: { show: false, label: "D-Cache" },
         }
     );
 
@@ -353,6 +360,10 @@ const DebuggerPage = () => {
                         load_buffer_data={load_buffer_data}
                         branch_status={branch_status}
                     />
+                    <Dcache
+                        dcache_data={dcache_data}
+                        select_number_sys={selected_number_sys}
+                    />
                     <Brat
                         free_ids_mask={free_ids_mask}
                         free_list_data={free_list_data}
@@ -386,6 +397,7 @@ const DebuggerPage = () => {
                     store_queue_data={store_queue_data}
                     load_buffer_data={load_buffer_data}
                     sq_tail_data={sq_tail_data}
+                    dcache_data={dcache_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />

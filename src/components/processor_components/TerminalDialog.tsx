@@ -229,6 +229,17 @@ const TerminalDialog: React.FC<{
                             />
                             Store Queue
                         </span>
+
+                        {/* DCache */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.dcache.show}
+                                onChange={(e) => handleCheck(e, "dcache")}
+                            />
+                            D-Cache
+                        </span>
                     </div>
 
                     <div className="checkbox-subcontainer">

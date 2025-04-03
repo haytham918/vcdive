@@ -26,6 +26,7 @@ const Terminal: React.FC<{
     store_queue_data: any;
     load_buffer_data: any;
     sq_tail_data: any;
+    dcache_data: any;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -52,6 +53,7 @@ const Terminal: React.FC<{
     store_queue_data,
     load_buffer_data,
     sq_tail_data,
+    dcache_data,
     terminal_settings,
     handleOpenDialog,
 }) => {
@@ -157,6 +159,10 @@ const Terminal: React.FC<{
             }
             case "Fetch": {
                 data = fetch_data;
+                break;
+            }
+            case "D-Cache": {
+                data = dcache_data;
                 break;
             }
             default:

@@ -218,7 +218,9 @@ class Parser {
 								  logic_name.ends_with("referenced") || logic_name.ends_with("evict_en") ||
 								  logic_name.find("bank_read_request_granted") != std::string::npos ||
 								  logic_name.ends_with(".bank_number") || logic_name.ends_with(".offset") ||
-								  logic_name.ends_with(".set_index") || logic_name.ends_with(".tag");
+								  logic_name.ends_with(".set_index") || logic_name.ends_with(".tag") ||
+								  logic_name.ends_with("read_request_en") || logic_name.ends_with("write_forward_en") ||
+								  logic_name.find("_gnt") != std::string::npos;
 			if (display_binary) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {
