@@ -10,7 +10,8 @@ let DCACHE_NUM_WAYS = 4; // Number of Ways per Set
 let DCACHE_BANK_ENTRY_SIZE = 16; // Number of Cachelines per Bank
 const MSHR_SEGMENT_SIZE = 8; // SEGMENT SIZE for MSHR
 let MSHR_SIZE = 16; // Size of MSHR
-let WRITE_BUFFER_SIZE = 4; // Size of Write Buffer
+let WRITE_BUFFER_SIZE = 16; // Size of Write Buffer
+const WRITE_BUFFER_SEGMENT_SIZE = 8; // Segment Size
 let WRITE_BUFFER_READ_PORT_SIZE = 2;
 let WRITE_BUFFER_WRITE_PORT_SIZE = 2;
 const Dcache: React.FC<{
@@ -317,7 +318,7 @@ const Dcache: React.FC<{
             dcache_data["DCACHE.WRITE_BUFFER.WRITE_PORTS"]
         );
     }
-    const write_buffer_valids: string[] = Array(WRITE_BUFFER_SIZE).fill("");
+    const write_buffer_valids: string[] = Array(WRITE_BUFFER_SIZE).fill("0");
     const write_buffer_addrs: string[] = Array(WRITE_BUFFER_SIZE).fill("-");
     const write_buffer_datas: string[] = Array(WRITE_BUFFER_SIZE).fill("-");
     const write_buffer_colors: string[] = Array(WRITE_BUFFER_SIZE).fill("");
@@ -463,39 +464,70 @@ const Dcache: React.FC<{
         }
     }
 
-    const write_buffer_comp = (
-        <div className="flex flex-row w-[100%]">
-            <div className="inner-section section">
-                <h3 className="smallsection-text font-bold mb-2">Buffer</h3>
-                <table className="write-buffer-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Valid</th>
-                            <th>Mem_Addr</th>
-                            <th>Data</th>
-                        </tr>
-                    </thead>
+    const WRITE_BUFFER_INDEX_SEGMENTS = segment_idx(
+        WRITE_BUFFER_SEGMENT_SIZE,
+        WRITE_BUFFER_SIZE
+    );
+    const write_buffer_tables = WRITE_BUFFER_INDEX_SEGMENTS.map(
+        (segment, segment_idx) => (
+            <table key={segment_idx} className="write-buffer-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Valid</th>
+                        <th>Mem_Addr</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        {Array.from({ length: WRITE_BUFFER_SIZE }, (_, i) => (
-                            <tr>
-                                <td className={write_buffer_colors[i]}>{i}</td>
-                                <td className={write_buffer_colors[i]}>
-                                    {write_buffer_valids[i]}
-                                </td>
-                                <td className={write_buffer_colors[i]}>
-                                    {write_buffer_addrs[i]}
-                                </td>
-                                <td className={write_buffer_colors[i]}>
-                                    {write_buffer_datas[i]}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="flex flex-col inner-section ml-auto gap-y-2 section">
+                <tbody>
+                    {Array.from(
+                        { length: WRITE_BUFFER_SEGMENT_SIZE },
+                        (_, i) => {
+                            const actual_index =
+                                segment_idx * WRITE_BUFFER_SEGMENT_SIZE + i;
+                            return (
+                                <tr key={i}>
+                                    <td
+                                        className={
+                                            write_buffer_colors[actual_index]
+                                        }
+                                    >
+                                        {actual_index}
+                                    </td>
+                                    <td
+                                        className={
+                                            write_buffer_colors[actual_index]
+                                        }
+                                    >
+                                        {write_buffer_valids[actual_index]}
+                                    </td>
+                                    <td
+                                        className={
+                                            write_buffer_colors[actual_index]
+                                        }
+                                    >
+                                        {write_buffer_addrs[actual_index]}
+                                    </td>
+                                    <td
+                                        className={
+                                            write_buffer_colors[actual_index]
+                                        }
+                                    >
+                                        {write_buffer_datas[actual_index]}
+                                    </td>
+                                </tr>
+                            );
+                        }
+                    )}
+                </tbody>
+            </table>
+        )
+    );
+
+    const write_buffer_comp = (
+        <div className="flex flex-col w-[100%] gap-y-1">
+            <div className="flex-row inner-section gap-x-1 flex partial-info-section">
                 {/* Read Ports */}
                 <div className="flex flex-col items-center">
                     <h3 className="smallsection-text font-bold mb-2">
@@ -516,7 +548,7 @@ const Dcache: React.FC<{
                             {Array.from(
                                 { length: WRITE_BUFFER_READ_PORT_SIZE },
                                 (_, i) => (
-                                    <tr>
+                                    <tr key={i}>
                                         <td
                                             className={
                                                 write_buffer_read_request_colors[
@@ -590,7 +622,7 @@ const Dcache: React.FC<{
                             {Array.from(
                                 { length: WRITE_BUFFER_WRITE_PORT_SIZE },
                                 (_, i) => (
-                                    <tr>
+                                    <tr key={i}>
                                         <td
                                             className={
                                                 write_buffer_write_forward_colors[
@@ -666,6 +698,12 @@ const Dcache: React.FC<{
                             )}
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div className="inner-section section">
+                <h3 className="smallsection-text font-bold mb-2">Buffer</h3>
+                <div className="flex flex-row gap-x-1">
+                    {write_buffer_tables}
                 </div>
             </div>
         </div>

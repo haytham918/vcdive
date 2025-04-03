@@ -17,7 +17,6 @@ import Terminal from "@/components/processor_components/Terminal";
 import TerminalDialog from "@/components/processor_components/TerminalDialog";
 import ThemeToggle from "@/components/ThemeToggle";
 import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
-import { Label } from "@headlessui/react";
 import { useCallback, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 /*

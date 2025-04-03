@@ -130,11 +130,11 @@
 }
 
 .write-buffer-table {
-    min-width: 375px;
+    min-width: 385px;
 }
 
 .write-buffer-ports-table {
-    min-width: 385px;
+    min-width: 390px;
 }
 
 .terminal-container {
