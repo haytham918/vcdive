@@ -33,7 +33,7 @@ const BranchGshare: React.FC<{
     const is_resolved = branch_status !== "0"; // Check we are actually resolving sth
     let resolved_comp = <div className="hidden"></div>;
     // Get the actual taken or not, then get the predicted accordingly
-    const actual = control_data["gen_control[0].CONTROL.output_taken"];
+    const actual = control_data["gen_control[0].CONTROL.output_taken"] || "-";
     let actual_color = "";
     let predict_color = "";
     let predicted = "0";

@@ -150,7 +150,7 @@ const LoadStore: React.FC<{
     const load_datas: string[] = Array(LB_SIZE).fill("");
     const load_entry_colors: string[] = Array(LB_SIZE).fill("");
     const resolved_branch_id: string =
-        load_buffer_data["LOAD_BUFFER.resolved_branch_id"];
+        load_buffer_data["LOAD_BUFFER.resolved_branch_id"] || "-";
     const load_banks: (string | number)[] = Array(LB_SIZE).fill("");
 
     if (load_buffer_data["LOAD_BUFFER.SIZE"]) {

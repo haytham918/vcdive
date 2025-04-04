@@ -141,7 +141,8 @@ const ReservationStation: React.FC<{
 
     // Extract rob squash_en and restore_tail
     const resolved_branch_id =
-        reservation_station_data["RESERVATION_STATION.resolved_branch_id"];
+        reservation_station_data["RESERVATION_STATION.resolved_branch_id"] ||
+        "-";
 
     // Branch info opacity
     let branch_info_opacity = "opacity-15";
