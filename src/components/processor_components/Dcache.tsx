@@ -10,8 +10,8 @@ let DCACHE_NUM_WAYS = 4; // Number of Ways per Set
 let DCACHE_BANK_ENTRY_SIZE = 16; // Number of Cachelines per Bank
 const MSHR_SEGMENT_SIZE = 8; // SEGMENT SIZE for MSHR
 let MSHR_SIZE = 16; // Size of MSHR
-let WRITE_BUFFER_SIZE = 16; // Size of Write Buffer
-const WRITE_BUFFER_SEGMENT_SIZE = 8; // Segment Size
+let WRITE_BUFFER_SIZE = 8; // Size of Write Buffer
+const WRITE_BUFFER_SEGMENT_SIZE = 4; // Segment Size
 let WRITE_BUFFER_READ_PORT_SIZE = 2;
 let WRITE_BUFFER_WRITE_PORT_SIZE = 2;
 const Dcache: React.FC<{
