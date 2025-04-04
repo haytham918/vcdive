@@ -11,6 +11,7 @@ import InstructionQueue from "@/components/processor_components/InstructionQueue
 import LoadStore from "@/components/processor_components/LoadStore";
 import MapTable from "@/components/processor_components/MapTable";
 import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
+import RAS from "@/components/processor_components/RAS";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
 import Terminal from "@/components/processor_components/Terminal";
@@ -243,6 +244,9 @@ const DebuggerPage = () => {
     // Fetch
     const fetch_data = extract_data(cycle_data, "FETCH");
 
+    // RAS
+    const ras_data = extract_data(cycle_data, "RAS");
+
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             icache: {
@@ -342,11 +346,18 @@ const DebuggerPage = () => {
                         branch_status={branch_status}
                     />
 
-                    <ReservationStation
-                        selected_number_sys={selected_number_sys}
-                        reservation_station_data={reservation_station_data}
-                        branch_status={branch_status}
-                    />
+                    <div className="flex flex-col">
+                        <ReservationStation
+                            selected_number_sys={selected_number_sys}
+                            reservation_station_data={reservation_station_data}
+                            branch_status={branch_status}
+                        />
+                        <RAS
+                            ras_data={ras_data}
+                            selected_number_sys={selected_number_sys}
+                            branch_status={branch_status}
+                        />
+                    </div>
                     <PRF_Ready_Free
                         selected_number_sys={selected_number_sys}
                         ready_list_data={ready_list_data}

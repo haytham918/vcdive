@@ -28,7 +28,9 @@ const Dcache: React.FC<{
     // Set parametes
     if (dcache_data["DCACHE.NUM_BANKS"]) {
         DCACHE_NUM_BANKS = convert_hex_to_dec(dcache_data["DCACHE.NUM_BANKS"]);
-        DCACHE_NUM_SETS = convert_hex_to_dec(dcache_data["DCACHE.NUM_SETS"]);
+        DCACHE_NUM_SETS = convert_hex_to_dec(
+            dcache_data["DCACHE.NUM_SETS_PER_BANK"]
+        );
         DCACHE_NUM_WAYS = convert_hex_to_dec(
             dcache_data["DCACHE.ASSOCIATIVITY"]
         );

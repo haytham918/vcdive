@@ -6,12 +6,14 @@ import {
     parse_instruction,
     process_values,
     reverse_string,
+    segment_idx,
 } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
 
 let RAS_SIZE = 16;
+const RAS_SEGMENT_SIZE = 8;
 
 const RAS: React.FC<{
     ras_data: any;
@@ -50,11 +52,45 @@ const RAS: React.FC<{
         }
     }
 
+    const RAS_INDEX_SEGMENTS = segment_idx(RAS_SEGMENT_SIZE, RAS_SIZE);
+
+    const ras_tables = RAS_INDEX_SEGMENTS.map((segment, segment_idx) => (
+        <table className="ras-table" key={segment_idx}>
+            <thead>
+                <tr>
+                    <th>top?</th>
+                    <th>#</th>
+                    <th>Ret_Addr</th>
+                </tr>
+            </thead>
+
+            {/* Actual Register Values */}
+            <tbody>
+                {Array.from({ length: RAS_SEGMENT_SIZE }, (_, i) => {
+                    const actual_index = RAS_SEGMENT_SIZE * segment_idx + i;
+                    return (
+                        <tr key={i}>
+                            <td className={ras_colors[actual_index]}>
+                                {ras_tops[actual_index]}
+                            </td>
+                            <td className={ras_colors[actual_index]}>
+                                {actual_index}
+                            </td>
+                            <td className={ras_colors[actual_index]}>
+                                {ras_addrs[actual_index]}
+                            </td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
+    ));
+
     let is_push = false;
-    let push_val = "0";
+    let push_val = "-";
     let push_info_opacity = "opacity-15";
     let is_pop = false;
-    let pop_val = "0";
+    let pop_val = "-";
     let pop_info_opacity = "opacity-15";
     if (ras_data["RAS.should_push"]) {
         is_push = ras_data["RAS.should_push"] === "1";
@@ -88,19 +124,28 @@ const RAS: React.FC<{
                 <div
                     className={`section small-section ${restore_info_capacity}`}
                 >
-                    <p className="smallsection-text w-[100%] flex flex-row">
+                    <p className="smallsection-text w-[140px] flex flex-row">
                         Restore Top:
-                        <span className="font-bold ml-2 text-[--color-accent]">
+                        <span className="font-bold ml-auto text-[--color-accent]">
                             {restore_top}
                         </span>
                     </p>
                 </div>
 
                 <div className={`section small-section ${push_info_opacity}`}>
-                    <p className="smallsection-text w-[100%] flex flex-row">
+                    <p className="smallsection-text w-[160px] flex flex-row">
                         Push Val:
-                        <span className="font-bold ml-2 text-[--color-accent]">
+                        <span className="font-bold ml-auto text-[--color-babyblue]">
                             {push_val}
+                        </span>
+                    </p>
+                </div>
+
+                <div className={`section small-section ${pop_info_opacity}`}>
+                    <p className="smallsection-text w-[160px] flex flex-row">
+                        Pop Val:
+                        <span className="font-bold ml-auto text-[--color-babyblue]">
+                            {pop_val}
                         </span>
                     </p>
                 </div>
@@ -108,29 +153,7 @@ const RAS: React.FC<{
 
             <div className="section sub-section">
                 <h2 className="subsection-header">RAS</h2>
-                {/* Table */}
-                <table className="ras-table">
-                    <thead>
-                        <tr>
-                            <th>top?</th>
-                            <th>#</th>
-                            <th>Ret_Addr</th>
-                        </tr>
-                    </thead>
-
-                    {/* Actual Register Values */}
-                    <tbody>
-                        {Array.from({ length: RAS_SIZE }, (_, i) => (
-                            <tr key={i}>
-                                <td className={ras_colors[i]}>{ras_tops[i]}</td>
-                                <td className={ras_colors[i]}>{i}</td>
-                                <td className={ras_colors[i]}>
-                                    {ras_addrs[i]}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="flex flex-row gap-x-2">{ras_tables}</div>
             </div>
         </div>
     ) : null;
