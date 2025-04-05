@@ -145,7 +145,9 @@ const Dcache: React.FC<{
                     dcache_data[
                         `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.memdp_metadata[${set}][${way}].tag`
                     ],
-                    select_number_sys
+                    select_number_sys,
+                    false,
+                    false
                 );
 
                 // Get actual data

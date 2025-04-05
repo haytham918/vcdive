@@ -137,7 +137,9 @@ const Icache: React.FC<{
                     icache_data[
                         `ICACHE.gen_cache[${bank_index}].ICACHE_BANK.memdp_metadata[${set}][${way}].tag`
                     ],
-                    select_number_sys
+                    select_number_sys,
+                    false,
+                    false
                 );
 
                 // Get actual data
