@@ -122,11 +122,11 @@
 }
 
 .icache-table {
-    min-width: 395px;
+    min-width: 405px;
 }
 
 .mshr-table {
-    min-width: 400px;
+    min-width: 405px;
 }
 
 .write-buffer-table {
@@ -138,7 +138,7 @@
 }
 
 .avc-table {
-    min-width: 340px;
+    min-width: 360px;
 }
 
 .terminal-container {

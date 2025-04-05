@@ -145,7 +145,7 @@ const Dcache: React.FC<{
                     dcache_data[
                         `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.memdp_metadata[${set}][${way}].tag`
                     ],
-                    select_number_sys,
+                    select_number_sys
                 );
 
                 // Get actual data
@@ -547,7 +547,7 @@ const Dcache: React.FC<{
 
     const write_buffer_comp = (
         <div className="flex flex-col w-[100%] gap-y-1">
-            <div className="flex-row inner-section gap-x-1 flex partial-info-section">
+            <div className="grid inner-section grid-cols-2 partial-info-section">
                 {/* Read Ports */}
                 <div className="flex flex-col items-center">
                     <h3 className="smallsection-text font-bold mb-2">
@@ -722,7 +722,7 @@ const Dcache: React.FC<{
             </div>
             <div className="inner-section section">
                 <h3 className="smallsection-text font-bold mb-2">Buffer</h3>
-                <div className="flex flex-row gap-x-1">
+                <div className="grid grid-cols-2 gap-3">
                     {write_buffer_tables}
                 </div>
             </div>
