@@ -10,6 +10,7 @@ let ICACHE_NUM_WAYS = 4; // Number of Ways per Set
 let ICACHE_BANK_ENTRY_SIZE = 16; // Number of Cachelines per Bank
 const MSHR_SEGMENT_SIZE = 8; // SEGMENT SIZE for MSHR
 let MSHR_SIZE = 16; // Size of MSHR
+let AVC_SIZE = 4; // Size of AVC
 const Icache: React.FC<{
     select_number_sys: NumberSystem;
     icache_data: any;
@@ -156,7 +157,7 @@ const Icache: React.FC<{
                         className={`section inner-section ${eviction_opacity}`}
                     >
                         <p className="smallsection-text flex flex-row">
-                            Eviction En:
+                            Evict En:
                             <span className="font-bold ml-2 text-[--color-primary]">
                                 {is_evict ? "1" : "0"}
                             </span>
@@ -164,7 +165,7 @@ const Icache: React.FC<{
                     </div>
 
                     <div className={`section inner-section ${read_opacity}`}>
-                        <p className="smallsection-text w-[12rem] flex flex-row">
+                        <p className="smallsection-text w-[11rem] flex flex-row">
                             Read Addr:
                             <span className="font-bold ml-auto text-[--color-babyblue]">
                                 {read_address}
@@ -302,11 +303,75 @@ const Icache: React.FC<{
         )
     );
 
+    // Anti Victim Cache
+    if (icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"]) {
+        AVC_SIZE = icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"];
+    }
+    const avc_deaths: string[] = Array(AVC_SIZE).fill("");
+    const avc_valids: string[] = Array(AVC_SIZE).fill("0");
+    const avc_addrs: string[] = Array(AVC_SIZE).fill("-");
+    const avc_datas: string[] = Array(AVC_SIZE).fill("-");
+    const avc_colors: string[] = Array(AVC_SIZE).fill("");
+    if (icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"]) {
+        const death_pointer = convert_hex_to_dec(
+            icache_data[`ICACHE.ANTI_VICTIM_CACHE.death_pointer`]
+        );
+
+        for (let i = 0; i < AVC_SIZE; i++) {
+            avc_deaths[i] = i === death_pointer ? "d" : "";
+            avc_valids[i] =
+                icache_data[`ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].valid`];
+            if (avc_valids[i] === "1") {
+                avc_addrs[i] =
+                    icache_data[`ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].addr`];
+                avc_datas[i] =
+                    icache_data[
+                        `ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].data.dbbl_level`
+                    ];
+                if (death_pointer !== i) avc_colors[i] = "emerald";
+                else avc_colors[i] = "red";
+            }
+        }
+    }
+
+    const anti_victim_cache = (
+        <table className="avc-table">
+            <thead>
+                <tr>
+                    <th>Death?</th>
+                    <th>#</th>
+                    <th>Valid</th>
+                    <th>Address</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {Array.from({ length: AVC_SIZE }, (_, i) => (
+                    <tr key={i}>
+                        <td className={avc_colors[i]}>{avc_deaths[i]}</td>
+                        <td className={avc_colors[i]}>{i}</td>
+                        <td className={avc_colors[i]}>{avc_valids[i]}</td>
+                        <td className={avc_colors[i]}>{avc_addrs[i]}</td>
+                        <td className={avc_colors[i]}>{avc_datas[i]}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+
     const subsection_comp = show_subsection ? (
         <div className="flex flex-col gap-y-2">
+            {/* MSHR */}
             <div className="section sub-section">
                 <h2 className="subsection-header">MSHR</h2>
                 <div className="flex flex-row gap-x-1">{mshr_tables}</div>
+            </div>
+
+            {/* Anti Victim Cache */}
+            <div className="section sub-section">
+                <h2 className="subsection-header">Anti Victim Cache</h2>
+                {anti_victim_cache}
             </div>
 
             {/* Generate Banks Information */}

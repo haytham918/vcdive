@@ -80,7 +80,7 @@ const LoadStore: React.FC<{
 
             // Store Data
             store_memory_datas[i] = process_values(
-                store_queue_data[`STORE_QUEUE.queue[${i}].store_queue_data`],
+                store_queue_data[`STORE_QUEUE.queue[${i}].data`],
                 selected_number_sys
             );
 
@@ -92,7 +92,7 @@ const LoadStore: React.FC<{
 
                 // Get actual address
                 store_memory_addrs[i] = process_values(
-                    store_queue_data[`STORE_QUEUE.queue[${i}].memory_addr`],
+                    store_queue_data[`STORE_QUEUE.queue[${i}].addr`],
                     selected_number_sys,
                     false,
                     false
@@ -214,7 +214,7 @@ const LoadStore: React.FC<{
             if (entry_state !== "1") {
                 load_memory_addrs[i] = process_values(
                     load_buffer_data[
-                        `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].memory_addr`
+                        `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].addr`
                     ],
                     selected_number_sys,
                     false,

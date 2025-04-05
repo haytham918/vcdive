@@ -66,37 +66,42 @@ const Dcache: React.FC<{
         // Check if read request valid and what
         let read_granted = false;
         let read_address = "0".repeat(8);
-        if (dcache_data["DCACHE.bank_read_request_granted"]) {
+        let write_granted = false;
+        let write_address = "0".repeat(8);
+        if (dcache_data["DCACHE.lsq_read_request_granted"]) {
             read_granted =
-                dcache_data["DCACHE.bank_read_request_granted"][
+                dcache_data["DCACHE.lsq_read_request_granted"][
                     DCACHE_NUM_BANKS - 1 - bank_index
                 ] === "1";
 
             if (read_granted) {
-                let binary_addr =
-                    dcache_data[
-                        `DCACHE.bank_read_request_address[${bank_index}].tag`
-                    ] +
-                    dcache_data[
-                        `DCACHE.bank_read_request_address[${bank_index}].set_index`
-                    ] +
-                    dcache_data[
-                        `DCACHE.bank_read_request_address[${bank_index}].bank_number`
-                    ] +
-                    dcache_data[
-                        `DCACHE.bank_read_request_address[${bank_index}].offset`
-                    ];
-                binary_addr = parseInt(binary_addr, 2);
-                const hex_addr = binary_addr.toString(16).padStart(8, "0");
                 read_address = process_values(
-                    hex_addr,
+                    dcache_data[
+                        `DCACHE.lsq_read_request_address[${bank_index}]`
+                    ],
+                    select_number_sys,
+                    false,
+                    false
+                );
+            }
+
+            write_granted =
+                dcache_data["DCACHE.lsq_write_request_granted"][
+                    DCACHE_NUM_BANKS - 1 - bank_index
+                ] === "1";
+
+            if (write_granted) {
+                write_address = process_values(
+                    dcache_data[
+                        `DCACHE.lsq_write_request_address[${bank_index}]`
+                    ],
                     select_number_sys,
                     false,
                     false
                 );
             }
         }
-
+        const write_opacity = write_granted ? "opacity-100" : "opacity-15";
         const read_opacity = read_granted ? "opacity-100" : "opacity-15";
 
         // Check each data val
@@ -157,23 +162,38 @@ const Dcache: React.FC<{
                 <h2 className="subsection-header">Bank {bank_index}</h2>
                 <div className="mb-2 flex flex-row w-[100%] ml-4 gap-x-4">
                     <div
-                        className={`section inner-section ${eviction_opacity}`}
+                        className={`section inner-section ${eviction_opacity} h-[max-content]`}
                     >
                         <p className="smallsection-text flex flex-row">
-                            Eviction En:
+                            Evict En:
                             <span className="font-bold ml-2 text-[--color-primary]">
                                 {is_evict ? "1" : "0"}
                             </span>
                         </p>
                     </div>
 
-                    <div className={`section inner-section ${read_opacity}`}>
-                        <p className="smallsection-text w-[12rem] flex flex-row">
-                            Read Addr:
-                            <span className="font-bold ml-auto text-[--color-babyblue]">
-                                {read_address}
-                            </span>
-                        </p>
+                    <div>
+                        <div
+                            className={`section inner-section ${read_opacity}`}
+                        >
+                            <p className="smallsection-text w-[11rem] flex flex-row">
+                                Read Addr:
+                                <span className="font-bold ml-auto text-[--color-babyblue]">
+                                    {read_address}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div
+                            className={`section inner-section ${write_opacity}`}
+                        >
+                            <p className="smallsection-text w-[11rem] flex flex-row">
+                                Write Addr:
+                                <span className="font-bold ml-auto text-[--color-babyblue]">
+                                    {write_address}
+                                </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <table className="icache-table">

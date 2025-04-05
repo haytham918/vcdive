@@ -137,6 +137,10 @@
     min-width: 390px;
 }
 
+.avc-table{
+    min-width: 340px;
+}
+
 .terminal-container {
     display: flex;
     flex-direction: column;

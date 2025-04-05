@@ -111,7 +111,7 @@ const Brat: React.FC<{
                     rob_tail_data[
                         `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
                     ]
-                );
+                ) || 0;
 
                 // Get SQ Tail -----------------------------------------------
                 let checkpoint_sq_tail = 0;
@@ -143,7 +143,7 @@ const Brat: React.FC<{
                         map_table_data[
                             `MAP_TABLE_BRAT_WORKER.checkpoint_data[${reverse_index}][${i}]`
                         ]
-                    );
+                    ) || 0;
                 }
 
                 // Segment Map Tables
