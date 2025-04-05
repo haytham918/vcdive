@@ -11,7 +11,7 @@ import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
 
-const ROB_SIZE = 32;
+let ROB_SIZE = 32;
 
 const ReorderBuffer: React.FC<{
     selected_number_sys: NumberSystem;
@@ -31,6 +31,10 @@ const ReorderBuffer: React.FC<{
         event.preventDefault();
         setShowSubsection(!show_subsection);
     };
+
+    if (rob_data["ROB.SIZE"]) {
+        ROB_SIZE = convert_hex_to_dec(rob_data["ROB.SIZE"]);
+    }
 
     // Get instructions, pc, destination tag and old tag, retirable
     const instructions: string[] = Array(ROB_SIZE).fill("");

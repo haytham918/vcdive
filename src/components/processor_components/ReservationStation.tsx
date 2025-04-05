@@ -8,7 +8,7 @@ import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
 
-const RS_SIZE = 16;
+let RS_SIZE = 16;
 
 // Entry color
 const rs_entry_color = (is_valid: boolean) => {
@@ -27,6 +27,12 @@ const ReservationStation: React.FC<{
         event.preventDefault();
         setShowSubsection(!show_subsection);
     };
+
+    if (reservation_station_data["RESERVATION_STATION.SIZE"]) {
+        RS_SIZE = convert_hex_to_dec(
+            reservation_station_data["RESERVATION_STATION.SIZE"]
+        );
+    }
 
     // Get RS info
     const valids: boolean[] = Array(RS_SIZE).fill(false);

@@ -6,12 +6,12 @@ import {
 } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
-import "./Section.css"
+import "./Section.css";
+let DECODER_SIZE = 4; // Init to be 4
 const Decoder: React.FC<{
     selected_number_sys: NumberSystem;
     decoder_data: any;
 }> = ({ selected_number_sys, decoder_data }) => {
-    let DECODER_SIZE = 4; // Init to be 4
     if (decoder_data["DECODER.MAX_DECODE"]) {
         DECODER_SIZE = convert_hex_to_dec(decoder_data["DECODER.MAX_DECODE"]);
     }

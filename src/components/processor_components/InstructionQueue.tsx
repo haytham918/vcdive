@@ -8,17 +8,23 @@ import {
 } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
+let IQ_SIZE = 8;
 const InstructionQueue: React.FC<{
     selected_number_sys: NumberSystem;
     instruction_queue_data: any;
 }> = ({ selected_number_sys, instruction_queue_data }) => {
-    const IQ_SIZE = 8;
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
     const handleHeaderClick = (event: MouseEvent) => {
         event.preventDefault();
         setShowSubsection(!show_subsection);
     };
+
+    if (instruction_queue_data["INSTRUCTION_QUEUE.SIZE"]) {
+        IQ_SIZE = convert_hex_to_dec(
+            instruction_queue_data["INSTRUCTION_QUEUE.SIZE"]
+        );
+    }
 
     // Get IQ head and tail, number free
     const iq_head = convert_hex_to_dec(

@@ -10,9 +10,9 @@ import {
     segment_mask_table,
 } from "@/lib/utils";
 
-export const PRF_SIZE = 64;
+export let PRF_SIZE = 64;
 export const PRF_SEGMENT_SIZE = 16;
-export const PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
+export let PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
 let READ_WRITE_SEGMENT_SIZE = 5;
 
 const PRF_Ready_Free: React.FC<{
@@ -48,6 +48,12 @@ const PRF_Ready_Free: React.FC<{
         event.preventDefault();
         setShowWrite(!show_write);
     };
+
+    // Get actual prf SIZE
+    if (prf_data["REGFILE.NUM_PHYS_REG"]) {
+        PRF_SIZE = convert_hex_to_dec(prf_data["REGFILE.NUM_PHYS_REG"]);
+        PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
+    }
 
     // Read Write Ports Info
     let READ_PORTS_SIZE = 13;
