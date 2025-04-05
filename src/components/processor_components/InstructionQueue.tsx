@@ -20,13 +20,6 @@ const InstructionQueue: React.FC<{
         setShowSubsection(!show_subsection);
     };
 
-    // Squash
-    const [show_squash, setShowSquash] = useState(true);
-    const handleSquashClick = (event: MouseEvent) => {
-        event.preventDefault();
-        setShowSquash(!show_squash);
-    };
-
     // Get IQ head and tail, number free
     const iq_head = convert_hex_to_dec(
         instruction_queue_data["INSTRUCTION_QUEUE.head"]
@@ -64,9 +57,6 @@ const InstructionQueue: React.FC<{
             pcs[i] = pc;
         }
     }
-
-    const squash_en = instruction_queue_data["INSTRUCTION_QUEUE.squash_en"];
-    const is_squash = squash_en === "1";
 
     const subsection_comp = show_subsection ? (
         <div className="section sub-section">

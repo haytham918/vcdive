@@ -130,8 +130,7 @@ export const process_values = (
     if (!value || value == "" || value == " " || value == "x") return "x";
     // Remove leading zeros
     let trimmedValue = value;
-    if (drop_zero) 
-        trimmedValue = value.replace(/^0+/, "") || "0";
+    if (drop_zero) trimmedValue = value.replace(/^0+/, "") || "0";
     let val = parseInt(trimmedValue, 16); // Decimal of Val
     if (is_npc) val -= 4; // If getting pc from npc
     if (number_system == "0d") {

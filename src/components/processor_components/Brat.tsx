@@ -107,11 +107,12 @@ const Brat: React.FC<{
                 );
 
                 // Get Rob Tail ----------------------------------------------
-                const checkpoint_rob_tail = convert_hex_to_dec(
-                    rob_tail_data[
-                        `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
-                    ]
-                ) || 0;
+                const checkpoint_rob_tail =
+                    convert_hex_to_dec(
+                        rob_tail_data[
+                            `ROB_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                        ]
+                    ) || 0;
 
                 // Get SQ Tail -----------------------------------------------
                 let checkpoint_sq_tail = 0;
@@ -139,11 +140,12 @@ const Brat: React.FC<{
                     Array(MAP_TABLE_SIZE).fill(0);
                 // Read the map table values from checkpoint
                 for (let i = 0; i < MAP_TABLE_SIZE; i++) {
-                    checkpoint_map_table_valeus[i] = convert_hex_to_dec(
-                        map_table_data[
-                            `MAP_TABLE_BRAT_WORKER.checkpoint_data[${reverse_index}][${i}]`
-                        ]
-                    ) || 0;
+                    checkpoint_map_table_valeus[i] =
+                        convert_hex_to_dec(
+                            map_table_data[
+                                `MAP_TABLE_BRAT_WORKER.checkpoint_data[${reverse_index}][${i}]`
+                            ]
+                        ) || 0;
                 }
 
                 // Segment Map Tables

@@ -1,32 +1,32 @@
 .debugger-header {
-  margin-left: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  column-gap: 0.5rem;
-  align-items: center;
+    margin-left: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    column-gap: 0.5rem;
+    align-items: center;
 }
 
 .cycle-navigation-container {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  column-gap: 0.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  align-items: center;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    column-gap: 0.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
 }
 
 .input-cycle {
-  margin-left: 0.1rem;
-  background: var(--textarea-background);
-  border-color: var(--textarea-border);
-  border-radius: 3px;
-  height: 35px;
-  width: 5.5rem;
-  padding-inline: 0.2rem;
+    margin-left: 0.1rem;
+    background: var(--textarea-background);
+    border-color: var(--textarea-border);
+    border-radius: 3px;
+    height: 35px;
+    width: 5.5rem;
+    padding-inline: 0.2rem;
 }
 
 .input-cycle::placeholder {
-  color: var(--foreground);
-  opacity: 0.3;
+    color: var(--foreground);
+    opacity: 0.3;
 }
