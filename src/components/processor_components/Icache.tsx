@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
-import { convert_hex_to_dec, process_values, segment_idx } from "@/lib/utils";
+import {
+    convert_hex_to_dec,
+    parse_instruction,
+    process_values,
+    segment_idx,
+} from "@/lib/utils";
 import { NumberSystem } from "@/app/debugger/page";
 
 let ICACHE_NUM_BANKS = 2; // Number of BANKS
@@ -10,7 +15,7 @@ let ICACHE_NUM_WAYS = 4; // Number of Ways per Set
 let ICACHE_BANK_ENTRY_SIZE = 16; // Number of Cachelines per Bank
 const MSHR_SEGMENT_SIZE = 8; // SEGMENT SIZE for MSHR
 let MSHR_SIZE = 16; // Size of MSHR
-let AVC_SIZE = 4; // Size of AVC
+let PSB_SIZE = 4; // Size of Prefetch Stream Buffer
 const Icache: React.FC<{
     select_number_sys: NumberSystem;
     icache_data: any;
@@ -46,7 +51,8 @@ const Icache: React.FC<{
         const is_hands: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("");
         const refs: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("-");
         const tags: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("-");
-        const datas: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("-");
+        const low_datas: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("-");
+        const high_datas: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("-");
         const colors: string[] = Array(ICACHE_BANK_ENTRY_SIZE).fill("");
 
         // Check if eviction enabled
@@ -96,7 +102,7 @@ const Icache: React.FC<{
 
         const read_opacity = read_granted ? "opacity-100" : "opacity-15";
 
-        // Check each data val
+        // Check each entry val
         for (let i = 0; i < ICACHE_BANK_ENTRY_SIZE; i++) {
             const set = Math.floor(i / ICACHE_NUM_WAYS); // Get the set index
             const way = i % ICACHE_NUM_WAYS; // Get the way index
@@ -133,20 +139,23 @@ const Icache: React.FC<{
                     ][ICACHE_NUM_WAYS - 1 - way];
 
                 // Get tag
-                tags[i] = process_values(
+                const raw_tag =
                     icache_data[
                         `ICACHE.gen_cache[${bank_index}].ICACHE_BANK.memdp_metadata[${set}][${way}].tag`
-                    ],
-                    select_number_sys,
-                );
+                    ];
+                tags[i] = parseInt(raw_tag, 2).toString(2);
 
                 // Get actual data
-                datas[i] = process_values(
+                const bank_hex_data: string =
                     icache_data[
                         `ICACHE.gen_cache[${bank_index}].ICACHE_BANK.gen_memdp[${way}].memdp_per_way.memData[${set}]`
-                    ],
-                    select_number_sys
-                );
+                    ];
+
+                const low_data = bank_hex_data.substring(8);
+                const high_data = bank_hex_data.substring(0, 8);
+
+                low_datas[i] = parse_instruction(low_data).asm;
+                high_datas[i] = parse_instruction(high_data).asm;
             }
         }
         return (
@@ -203,7 +212,11 @@ const Icache: React.FC<{
 
                                     <td className={colors[i]}>{tags[i]}</td>
 
-                                    <td className={colors[i]}>{datas[i]}</td>
+                                    <td className={`${colors[i]} leading-4`}>
+                                        {low_datas[i]}
+                                        <br></br>
+                                        {high_datas[i]}
+                                    </td>
                                 </tr>
                             )
                         )}
@@ -223,8 +236,6 @@ const Icache: React.FC<{
     // Get the MSHR entry information
     const mshr_valids: string[] = Array(MSHR_SIZE).fill("");
     const mshr_base_addrs: (string | number)[] = Array(MSHR_SIZE).fill("-");
-    const mshr_valid_masks: string[] = Array(MSHR_SIZE).fill("-");
-    const mshr_datas: (string | number)[] = Array(MSHR_SIZE).fill("-");
     const mshr_colors: string[] = Array(MSHR_SIZE).fill("");
     // set values
     if (icache_data["ICACHE.MSHR_TABLE.mshr_table[0].valid"]) {
@@ -243,16 +254,6 @@ const Icache: React.FC<{
                     false,
                     false
                 );
-                mshr_valid_masks[i] =
-                    icache_data[
-                        `ICACHE.MSHR_TABLE.mshr_table[${i}].valid_mask`
-                    ];
-                mshr_datas[i] = process_values(
-                    icache_data[
-                        `ICACHE.MSHR_TABLE.mshr_table[${i}].data.dbbl_level`
-                    ],
-                    select_number_sys
-                );
                 mshr_colors[i] = "cyan";
             }
         }
@@ -268,8 +269,6 @@ const Icache: React.FC<{
                         <th>#</th>
                         <th>Valid</th>
                         <th>Base_Addr</th>
-                        <th>Valid_Mask</th>
-                        <th>Data</th>
                     </tr>
                 </thead>
 
@@ -289,12 +288,6 @@ const Icache: React.FC<{
                                 <td className={mshr_colors[actual_index]}>
                                     {mshr_base_addrs[actual_index]}
                                 </td>
-                                <td className={mshr_colors[actual_index]}>
-                                    {mshr_valid_masks[actual_index]}
-                                </td>
-                                <td className={mshr_colors[actual_index]}>
-                                    {mshr_datas[actual_index]}
-                                </td>
                             </tr>
                         );
                     })}
@@ -303,61 +296,148 @@ const Icache: React.FC<{
         )
     );
 
-    // Anti Victim Cache
-    if (icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"]) {
-        AVC_SIZE = icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"];
+    // PREFETCH_STREAM_BUFFER
+    if (icache_data["ICACHE.PREFETCH_STREAM_BUFFER.SIZE"]) {
+        PSB_SIZE = convert_hex_to_dec(
+            icache_data["ICACHE.PREFETCH_STREAM_BUFFER.SIZE"]
+        );
     }
-    const avc_deaths: string[] = Array(AVC_SIZE).fill("");
-    const avc_valids: string[] = Array(AVC_SIZE).fill("0");
-    const avc_addrs: string[] = Array(AVC_SIZE).fill("-");
-    const avc_datas: string[] = Array(AVC_SIZE).fill("-");
-    const avc_colors: string[] = Array(AVC_SIZE).fill("");
-    if (icache_data["ICACHE.ANTI_VICTIM_CACHE.SIZE"]) {
-        const death_pointer = convert_hex_to_dec(
-            icache_data[`ICACHE.ANTI_VICTIM_CACHE.death_pointer`]
+    // PSB Stuff
+    const psb_valids: string[] = Array(PSB_SIZE).fill("0");
+    const psb_addrs: string[] = Array(PSB_SIZE).fill("-");
+    const psb_low_datas: string[] = Array(PSB_SIZE).fill("-");
+    const psb_high_datas: string[] = Array(PSB_SIZE).fill("-");
+    const psb_colors: string[] = Array(PSB_SIZE).fill("");
+    let last_max_read_address = "0".repeat(8);
+    let read_en = false;
+    let psb_read_opacity = "opacity-15";
+    let psb_allocate_opacity = "opacity-15";
+    let allocate_en = false;
+    let prefetch_addr = "0".repeat(8);
+    if (icache_data["ICACHE.PREFETCH_STREAM_BUFFER.read_en"]) {
+        read_en = icache_data["ICACHE.PREFETCH_STREAM_BUFFER.read_en"] === "1";
+        if (read_en) {
+            psb_read_opacity = "opacity-100";
+        }
+        allocate_en =
+            icache_data["ICACHE.PREFETCH_STREAM_BUFFER.allocate_en"] === "1";
+        if (allocate_en) {
+            psb_allocate_opacity = "opacity-100";
+        }
+        last_max_read_address = process_values(
+            icache_data[`ICACHE.PREFETCH_STREAM_BUFFER.last_max_read_addr`],
+            select_number_sys,
+            false,
+            false
+        );
+        prefetch_addr = process_values(
+            icache_data[`ICACHE.PREFETCH_STREAM_BUFFER.prefetch_addr`],
+            select_number_sys,
+            false,
+            false
         );
 
-        for (let i = 0; i < AVC_SIZE; i++) {
-            avc_deaths[i] = i === death_pointer ? "d" : "";
-            avc_valids[i] =
-                icache_data[`ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].valid`];
-            if (avc_valids[i] === "1") {
-                avc_addrs[i] =
-                    icache_data[`ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].addr`];
-                avc_datas[i] =
+        for (let i = 0; i < PSB_SIZE; i++) {
+            psb_valids[i] =
+                icache_data[
+                    `ICACHE.PREFETCH_STREAM_BUFFER.last_buffer[${i}].valid`
+                ];
+
+            // If is actually valid
+            if (psb_valids[i] === "1") {
+                console.log("E");
+                psb_addrs[i] = process_values(
                     icache_data[
-                        `ICACHE.ANTI_VICTIM_CACHE.v_cache[${i}].data.dbbl_level`
+                        `ICACHE.PREFETCH_STREAM_BUFFER.last_buffer[${i}].addr`
+                    ],
+                    select_number_sys,
+                    false,
+                    false
+                );
+
+                const data: string =
+                    icache_data[
+                        `ICACHE.PREFETCH_STREAM_BUFFER.last_buffer[${i}].data.dbbl_level`
                     ];
-                if (death_pointer !== i) avc_colors[i] = "emerald";
-                else avc_colors[i] = "red";
+                const low_data_hex = data.substring(8);
+                const high_data_hex = data.substring(0, 8);
+
+                psb_low_datas[i] = parse_instruction(low_data_hex).asm;
+                psb_high_datas[i] = parse_instruction(high_data_hex).asm;
+
+                psb_colors[i] = "emerald";
             }
         }
     }
+    console.log(psb_addrs);
 
-    const anti_victim_cache = (
-        <table className="avc-table">
-            <thead>
-                <tr>
-                    <th>Death?</th>
-                    <th>#</th>
-                    <th>Valid</th>
-                    <th>Address</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
+    const prefetch_stream_buffer = (
+        <div className="flex flex-col">
+            <div className="mt-2 mb-2 flex flex-row w-[100%] ml-4 gap-x-4">
+                <div className={`section inner-section ${psb_read_opacity}`}>
+                    <p className="smallsection-text flex flex-row">
+                        Read En:
+                        <span className="font-bold ml-2 text-[--color-primary]">
+                            {read_en ? "1" : "0"}
+                        </span>
+                    </p>
+                </div>
 
-            <tbody>
-                {Array.from({ length: AVC_SIZE }, (_, i) => (
-                    <tr key={i}>
-                        <td className={avc_colors[i]}>{avc_deaths[i]}</td>
-                        <td className={avc_colors[i]}>{i}</td>
-                        <td className={avc_colors[i]}>{avc_valids[i]}</td>
-                        <td className={avc_colors[i]}>{avc_addrs[i]}</td>
-                        <td className={avc_colors[i]}>{avc_datas[i]}</td>
+                <div
+                    className={`section inner-section ${psb_allocate_opacity}`}
+                >
+                    <p className="smallsection-text flex flex-row">
+                        Allocate En:
+                        <span className="font-bold ml-2 text-[--color-primary]">
+                            {allocate_en ? "1" : "0"}
+                        </span>
+                    </p>
+                </div>
+
+                <div className={`section inner-section`}>
+                    <p className="smallsection-text flex flex-row">
+                        Max Read Addr:
+                        <span className="font-bold ml-2 text-[--color-babyblue]">
+                            {last_max_read_address}
+                        </span>
+                    </p>
+                </div>
+
+                <div className={`section inner-section`}>
+                    <p className="smallsection-text flex flex-row">
+                        Prefetch Addr:
+                        <span className="font-bold ml-2 text-[--color-babyblue]">
+                            {prefetch_addr}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <table className="psb-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Valid</th>
+                        <th>Base_Addr</th>
+                        <th>Data</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    {Array.from({ length: PSB_SIZE }, (_, i) => (
+                        <tr key={i}>
+                            <td className={psb_colors[i]}>{i}</td>
+                            <td className={psb_colors[i]}>{psb_valids[i]}</td>
+                            <td className={psb_colors[i]}>{psb_addrs[i]}</td>
+                            <td className={`${psb_colors[i]} leading-4`}>
+                                {psb_low_datas[i]}
+                                <br></br>
+                                {psb_high_datas[i]}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 
     const subsection_comp = show_subsection ? (
@@ -370,8 +450,8 @@ const Icache: React.FC<{
 
             {/* Anti Victim Cache */}
             <div className="section sub-section">
-                <h2 className="subsection-header">Anti Victim Cache</h2>
-                {anti_victim_cache}
+                <h2 className="subsection-header">Prefetch Stream Buffer</h2>
+                {prefetch_stream_buffer}
             </div>
 
             {/* Generate Banks Information */}

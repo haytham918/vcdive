@@ -141,12 +141,11 @@ const Dcache: React.FC<{
                     ][DCACHE_NUM_WAYS - 1 - way];
 
                 // Get tag
-                tags[i] = process_values(
+                const raw_tag =
                     dcache_data[
                         `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.memdp_metadata[${set}][${way}].tag`
-                    ],
-                    select_number_sys
-                );
+                    ];
+                tags[i] = parseInt(raw_tag, 2).toString(2);
 
                 // Get actual data
                 datas[i] = process_values(

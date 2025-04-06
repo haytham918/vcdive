@@ -158,14 +158,9 @@ const ParseButton: React.FC<{
                 {!is_loading ? (
                     <p className="w-[180px]">
                         Parse VCD Contents<br></br>
-                        <KeyReturn
-                            style={{
-                                justifySelf: "center",
-                                alignSelf: "center",
-                            }}
-                            weight="bold"
-                            size={25}
-                        />
+                        <span className="items-center justify-center flex">
+                            <KeyReturn weight="bold" size={25} />
+                        </span>
                     </p>
                 ) : (
                     <SpinnerGap
