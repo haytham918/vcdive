@@ -84,7 +84,7 @@ const CoreMemBus: React.FC<{
         <div className="flex flex-col gap-y-2">
             <div className="section sub-section">
                 <h2 className="subsection-header">Input</h2>
-                <div className="flex flex-col mt-1 w-[305px] gap-y-1">
+                <div className="flex flex-col mt-1 w-[315px] gap-y-1">
                     <p className="smallsection-text font-bold flex flex-row">
                         Memory Bus Request Tag:
                         <span className="ml-auto text-[--color-primary]">
@@ -109,7 +109,7 @@ const CoreMemBus: React.FC<{
             </div>
             <div className="section sub-section">
                 <h2 className="subsection-header">Output</h2>
-                <div className="flex flex-col mt-1 w-[305px] gap-y-1">
+                <div className="flex flex-col mt-1 w-[315px] gap-y-1">
                     <p className="smallsection-text font-bold flex flex-row">
                         Memory Bus Command:
                         <span className="ml-auto text-[--color-accent]">
