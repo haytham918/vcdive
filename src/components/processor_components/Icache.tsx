@@ -369,7 +369,6 @@ const Icache: React.FC<{
             }
         }
     }
-    console.log(psb_addrs);
 
     const prefetch_stream_buffer = (
         <div className="flex flex-col">

@@ -3,6 +3,7 @@
 import DebuggerHeader from "@/components/DebuggerHeader";
 import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
+import CoreMemBus from "@/components/processor_components/CoreMemBus";
 import Dcache from "@/components/processor_components/Dcache";
 import Decoder from "@/components/processor_components/Decoder";
 import FileFetch from "@/components/processor_components/FileFetch";
@@ -247,6 +248,34 @@ const DebuggerPage = () => {
     // RAS
     const ras_data = extract_data(cycle_data, "RAS");
 
+    // CPU Memory Bus output
+    const mem_bus_address_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_address"
+    );
+    const mem_bus_command_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_command"
+    );
+    const mem_bus_data_out_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_data_out"
+    );
+
+    // CPU Memory Bus input
+    const mem_bus_req_tag_in_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_req_tag_in"
+    );
+    const mem_bus_complete_tag_in_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_complete_tag_in"
+    );
+    const mem_bus_data_in_data = extract_data(
+        cycle_data,
+        "CORE.mem_bus_data_in"
+    );
+
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             icache: {
@@ -332,11 +361,23 @@ const DebuggerPage = () => {
                                     control_data={control_data}
                                 />
                             </div>
+
                             <InstructionQueue
                                 selected_number_sys={selected_number_sys}
                                 instruction_queue_data={instruction_queue_data}
                             />
                         </div>
+                        <CoreMemBus
+                            mem_bus_address_data={mem_bus_address_data}
+                            mem_bus_command_data={mem_bus_command_data}
+                            mem_bus_complete_tag_in_data={
+                                mem_bus_complete_tag_in_data
+                            }
+                            mem_bus_data_out_data={mem_bus_data_out_data}
+                            mem_bus_data_in_data={mem_bus_data_in_data}
+                            mem_bus_req_tag_in_data={mem_bus_req_tag_in_data}
+                            select_number_sys={selected_number_sys}
+                        />
                         <MapTable map_table_data={map_table_data} />
                     </div>
                     <ReorderBuffer
