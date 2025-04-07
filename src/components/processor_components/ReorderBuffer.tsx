@@ -74,7 +74,10 @@ const ReorderBuffer: React.FC<{
     const rob_num_free = convert_hex_to_dec(rob_data["ROB.num_free"]);
 
     // Extract rob squash_en and restore_tail
-    const branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]) || "-";
+    let branch_tail: string | number = "-";
+    if (rob_data["ROB.branch_tail"]) {
+        branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]);
+    }
 
     // Branch Info Opacity
     let branch_info_opacity = "opacity-15";
