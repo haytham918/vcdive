@@ -117,8 +117,10 @@ const TerminalDialog: React.FC<{
                             />
                             Reorder Buffer
                         </span>
+                    </div>
 
-                        {/* RS */}
+                    <div className="checkbox-subcontainer">
+                        {/* Reservation Station */}
                         <span className="checkbox-item">
                             <input
                                 type="checkbox"
@@ -139,9 +141,7 @@ const TerminalDialog: React.FC<{
                             />
                             Issue
                         </span>
-                    </div>
 
-                    <div className="checkbox-subcontainer">
                         {/* ALU */}
                         <span className="checkbox-item">
                             <input
@@ -164,6 +164,28 @@ const TerminalDialog: React.FC<{
                             MULT
                         </span>
 
+                        {/* Load Unit */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.load.show}
+                                onChange={(e) => handleCheck(e, "load")}
+                            />
+                            Load Unit
+                        </span>
+
+                        {/* Store Unit */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.store.show}
+                                onChange={(e) => handleCheck(e, "store")}
+                            />
+                            Store Unit
+                        </span>
+
                         {/* Control */}
                         <span className="checkbox-item">
                             <input
@@ -173,6 +195,19 @@ const TerminalDialog: React.FC<{
                                 onChange={(e) => handleCheck(e, "control")}
                             />
                             Control
+                        </span>
+                    </div>
+
+                    <div className="checkbox-subcontainer">
+                        {/* RAS */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.ras.show}
+                                onChange={(e) => handleCheck(e, "ras")}
+                            />
+                            RAS
                         </span>
 
                         {/* Regfile */}
@@ -289,6 +324,17 @@ const TerminalDialog: React.FC<{
                                 onChange={(e) => handleCheck(e, "brat_gshare")}
                             />
                             BRAT - Gshare
+                        </span>
+
+                        {/* BRAT - RAS */}
+                        <span className="checkbox-item">
+                            <input
+                                type="checkbox"
+                                className="checkbox-input"
+                                checked={terminal_settings.brat_ras.show}
+                                onChange={(e) => handleCheck(e, "brat_ras")}
+                            />
+                            BRAT - RAS
                         </span>
 
                         {/* BRAT-Map Table */}

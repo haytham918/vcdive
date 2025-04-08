@@ -228,7 +228,6 @@ const PRF_Ready_Free: React.FC<{
                   "0".repeat(PRF_SEGMENT_SIZE),
                   "0".repeat(PRF_SEGMENT_SIZE),
               ];
-    // console.log(ready_segments);
 
     const prf_vals: string[] = ["0"];
     if (ready_state_mask) {

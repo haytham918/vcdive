@@ -346,7 +346,6 @@ const Icache: React.FC<{
 
             // If is actually valid
             if (psb_valids[i] === "1") {
-                console.log("E");
                 psb_addrs[i] = process_values(
                     icache_data[
                         `ICACHE.PREFETCH_STREAM_BUFFER.last_buffer[${i}].addr`

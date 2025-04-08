@@ -50,7 +50,6 @@ const CoreMemBus: React.FC<{
 
         const raw_mem_bus_command =
             mem_bus_command_data["CORE.mem_bus_command"];
-        console.log(raw_mem_bus_command);
         if (raw_mem_bus_command === "1") {
             mem_bus_command = "LOAD";
         } else if (raw_mem_bus_command === "2") {

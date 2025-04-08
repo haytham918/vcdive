@@ -46,19 +46,23 @@ export interface TerminalSettings {
     issue: { show: boolean; label: "Issue" };
     alu: { show: boolean; label: "ALU" };
     mult: { show: boolean; label: "MULT" };
+    load: { show: boolean; label: "Load Unit" };
+    store: { show: boolean; label: "Store Unit" };
     control: { show: boolean; label: "Control" };
+    ras: { show: boolean; label: "RAS" };
     regfile: { show: boolean; label: "Regfile" };
     ready_list: { show: boolean; label: "Ready List" };
     retire_list: { show: boolean; label: "Retire List" };
     load_buffer: { show: boolean; label: "Load Buffer" };
     store_queue: { show: boolean; label: "Store Queue" };
+    dcache: { show: boolean; label: "D-Cache" };
     coordinator: { show: boolean; label: "BRAT - Coordinator" };
     rob_tail: { show: boolean; label: "BRAT - ROB Tail" };
     brat_store_queue: { show: boolean; label: "BRAT - Store Queue" };
     brat_gshare: { show: boolean; label: "BRAT - Gshare" };
+    brat_ras: { show: boolean; label: "BRAT - RAS" };
     map_table: { show: boolean; label: "BRAT - Map Table" };
     free_list: { show: boolean; label: "BRAT - Free List" };
-    dcache: { show: boolean; label: "D-Cache" };
 }
 
 // -------------- Extract Data --------------------------------------------------
@@ -94,7 +98,13 @@ const get_module_data = (
 ) => {
     return useMemo(() => {
         let base = module;
-        if (module === "ALU" || module === "MULT" || module === "CONTROL") {
+        if (
+            module === "ALU" ||
+            module === "MULT" ||
+            module === "CONTROL" ||
+            module === "LOAD_UNIT" ||
+            module === "STORE_UNIT"
+        ) {
             base = "gen";
         }
         const entries =
@@ -267,6 +277,9 @@ const DebuggerPage = () => {
     const load_buffer_data = get_module_data(group_data, "LOAD_BUFFER");
     const store_queue_data = get_module_data(group_data, "STORE_QUEUE");
 
+    const load_unit_data = get_module_data(group_data, "LOAD_UNIT");
+    const store_unit_data = get_module_data(group_data, "STORE_UNIT");
+
     // gshare
     const gshare_data: any = get_module_data(group_data, "GSHARE");
 
@@ -308,7 +321,7 @@ const DebuggerPage = () => {
     const fetch_data = get_module_data(group_data, "FETCH");
 
     // RAS
-    const ras_data = get_module_data(group_data, "RAS");
+    const ras_data = get_module_data(group_data, "RETURN_ADDRESS_STACK");
     const ras_checkpoint_data: any = get_module_data(
         group_data,
         "RAS_BRAT_WORKER"
@@ -367,7 +380,10 @@ const DebuggerPage = () => {
             issue: { show: false, label: "Issue" },
             alu: { show: false, label: "ALU" },
             mult: { show: false, label: "MULT" },
+            load: { show: false, label: "Load Unit" },
+            store: { show: false, label: "Store Unit" },
             control: { show: false, label: "Control" },
+            ras: { show: false, label: "RAS" },
             regfile: { show: false, label: "Regfile" },
             ready_list: { show: false, label: "Ready List" },
             coordinator: { show: false, label: "BRAT - Coordinator" },
@@ -376,6 +392,7 @@ const DebuggerPage = () => {
             rob_tail: { show: false, label: "BRAT - ROB Tail" },
             retire_list: { show: false, label: "Retire List" },
             brat_gshare: { show: false, label: "BRAT - Gshare" },
+            brat_ras: { show: false, label: "BRAT - RAS" },
             load_buffer: { show: false, label: "Load Buffer" },
             store_queue: { show: false, label: "Store Queue" },
             brat_store_queue: { show: false, label: "BRAT - Store Queue" },
@@ -535,6 +552,10 @@ const DebuggerPage = () => {
                     load_buffer_data={load_buffer_data}
                     sq_tail_data={sq_tail_data}
                     dcache_data={dcache_data}
+                    load_unit_data={load_unit_data}
+                    store_unit_data={store_unit_data}
+                    ras_checkpoint_data={ras_checkpoint_data}
+                    ras_data={ras_data}
                     terminal_settings={terminal_settings}
                     handleOpenDialog={handleOpenDialog}
                 />

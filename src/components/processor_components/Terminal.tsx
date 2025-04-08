@@ -27,6 +27,10 @@ const Terminal: React.FC<{
     load_buffer_data: any;
     sq_tail_data: any;
     dcache_data: any;
+    load_unit_data: any;
+    store_unit_data: any;
+    ras_checkpoint_data: any;
+    ras_data: any;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -54,6 +58,10 @@ const Terminal: React.FC<{
     load_buffer_data,
     sq_tail_data,
     dcache_data,
+    load_unit_data,
+    store_unit_data,
+    ras_checkpoint_data,
+    ras_data,
     terminal_settings,
     handleOpenDialog,
 }) => {
@@ -163,6 +171,22 @@ const Terminal: React.FC<{
             }
             case "D-Cache": {
                 data = dcache_data;
+                break;
+            }
+            case "Load Unit": {
+                data = load_unit_data;
+                break;
+            }
+            case "Store Unit": {
+                data = store_unit_data;
+                break;
+            }
+            case "BRAT - RAS": {
+                data = ras_checkpoint_data;
+                break;
+            }
+            case "RAS": {
+                data = ras_data;
                 break;
             }
             default:
