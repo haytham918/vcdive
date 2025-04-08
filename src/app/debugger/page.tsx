@@ -33,6 +33,8 @@ const TerminalDialog = dynamic(
 */
 export type NumberSystem = "0d" | "0x"; // Maybe binary in the future
 
+export type ParsedData = { string: string };
+
 // Decide which to show and not to show for Terminal
 export interface TerminalSettings {
     icache: { show: boolean; label: "I-Cache" };

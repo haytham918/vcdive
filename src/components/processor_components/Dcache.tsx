@@ -381,14 +381,14 @@ const Dcache: React.FC<{
     if (dcache_data["DCACHE.WRITE_BUFFER.READ_PORTS"]) {
         for (let i = 0; i < WRITE_BUFFER_READ_PORT_SIZE; i++) {
             write_buffer_read_request_ens[i] =
-                dcache_data[`DCACHE.WRITE_BUFFER.read_request_en`][
+                dcache_data[`DCACHE.WRITE_BUFFER.read_request_valid`][
                     WRITE_BUFFER_READ_PORT_SIZE - 1 - i
                 ];
             // If read enable
             if (write_buffer_read_request_ens[i] === "1") {
                 // Get gnt
                 write_buffer_read_request_gnts[i] =
-                    dcache_data[`DCACHE.WRITE_BUFFER.read_gnt`][
+                    dcache_data[`DCACHE.WRITE_BUFFER.read_data_valid`][
                         WRITE_BUFFER_READ_PORT_SIZE - i - 1
                     ];
 
@@ -440,14 +440,14 @@ const Dcache: React.FC<{
     if (dcache_data["DCACHE.WRITE_BUFFER.WRITE_PORTS"]) {
         for (let i = 0; i < WRITE_BUFFER_WRITE_PORT_SIZE; i++) {
             write_buffer_write_forward_ens[i] =
-                dcache_data[`DCACHE.WRITE_BUFFER.write_forward_en`][
+                dcache_data[`DCACHE.WRITE_BUFFER.write_request_valid`][
                     WRITE_BUFFER_WRITE_PORT_SIZE - 1 - i
                 ];
             // If read enable
             if (write_buffer_write_forward_ens[i] === "1") {
                 // Get gnt
                 write_buffer_write_forward_gnts[i] =
-                    dcache_data[`DCACHE.WRITE_BUFFER.write_foward_gnt`][
+                    dcache_data[`DCACHE.WRITE_BUFFER.write_granted`][
                         WRITE_BUFFER_WRITE_PORT_SIZE - i - 1
                     ];
 
@@ -460,7 +460,9 @@ const Dcache: React.FC<{
 
                 // Get size, address and data
                 write_buffer_write_forward_addrs[i] = process_values(
-                    dcache_data[`DCACHE.WRITE_BUFFER.write_forward_addr[${i}]`],
+                    dcache_data[
+                        `DCACHE.WRITE_BUFFER.write_request_address[${i}]`
+                    ],
                     select_number_sys,
                     false,
                     false
@@ -469,13 +471,13 @@ const Dcache: React.FC<{
                 write_buffer_write_forward_request_sizes[i] =
                     convert_hex_to_dec(
                         dcache_data[
-                            `DCACHE.WRITE_BUFFER.write_forward_request_sizes[${i}]`
+                            `DCACHE.WRITE_BUFFER.write_request_sizes[${i}]`
                         ]
                     );
 
                 write_buffer_write_forward_datas[i] = process_values(
                     dcache_data[
-                        `DCACHE.WRITE_BUFFER.write_forward_data[${i}].dbbl_level`
+                        `DCACHE.WRITE_BUFFER.write_request_data[${i}].dbbl_level`
                     ],
                     select_number_sys
                 );

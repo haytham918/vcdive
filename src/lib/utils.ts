@@ -157,7 +157,7 @@ export const segment_mask_table = (size: number, mask: string) => {
     if (mask) {
         let remaining_mask = mask;
         while (remaining_mask.length > 0) {
-            let segment = remaining_mask.slice(0, size);
+            const segment = remaining_mask.slice(0, size);
             remaining_mask = remaining_mask.slice(size);
 
             if (segment.length < size) {
