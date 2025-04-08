@@ -159,8 +159,9 @@ const LoadStore: React.FC<{
             // Get state
             const entry_state =
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].state`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.state`
                 ];
+            console.log(entry_state);
             // If entry state is 0 (No Load), then it's empty
             if (entry_state === "0") continue;
 
@@ -179,33 +180,33 @@ const LoadStore: React.FC<{
             // Set instructions
             load_instructions[i] = parse_instruction(
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.instruction`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.instruction`
                 ]
             ).asm;
 
             // Set branch_mask
             load_branch_masks[i] =
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.branch_mask`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.branch_mask`
                 ];
 
             // Set destination_tag
             load_destination_tags[i] = convert_hex_to_dec(
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.destination_tag`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.destination_tag`
                 ]
             );
 
             // Set store tail
             load_corresponding_store_tails[i] = convert_hex_to_dec(
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail.pointer`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.corresponding_store_tail.pointer`
                 ]
             );
             // Set store tail parity
             load_parities[i] =
                 load_buffer_data[
-                    `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].load_entry.corresponding_store_tail.parity`
+                    `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.corresponding_store_tail.parity`
                 ];
 
             // Set memory_addr if not waiting for FU
@@ -214,7 +215,7 @@ const LoadStore: React.FC<{
             if (entry_state !== "1") {
                 load_memory_addrs[i] = process_values(
                     load_buffer_data[
-                        `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].addr`
+                        `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.addr`
                     ],
                     selected_number_sys,
                     false,
@@ -235,7 +236,7 @@ const LoadStore: React.FC<{
                 if (entry_state === "2") {
                     load_has_requested_cache[i] =
                         load_buffer_data[
-                            `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].has_requested_cache`
+                            `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.has_requested_cache`
                         ] === "1"
                             ? "Y"
                             : "N";
@@ -243,7 +244,7 @@ const LoadStore: React.FC<{
                     if (load_has_requested_cache[i] === "Y") {
                         load_has_granted_cache[i] =
                             load_buffer_data[
-                                `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].cache_req_gnt`
+                                `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.cache_req_gnt`
                             ] === "1"
                                 ? "Y"
                                 : "N";
@@ -260,7 +261,7 @@ const LoadStore: React.FC<{
                 if (entry_state === "3") {
                     load_datas[i] = process_values(
                         load_buffer_data[
-                            `LOAD_BUFFER.gen_load_handler.LOAD_HANDLER[${i}].output_data`
+                            `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.output_data`
                         ],
                         selected_number_sys
                     );
