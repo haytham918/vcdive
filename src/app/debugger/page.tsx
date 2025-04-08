@@ -357,8 +357,6 @@ const DebuggerPage = () => {
         "CORE.mem_bus_data_in"
     );
 
-    console.log(group_data);
-
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             icache: {

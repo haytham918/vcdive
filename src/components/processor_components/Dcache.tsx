@@ -344,18 +344,18 @@ const Dcache: React.FC<{
     if (dcache_data["DCACHE.WRITE_BUFFER.SIZE"]) {
         for (let i = 0; i < WRITE_BUFFER_SIZE; i++) {
             write_buffer_valids[i] =
-                dcache_data[`DCACHE.WRITE_BUFFER.buffer[${i}].valid`];
+                dcache_data[`DCACHE.WRITE_BUFFER.write_buffer[${i}].valid`];
             // If is valid
             if (write_buffer_valids[i] === "1") {
                 write_buffer_colors[i] = "cyan";
                 write_buffer_addrs[i] = process_values(
-                    dcache_data[`DCACHE.WRITE_BUFFER.buffer[${i}].addr`],
+                    dcache_data[`DCACHE.WRITE_BUFFER.write_buffer[${i}].addr`],
                     select_number_sys,
                     false,
                     false
                 );
                 write_buffer_datas[i] = process_values(
-                    dcache_data[`DCACHE.WRITE_BUFFER.buffer[${i}].data`],
+                    dcache_data[`DCACHE.WRITE_BUFFER.write_buffer[${i}].data`],
                     select_number_sys
                 );
             }
@@ -418,6 +418,8 @@ const Dcache: React.FC<{
             }
         }
     }
+
+    console.log(write_buffer_read_request_ens[0]);
 
     const write_buffer_write_forward_ens: string[] = Array(
         WRITE_BUFFER_WRITE_PORT_SIZE

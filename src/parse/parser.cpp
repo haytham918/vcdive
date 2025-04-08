@@ -208,19 +208,20 @@ class Parser {
 				-- free_list_brat's current state
 				-- free_list_brat's checkpooint data
 			*/
-			bool display_binary = logic_name.ends_with("_oht") || logic_name.ends_with("write_en") ||
-								  logic_name.ends_with("branch_id") || logic_name.find("mask") != std::string::npos ||
-								  logic_name.find("branch_to_squash") != std::string::npos ||
-								  logic_name.ends_with("FREE_LIST_BRAT_WORKER.current_state") ||
-								  logic_name.find("FREE_LIST_BRAT_WORKER.checkpoint_data") != std::string::npos ||
-								  logic_name.ends_with("global_history") ||
-								  logic_name.find("GBHR_BRAT_WORKER.checkpoint_data") != std::string::npos ||
-								  logic_name.ends_with("referenced") || logic_name.ends_with("evict_en") ||
-								  logic_name.find("bank_read_request_granted") != std::string::npos ||
-								  logic_name.ends_with(".bank_number") || logic_name.ends_with(".offset") ||
-								  logic_name.ends_with(".set_index") || logic_name.ends_with(".tag") ||
-								  logic_name.ends_with("read_request_en") || logic_name.ends_with("write_forward_en") ||
-								  logic_name.find("_gnt") != std::string::npos;
+			bool display_binary =
+				logic_name.ends_with("_oht") || logic_name.ends_with("write_en") || logic_name.ends_with("branch_id") ||
+				logic_name.find("mask") != std::string::npos ||
+				logic_name.find("branch_to_squash") != std::string::npos ||
+				logic_name.ends_with("FREE_LIST_BRAT_WORKER.current_state") ||
+				logic_name.find("FREE_LIST_BRAT_WORKER.checkpoint_data") != std::string::npos ||
+				logic_name.ends_with("global_history") ||
+				logic_name.find("GBHR_BRAT_WORKER.checkpoint_data") != std::string::npos ||
+				logic_name.ends_with("referenced") || logic_name.ends_with("evict_en") ||
+				logic_name.find("bank_read_request_granted") != std::string::npos ||
+				logic_name.ends_with(".bank_number") || logic_name.ends_with(".offset") ||
+				logic_name.ends_with(".set_index") || logic_name.ends_with(".tag") ||
+				logic_name.ends_with("read_request_valid") || logic_name.ends_with("write_request_valid") ||
+				logic_name.ends_with("read_data_valid") || logic_name.find("_gnt") != std::string::npos;
 			if (display_binary) {
 				raw_data.back()[logic_name] = data.substr(1);
 			} else {
