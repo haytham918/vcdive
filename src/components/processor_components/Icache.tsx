@@ -8,6 +8,7 @@ import {
     segment_idx,
 } from "@/lib/utils";
 import { NumberSystem } from "@/app/debugger/page";
+import React from "react";
 
 let ICACHE_NUM_BANKS = 2; // Number of BANKS
 let ICACHE_NUM_SETS = 4; // Number of Sets per Bank
@@ -472,4 +473,4 @@ const Icache: React.FC<{
     );
 };
 
-export default Icache;
+export default React.memo(Icache);

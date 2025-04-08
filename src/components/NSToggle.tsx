@@ -1,6 +1,6 @@
 import { NumberSystem } from "@/app/debugger/page";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
+import React from "react";
 interface NSOption {
     sys: NumberSystem;
     label: string;
@@ -48,4 +48,4 @@ const NSToggle: React.FC<{
     );
 };
 
-export default NSToggle;
+export default React.memo(NSToggle);

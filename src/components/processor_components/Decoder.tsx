@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
+import React from "react";
 let DECODER_SIZE = 4; // Init to be 4
 const Decoder: React.FC<{
     selected_number_sys: NumberSystem;
@@ -110,4 +111,4 @@ const Decoder: React.FC<{
     );
 };
 
-export default Decoder;
+export default React.memo(Decoder);

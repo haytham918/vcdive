@@ -9,7 +9,7 @@ import {
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
-
+import React from "react";
 let SQ_SIZE = 16;
 let LB_SIZE = 16;
 
@@ -540,4 +540,4 @@ const LoadStore: React.FC<{
     );
 };
 
-export default LoadStore;
+export default React.memo(LoadStore);

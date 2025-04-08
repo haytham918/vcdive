@@ -10,7 +10,7 @@ import {
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
-
+import React from "react";
 let ROB_SIZE = 32;
 
 const ReorderBuffer: React.FC<{
@@ -181,4 +181,4 @@ const ReorderBuffer: React.FC<{
     );
 };
 
-export default ReorderBuffer;
+export default React.memo(ReorderBuffer);

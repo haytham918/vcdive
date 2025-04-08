@@ -3,7 +3,7 @@ import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, process_values, segment_idx } from "@/lib/utils";
 import { NumberSystem } from "@/app/debugger/page";
-
+import React from "react";
 let DCACHE_NUM_BANKS = 2; // Number of BANKS
 let DCACHE_NUM_SETS = 4; // Number of Sets per Bank
 let DCACHE_NUM_WAYS = 4; // Number of Ways per Set
@@ -762,4 +762,4 @@ const Dcache: React.FC<{
     );
 };
 
-export default Dcache;
+export default React.memo(Dcache);

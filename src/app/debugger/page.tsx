@@ -1,12 +1,11 @@
 "use client";
-
+import dynamic from "next/dynamic";
 import DebuggerHeader from "@/components/DebuggerHeader";
 import BranchGshare from "@/components/processor_components/BranchGshare";
 import Brat from "@/components/processor_components/Brat";
 import CoreMemBus from "@/components/processor_components/CoreMemBus";
 import Dcache from "@/components/processor_components/Dcache";
 import Decoder from "@/components/processor_components/Decoder";
-import FileFetch from "@/components/processor_components/FileFetch";
 import Icache from "@/components/processor_components/Icache";
 import InstructionQueue from "@/components/processor_components/InstructionQueue";
 import LoadStore from "@/components/processor_components/LoadStore";
@@ -15,12 +14,18 @@ import PRF_Ready_Free from "@/components/processor_components/PRF_Ready_Free";
 import RAS from "@/components/processor_components/RAS";
 import ReorderBuffer from "@/components/processor_components/ReorderBuffer";
 import ReservationStation from "@/components/processor_components/ReservationStation";
-import Terminal from "@/components/processor_components/Terminal";
-import TerminalDialog from "@/components/processor_components/TerminalDialog";
 import ThemeToggle from "@/components/ThemeToggle";
-import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { reverse_string } from "@/lib/utils";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
+const Terminal = dynamic(
+    () => import("@/components/processor_components/Terminal"),
+    { ssr: false }
+);
+const TerminalDialog = dynamic(
+    () => import("@/components/processor_components/TerminalDialog"),
+    { ssr: false }
+);
 /*
 
     Page for the /debugger
@@ -56,6 +61,54 @@ export interface TerminalSettings {
     dcache: { show: boolean; label: "D-Cache" };
 }
 
+// -------------- Extract Data --------------------------------------------------
+const get_group_data = (cycle_data: any) => {
+    const [group_data, setGroupData] = useState<Record<
+        string,
+        Array<[string, any]>
+    > | null>(null);
+
+    useEffect(() => {
+        if (cycle_data && Object.keys(cycle_data).length > 0) {
+            const worker = new Worker(
+                new URL("/public/workers/CycleWorker.js", import.meta.url)
+            );
+            worker.postMessage(cycle_data);
+
+            worker.onmessage = (event) => {
+                setGroupData(event.data);
+                worker.terminate();
+            };
+            return () => {
+                worker.terminate();
+            };
+        }
+    }, [cycle_data]);
+
+    return group_data;
+};
+
+const get_module_data = (
+    group_data: Record<string, Array<[string, any]>> | null,
+    module: string
+) => {
+    return useMemo(() => {
+        let base = module;
+        if (module === "ALU" || module === "MULT" || module === "CONTROL") {
+            base = "gen";
+        }
+        const entries =
+            group_data && group_data[module] ? group_data[module] : [];
+        return Object.fromEntries(
+            entries.map(([key, val]) => {
+                const idx = key.indexOf(base);
+                const new_key = idx >= 0 ? key.substring(idx) : key;
+                return [new_key, val];
+            })
+        );
+    }, [group_data, module]);
+};
+
 const DebuggerPage = () => {
     const [selected_number_sys, setNumberSys] = useState<NumberSystem>("0x"); // Number System
     const [file_name, setFileName] = useState(""); // File Name for current parsed file
@@ -84,7 +137,7 @@ const DebuggerPage = () => {
         setCurCycle(cycle);
     }, []);
 
-    console.log("Current cycle is", cur_cycle);
+    // console.log("Current cycle is", cur_cycle);
     // Async function to fetch the metadata about the current parsed file
     const fetch_file_metada = async () => {
         const response = await fetch("/backend/file_metadata/", {
@@ -97,7 +150,7 @@ const DebuggerPage = () => {
         }
 
         const fetched_metadata = await response.json();
-        console.log("FETCHED META", fetched_metadata);
+        // console.log("FETCHED META", fetched_metadata);
         setFileName(fetched_metadata["file_name"]);
         setNumPosClocks(fetched_metadata["num_pos_clocks"]);
         setNumNegClocks(fetched_metadata["num_neg_clocks"]);
@@ -120,7 +173,7 @@ const DebuggerPage = () => {
 
             const data = await response.json();
             setCycleData(data.data);
-            console.log("FETCHED CYCLE DATA: ", data.data);
+            //  console.log("FETCHED CYCLE DATA: ", data.data);
         }
     };
 
@@ -134,83 +187,92 @@ const DebuggerPage = () => {
         fetch_cycle_info();
     }, [include_neg, cur_cycle, file_name]);
 
-    const extract_data = (cycle_data: any, module: string) => {
-        return Object.fromEntries(
-            Object.entries(cycle_data)
-                .filter(([key, _]) => key.includes(module))
-                .map(([key, val]) => {
-                    let start_str: string = module;
-                    // If FU, then there are multiple
-                    if (
-                        module === "ALU" ||
-                        module === "MULT" ||
-                        module === "CONTROL"
-                    ) {
-                        start_str = "gen";
-                    }
-                    const start_index = key.indexOf(start_str);
+    // const extract_data = (cycle_data: any, module: string) => {
+    //     return Object.fromEntries(
+    //         Object.entries(cycle_data)
+    //             .filter(([key, _]) => key.includes(module))
+    //             .map(([key, val]) => {
+    //                 let start_str: string = module;
+    //                 // If FU, then there are multiple
+    //                 if (
+    //                     module === "ALU" ||
+    //                     module === "MULT" ||
+    //                     module === "CONTROL"
+    //                 ) {
+    //                     start_str = "gen";
+    //                 }
+    //                 const start_index = key.indexOf(start_str);
 
-                    const new_key =
-                        start_index >= 0 ? key.substring(start_index) : key;
-                    return [new_key, val];
-                })
-        );
-    };
+    //                 const new_key =
+    //                     start_index >= 0 ? key.substring(start_index) : key;
+    //                 return [new_key, val];
+    //             })
+    //     );
+    // };
 
     // Get all data for modules
-    const ready_list_data = extract_data(cycle_data, "READY_LIST");
-    const rob_data = extract_data(cycle_data, "ROB");
-    const retire_list_data = extract_data(cycle_data, "RETIRE_LIST");
+    // Group Data: ------
+    const group_data = get_group_data(cycle_data);
+    const ready_list_data = get_module_data(group_data, "READY_LIST");
+    const rob_data = get_module_data(group_data, "ROB");
 
+    const retire_list_data = get_module_data(group_data, "RETIRE_LIST");
     const retire_list_state_mask: any =
         retire_list_data["RETIRE_LIST.retire_state_mask"];
-    const prf_data = extract_data(cycle_data, "REGFILE");
-    const instruction_queue_data = extract_data(
-        cycle_data,
+
+    const prf_data = get_module_data(group_data, "REGFILE");
+
+    const instruction_queue_data = get_module_data(
+        group_data,
         "INSTRUCTION_QUEUE"
     );
-    const reservation_station_data = extract_data(
-        cycle_data,
+    const reservation_station_data = get_module_data(
+        group_data,
         "RESERVATION_STATION"
     );
 
-    const decoder_data = extract_data(cycle_data, "DECODER");
-    // const file_fetch_data = extract_data(cycle_data, "FILE_FETCH");
+    const decoder_data = get_module_data(group_data, "DECODER");
+    // const file_fetch_data = extract_data(group_data, "FILE_FETCH");
 
-    // const control_data = extract_data(cycle_data, "gen_control[0].CONTROL");
-    const issue_data = extract_data(cycle_data, "ISSUE");
-    const dispatch_data = extract_data(cycle_data, "DISPATCH");
+    // const control_data = extract_data(group_data, "gen_control[0].CONTROL");
+    const issue_data = get_module_data(group_data, "ISSUE");
 
-    const alu_data = extract_data(cycle_data, "ALU");
-    const control_data = extract_data(cycle_data, "CONTROL");
-    const mult_data = extract_data(cycle_data, "MULT");
+    const dispatch_data = get_module_data(group_data, "DISPATCH");
 
-    const free_list_data: any = extract_data(
-        cycle_data,
+    const alu_data = get_module_data(group_data, "ALU");
+    const control_data = get_module_data(group_data, "CONTROL");
+    const mult_data = get_module_data(group_data, "MULT");
+
+    const free_list_data: any = get_module_data(
+        group_data,
         "FREE_LIST_BRAT_WORKER"
     );
-    const current_free_list: string = reverse_string(
-        free_list_data["FREE_LIST_BRAT_WORKER.current_state"]
+    const current_free_list: string = useMemo(
+        () =>
+            reverse_string(
+                free_list_data["FREE_LIST_BRAT_WORKER.current_state"]
+            ),
+        [free_list_data]
     );
 
-    const coordinator_data: any = extract_data(cycle_data, "COORDINATOR");
+    const coordinator_data: any = get_module_data(group_data, "COORDINATOR");
     const free_ids_mask = coordinator_data["COORDINATOR.free_ids_mask"];
 
-    const map_table_data = extract_data(cycle_data, "MAP_TABLE_BRAT_WORKER");
-    const rob_tail_data = extract_data(cycle_data, "ROB_TAIL_BRAT_WORKER");
-    const sq_tail_data = extract_data(cycle_data, "SQ_TAIL_BRAT_WORKER");
+    const map_table_data = get_module_data(group_data, "MAP_TABLE_BRAT_WORKER");
+    const rob_tail_data = get_module_data(group_data, "ROB_TAIL_BRAT_WORKER");
+    const sq_tail_data = get_module_data(group_data, "SQ_TAIL_BRAT_WORKER");
     //  console.log(free_list_data["FREE_LIST_BRAT_WORKER.checkpoint_data[3]"][63-57])
 
     // Load + Store
-    const load_buffer_data = extract_data(cycle_data, "LOAD_BUFFER");
-    const store_queue_data = extract_data(cycle_data, "STORE_QUEUE");
+    const load_buffer_data = get_module_data(group_data, "LOAD_BUFFER");
+    const store_queue_data = get_module_data(group_data, "STORE_QUEUE");
 
     // gshare
-    const gshare_data: any = extract_data(cycle_data, "GSHARE");
+    const gshare_data: any = get_module_data(group_data, "GSHARE");
 
     const gshare_gbhr: any = gshare_data["GSHARE.global_history"];
-    const gbhr_checkpoint_data: any = extract_data(
-        cycle_data,
+    const gbhr_checkpoint_data: any = get_module_data(
+        group_data,
         "GBHR_BRAT_WORKER"
     );
 
@@ -237,42 +299,42 @@ const DebuggerPage = () => {
     };
 
     // Icache
-    const icache_data = extract_data(cycle_data, "ICACHE");
+    const icache_data = get_module_data(group_data, "ICACHE");
 
     // Dcache
-    const dcache_data = extract_data(cycle_data, "DCACHE");
+    const dcache_data = get_module_data(group_data, "DCACHE");
 
     // Fetch
-    const fetch_data = extract_data(cycle_data, "FETCH");
+    const fetch_data = get_module_data(group_data, "FETCH");
 
     // RAS
-    const ras_data = extract_data(cycle_data, "RAS");
+    const ras_data = get_module_data(group_data, "RAS");
 
     // CPU Memory Bus output
-    const mem_bus_address_data = extract_data(
-        cycle_data,
+    const mem_bus_address_data = get_module_data(
+        group_data,
         "CORE.mem_bus_address"
     );
-    const mem_bus_command_data = extract_data(
-        cycle_data,
+    const mem_bus_command_data = get_module_data(
+        group_data,
         "CORE.mem_bus_command"
     );
-    const mem_bus_data_out_data = extract_data(
-        cycle_data,
+    const mem_bus_data_out_data = get_module_data(
+        group_data,
         "CORE.mem_bus_data_out"
     );
 
     // CPU Memory Bus input
-    const mem_bus_req_tag_in_data = extract_data(
-        cycle_data,
+    const mem_bus_req_tag_in_data = get_module_data(
+        group_data,
         "CORE.mem_bus_req_tag_in"
     );
-    const mem_bus_complete_tag_in_data = extract_data(
-        cycle_data,
+    const mem_bus_complete_tag_in_data = get_module_data(
+        group_data,
         "CORE.mem_bus_complete_tag_in"
     );
-    const mem_bus_data_in_data = extract_data(
-        cycle_data,
+    const mem_bus_data_in_data = get_module_data(
+        group_data,
         "CORE.mem_bus_data_in"
     );
 
@@ -317,24 +379,30 @@ const DebuggerPage = () => {
         }
     );
 
-    console.log("LOAD BUFFER: ", JSON.stringify(load_buffer_data).length);
-    console.log("Store Queue", JSON.stringify(store_queue_data).length);
-    console.log("ICACHE: ", JSON.stringify(icache_data).length);
-    console.log("DCACHE: ", JSON.stringify(dcache_data).length);
-    console.log("Issue: ", JSON.stringify(issue_data).length);
-    console.log("ALU: ", JSON.stringify(alu_data).length);
-    console.log("MUlt: ", JSON.stringify(mult_data).length);
-    console.log("CU: ", JSON.stringify(control_data).length);
-    console.log("ROB: ", JSON.stringify(rob_data).length);
-    console.log("RS: ", JSON.stringify(reservation_station_data).length);
-    console.log("regfile: ", JSON.stringify(prf_data).length);
-    
+    // console.log("LOAD BUFFER: ", JSON.stringify(load_buffer_data).length);
+    // console.log("Store Queue", JSON.stringify(store_queue_data).length);
+    // console.log("ICACHE: ", JSON.stringify(icache_data).length);
+    // console.log("DCACHE: ", JSON.stringify(dcache_data).length);
+    // console.log("Issue: ", JSON.stringify(issue_data).length);
+    // console.log("ALU: ", JSON.stringify(alu_data).length);
+    // console.log("MUlt: ", JSON.stringify(mult_data).length);
+    // console.log("CU: ", JSON.stringify(control_data).length);
+    // console.log("ROB: ", JSON.stringify(rob_data).length);
+    // console.log("RS: ", JSON.stringify(reservation_station_data).length);
+    // console.log("regfile: ", JSON.stringify(prf_data).length);
 
-    const handleTerminalSettings = (module: string, set_value: boolean) => {
-        const updated: any = { ...terminal_settings };
-        updated[module].show = set_value;
-        setTerminalSettings(updated);
-    };
+    const handleTerminalSettings = useCallback(
+        (module: string, set_value: boolean) => {
+            setTerminalSettings((prevSettings: any) => ({
+                ...prevSettings,
+                [module]: {
+                    ...prevSettings[module],
+                    show: set_value,
+                },
+            }));
+        },
+        []
+    );
 
     return (
         <>

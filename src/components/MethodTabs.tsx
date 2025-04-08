@@ -1,7 +1,7 @@
 "use client";
 import "./MethodTabs.css";
 import { Method, MethodOption } from "@/app/page";
-
+import React from "react";
 const MethodTabs: React.FC<{
     available_methods: MethodOption[];
     chosen_method: Method;
@@ -27,4 +27,4 @@ const MethodTabs: React.FC<{
     );
 };
 
-export default MethodTabs;
+export default React.memo(MethodTabs);

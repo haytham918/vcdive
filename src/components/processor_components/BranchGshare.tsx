@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-
+import React from "react";
 export let GSHARE_LENGTH = 4;
 
 const BranchGshare: React.FC<{
@@ -144,4 +144,4 @@ const BranchGshare: React.FC<{
     );
 };
 
-export default BranchGshare;
+export default React.memo(BranchGshare);

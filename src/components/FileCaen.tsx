@@ -1,6 +1,6 @@
 import "../app/home.css";
 import ParseButton from "./ParseButton";
-
+import React from "react";
 const FileCaen: React.FC<{
     file_name: string;
     is_loading: boolean;
@@ -41,4 +41,4 @@ const FileCaen: React.FC<{
     );
 };
 
-export default FileCaen;
+export default React.memo(FileCaen);

@@ -1,6 +1,6 @@
 import { TerminalSettings } from "@/app/debugger/page";
 import { XSquare } from "phosphor-react";
-
+import React from "react";
 const TerminalDialog: React.FC<{
     show_dialog: boolean;
     handleCloseDialog: () => void;
@@ -319,4 +319,4 @@ const TerminalDialog: React.FC<{
     );
 };
 
-export default TerminalDialog;
+export default React.memo(TerminalDialog);

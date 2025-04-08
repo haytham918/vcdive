@@ -1,12 +1,9 @@
 import { NumberSystem } from "@/app/debugger/page";
-import {
-    convert_hex_to_dec,
-    parse_instruction,
-    process_values,
-} from "@/lib/utils";
+import { convert_hex_to_dec, process_values } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
+import React from "react";
 
 const CoreMemBus: React.FC<{
     mem_bus_address_data: any;
@@ -145,4 +142,4 @@ const CoreMemBus: React.FC<{
     );
 };
 
-export default CoreMemBus;
+export default React.memo(CoreMemBus);

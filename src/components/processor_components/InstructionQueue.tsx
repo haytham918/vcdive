@@ -8,6 +8,7 @@ import {
 } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
+import React from "react";
 let IQ_SIZE = 8;
 const InstructionQueue: React.FC<{
     selected_number_sys: NumberSystem;
@@ -134,4 +135,4 @@ const InstructionQueue: React.FC<{
     );
 };
 
-export default InstructionQueue;
+export default React.memo(InstructionQueue);

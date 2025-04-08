@@ -8,7 +8,7 @@ import {
 } from "./MapTable";
 import { PRF_INDEX_SEGMENTS, PRF_SEGMENT_SIZE } from "./PRF_Ready_Free";
 import { GSHARE_LENGTH } from "./BranchGshare";
-
+import React from "react";
 const Brat: React.FC<{
     free_ids_mask: string;
     free_list_data: any;
@@ -343,4 +343,4 @@ const Brat: React.FC<{
     );
 };
 
-export default Brat;
+export default React.memo(Brat);

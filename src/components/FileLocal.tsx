@@ -1,6 +1,6 @@
 import "../app/home.css";
 import ParseButton from "./ParseButton";
-
+import React from "react";
 const FileLocal: React.FC<{
     file_name: string;
     is_loading: boolean;
@@ -33,4 +33,4 @@ const FileLocal: React.FC<{
     );
 };
 
-export default FileLocal;
+export default React.memo(FileLocal);

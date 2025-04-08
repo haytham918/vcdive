@@ -11,7 +11,7 @@ import { FileRejection, useDropzone } from "react-dropzone";
 import { useState, useCallback } from "react";
 import ParseButton from "./ParseButton";
 import toast from "react-hot-toast";
-
+import React from "react";
 // This is the drop-upload box using react-dropzone
 const FileUpload: React.FC<{
     file_name: string;
@@ -123,4 +123,4 @@ const FileUpload: React.FC<{
     );
 };
 
-export default FileUpload;
+export default React.memo(FileUpload);

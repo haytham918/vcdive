@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, segment_idx } from "@/lib/utils";
-
+import React from "react";
 export const MAP_TABLE_SIZE = 32;
 export const MAP_TABLE_SEGMENT_SIZE = 8;
 export const MAP_TABLE_INDEX_SEGMENTS = segment_idx(
@@ -90,4 +90,4 @@ const MapTable: React.FC<{
     );
 };
 
-export default MapTable;
+export default React.memo(MapTable);

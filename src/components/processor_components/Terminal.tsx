@@ -1,7 +1,7 @@
 import { TerminalSettings } from "@/app/debugger/page";
 import { Gear, TerminalWindow } from "phosphor-react";
 import { MouseEvent, useState } from "react";
-
+import React from "react";
 const Terminal: React.FC<{
     icache_data: any;
     fetch_data: any;
@@ -218,4 +218,4 @@ const Terminal: React.FC<{
     );
 };
 
-export default Terminal;
+export default React.memo(Terminal);

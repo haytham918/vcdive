@@ -1,17 +1,9 @@
 "use client";
-import {
-    convert_hex_to_dec,
-    fifo_entry_color,
-    head_tail_comp,
-    parse_instruction,
-    process_values,
-    reverse_string,
-    segment_idx,
-} from "@/lib/utils";
+import { convert_hex_to_dec, process_values, segment_idx } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
-
+import React from "react";
 let RAS_SIZE = 16;
 const RAS_SEGMENT_SIZE = 8;
 
@@ -168,4 +160,4 @@ const RAS: React.FC<{
     );
 };
 
-export default RAS;
+export default React.memo(RAS);

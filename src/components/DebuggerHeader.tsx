@@ -10,6 +10,7 @@ import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import icon_img from "../../public/apple-touch-icon.png";
 import { NumberSystem } from "@/app/debugger/page";
+import React from "react";
 // Additional header stuff for the debugger page
 const DebuggerHeader: React.FC<{
     file_name: string;
@@ -91,4 +92,4 @@ const DebuggerHeader: React.FC<{
     );
 };
 
-export default DebuggerHeader;
+export default React.memo(DebuggerHeader);

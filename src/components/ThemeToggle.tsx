@@ -6,7 +6,7 @@ import { useEffect, useState, JSX } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Sun, Moon, Desktop } from "phosphor-react";
 import { get_cookie, set_cookie } from "@/lib/utils";
-
+import React from "react";
 type ThemeOption = "light" | "dark" | "system";
 
 interface ThemeItem {
@@ -85,4 +85,4 @@ const ThemeToggle = () => {
     );
 };
 
-export default ThemeToggle;
+export default React.memo(ThemeToggle);

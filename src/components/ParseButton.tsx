@@ -8,6 +8,7 @@ import { SpinnerGap, KeyReturn } from "phosphor-react";
 import { Method } from "@/app/page";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import React from "react";
 const ParseButton: React.FC<{
     method: Method;
     uploaded_file: File | null;
@@ -194,4 +195,4 @@ const ParseButton: React.FC<{
     );
 };
 
-export default ParseButton;
+export default React.memo(ParseButton);

@@ -7,7 +7,7 @@ import {
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import { NumberSystem } from "@/app/debugger/page";
-
+import React from "react";
 let RS_SIZE = 16;
 
 // Entry color
@@ -247,4 +247,4 @@ const ReservationStation: React.FC<{
     );
 };
 
-export default ReservationStation;
+export default React.memo(ReservationStation);
