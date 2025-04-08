@@ -226,7 +226,7 @@ const DebuggerPage = () => {
     // Group Data: ------
     const group_data = get_group_data(cycle_data);
     const ready_list_data = get_module_data(group_data, "READY_LIST");
-    const rob_data = get_module_data(group_data, "ROB");
+    const rob_data = get_module_data(group_data, "REORDER_BUFFER");
 
     const retire_list_data = get_module_data(group_data, "RETIRE_LIST");
     const retire_list_state_mask: any =
@@ -356,6 +356,8 @@ const DebuggerPage = () => {
         group_data,
         "CORE.mem_bus_data_in"
     );
+
+    console.log(group_data);
 
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
