@@ -32,8 +32,8 @@ const ReorderBuffer: React.FC<{
         setShowSubsection(!show_subsection);
     };
 
-    if (rob_data["ROB.SIZE"]) {
-        ROB_SIZE = convert_hex_to_dec(rob_data["ROB.SIZE"]);
+    if (rob_data["REORDER_BUFFER.SIZE"]) {
+        ROB_SIZE = convert_hex_to_dec(rob_data["REORDER_BUFFER.SIZE"]);
     }
 
     // Get instructions, pc, destination tag and old tag, retirable
@@ -46,20 +46,20 @@ const ReorderBuffer: React.FC<{
 
     for (let i = 0; i < ROB_SIZE; i++) {
         const destination_tag = convert_hex_to_dec(
-            rob_data[`ROB.rob_data[${i}].destination_tag`]
+            rob_data[`REORDER_BUFFER.rob_data[${i}].destination_tag`]
         );
 
         // Get the current PC based on NPC
         const pc = process_values(
-            rob_data[`ROB.rob_data[${i}].commit_packet.NPC`],
+            rob_data[`REORDER_BUFFER.rob_data[${i}].commit_packet.NPC`],
             selected_number_sys,
             true
         );
         const tag_old = convert_hex_to_dec(
-            rob_data[`ROB.rob_data[${i}].tag_old`]
+            rob_data[`REORDER_BUFFER.rob_data[${i}].tag_old`]
         );
         const instruction_hex_string =
-            rob_data[`ROB.rob_data[${i}].instruction`];
+            rob_data[`REORDER_BUFFER.rob_data[${i}].instruction`];
         const decoded_instruction = parse_instruction(instruction_hex_string);
 
         instructions[i] = decoded_instruction.asm;
@@ -69,14 +69,18 @@ const ReorderBuffer: React.FC<{
     }
 
     // Extract rob head and tail
-    const rob_head = convert_hex_to_dec(rob_data["ROB.head"]);
-    const rob_tail = convert_hex_to_dec(rob_data["ROB.tail"]);
-    const rob_num_free = convert_hex_to_dec(rob_data["ROB.num_free"]);
+    const rob_head = convert_hex_to_dec(rob_data["REORDER_BUFFER.head"]);
+    const rob_tail = convert_hex_to_dec(rob_data["REORDER_BUFFER.tail"]);
+    const rob_num_free = convert_hex_to_dec(
+        rob_data["REORDER_BUFFER.num_free"]
+    );
 
     // Extract rob squash_en and restore_tail
     let branch_tail: string | number = "-";
-    if (rob_data["ROB.branch_tail"]) {
-        branch_tail = convert_hex_to_dec(rob_data["ROB.branch_tail"]);
+    if (rob_data["REORDER_BUFFER.branch_tail"]) {
+        branch_tail = convert_hex_to_dec(
+            rob_data["REORDER_BUFFER.branch_tail"]
+        );
     }
 
     // Branch Info Opacity

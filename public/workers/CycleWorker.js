@@ -1,6 +1,6 @@
 const known_modules = [
     "READY_LIST",
-    "ROB",
+    "REORDER_BUFFER",
     "RETIRE_LIST",
     "REGFILE",
     "INSTRUCTION_QUEUE",
