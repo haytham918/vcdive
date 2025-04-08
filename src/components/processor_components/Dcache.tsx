@@ -154,6 +154,7 @@ const Dcache: React.FC<{
                     ],
                     select_number_sys
                 );
+                console.log(datas[i]);
             }
         }
         return (
@@ -470,13 +471,18 @@ const Dcache: React.FC<{
                     false
                 );
 
-                write_buffer_write_forward_request_sizes[i] =
-                    convert_hex_to_dec(
-                        dcache_data[
-                            `DCACHE.WRITE_BUFFER.write_request_sizes[${i}]`
-                        ]
-                    );
+                const size =
+                    dcache_data[
+                        `DCACHE.WRITE_BUFFER.write_request_sizes[${i}]`
+                    ];
 
+                if (size === "0") {
+                    write_buffer_write_forward_request_sizes[i] = "WORD";
+                } else if (size === "1") {
+                    write_buffer_write_forward_request_sizes[i] = "H_WORD";
+                } else {
+                    write_buffer_write_forward_request_sizes[i] = "BYTE";
+                }
                 write_buffer_write_forward_datas[i] = process_values(
                     dcache_data[
                         `DCACHE.WRITE_BUFFER.write_request_data[${i}].dbbl_level`

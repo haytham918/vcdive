@@ -128,12 +128,12 @@ const Brat: React.FC<{
                         sq_tail_data[
                             `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].pointer`
                         ]
-                    );
+                    ) || 0;
                     checkpoint_sq_tail_parity = convert_hex_to_dec(
                         sq_tail_data[
                             `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].parity`
                         ]
-                    );
+                    ) || 0;
                 }
 
                 // Get Checkpoint GBHR --------------------------------------

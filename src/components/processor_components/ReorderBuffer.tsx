@@ -47,7 +47,7 @@ const ReorderBuffer: React.FC<{
     for (let i = 0; i < ROB_SIZE; i++) {
         const destination_tag = convert_hex_to_dec(
             rob_data[`REORDER_BUFFER.rob_data[${i}].destination_tag`]
-        );
+        ) || 0;
 
         // Get the current PC based on NPC
         const pc = process_values(
@@ -57,7 +57,7 @@ const ReorderBuffer: React.FC<{
         );
         const tag_old = convert_hex_to_dec(
             rob_data[`REORDER_BUFFER.rob_data[${i}].tag_old`]
-        );
+        ) || 0;
         const instruction_hex_string =
             rob_data[`REORDER_BUFFER.rob_data[${i}].instruction`];
         const decoded_instruction = parse_instruction(instruction_hex_string);
@@ -69,11 +69,11 @@ const ReorderBuffer: React.FC<{
     }
 
     // Extract rob head and tail
-    const rob_head = convert_hex_to_dec(rob_data["REORDER_BUFFER.head"]);
-    const rob_tail = convert_hex_to_dec(rob_data["REORDER_BUFFER.tail"]);
+    const rob_head = convert_hex_to_dec(rob_data["REORDER_BUFFER.head"]) || 0;
+    const rob_tail = convert_hex_to_dec(rob_data["REORDER_BUFFER.tail"]) || 0;
     const rob_num_free = convert_hex_to_dec(
         rob_data["REORDER_BUFFER.num_free"]
-    );
+    ) || ROB_SIZE;
 
     // Extract rob squash_en and restore_tail
     let branch_tail: string | number = "-";
@@ -137,7 +137,6 @@ const ReorderBuffer: React.FC<{
                                 let inst = "";
                                 let t_dst: string | number = "";
                                 let t_old: string | number = "";
-                                let branch_id: string = "";
                                 let is_ready_retire = "";
                                 if (
                                     entry_color !== "" &&
@@ -147,7 +146,6 @@ const ReorderBuffer: React.FC<{
                                     inst = instructions[i];
                                     t_dst = destination_tags[i];
                                     t_old = tag_olds[i];
-                                    branch_id = branch_ids[i];
                                     is_ready_retire =
                                         retirables[t_dst] == "1" ? "Y" : "N";
                                 }

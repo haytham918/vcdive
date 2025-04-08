@@ -126,7 +126,7 @@ const Icache: React.FC<{
                 icache_data[
                     `ICACHE.gen_cache[${bank_index}].EVICTION_POLICY.clock_queues[${set}].hand`
                 ]
-            );
+            ) || 0;
             if (set_hand == way) {
                 is_hands[i] = "h";
             }

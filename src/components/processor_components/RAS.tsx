@@ -20,23 +20,23 @@ const RAS: React.FC<{
         setShowSubsection(!show_subsection);
     };
 
-    if (ras_data["RAS.RAS_DEPTH"]) {
-        RAS_SIZE = convert_hex_to_dec(ras_data["RAS.RAS_DEPTH"]);
+    if (ras_data["RETURN_ADDRESS_STACK.RAS_DEPTH"]) {
+        RAS_SIZE = convert_hex_to_dec(ras_data["RETURN_ADDRESS_STACK.RAS_DEPTH"]);
     }
 
     // Get the top and address info
     const ras_tops: string[] = Array(RAS_SIZE).fill("");
     const ras_addrs: string[] = Array(RAS_SIZE).fill("");
     const ras_colors: string[] = Array(RAS_SIZE).fill("");
-    if (ras_data["RAS.top"]) {
-        const top = convert_hex_to_dec(ras_data["RAS.top"]);
+    if (ras_data["RETURN_ADDRESS_STACK.top"]) {
+        const top = convert_hex_to_dec(ras_data["RETURN_ADDRESS_STACK.top"]);
         for (let i = 0; i < RAS_SIZE; i++) {
             if (i == top) {
                 ras_tops[i] = "top";
                 ras_colors[i] = "cyan";
             }
             ras_addrs[i] = process_values(
-                ras_data[`RAS.buffer[${i}]`],
+                ras_data[`RETURN_ADDRESS_STACK.buffer[${i}]`],
                 selected_number_sys,
                 false,
                 false
@@ -84,19 +84,19 @@ const RAS: React.FC<{
     let is_pop = false;
     let pop_val = "-";
     let pop_info_opacity = "opacity-15";
-    if (ras_data["RAS.should_push"]) {
-        is_push = ras_data["RAS.should_push"] === "1";
+    if (ras_data["RETURN_ADDRESS_STACK.should_push"]) {
+        is_push = ras_data["RETURN_ADDRESS_STACK.should_push"] === "1";
         if (is_push) {
             push_info_opacity = "opacity-100";
-            const pc = convert_hex_to_dec(ras_data["RAS.pc"]);
+            const pc = convert_hex_to_dec(ras_data["RETURN_ADDRESS_STACK.pc"]);
             const npc = pc + 4;
             push_val = process_values(npc.toString(16), selected_number_sys);
         }
-        is_pop = ras_data["RAS.should_pop"] === "1";
+        is_pop = ras_data["RETURN_ADDRESS_STACK.should_pop"] === "1";
         if (is_pop) {
             pop_info_opacity = "opacity-100";
             pop_val = process_values(
-                ras_data["RAS.prediction"],
+                ras_data["RETURN_ADDRESS_STACK.prediction"],
                 selected_number_sys
             );
         }
@@ -107,7 +107,10 @@ const RAS: React.FC<{
     let restore_top = 0;
     if (branch_status === "1") {
         restore_info_capacity = "opacity-100";
-        restore_top = convert_hex_to_dec(ras_data["RAS.ras_restore_data"]);
+        restore_top =
+            convert_hex_to_dec(
+                ras_data["RETURN_ADDRESS_STACK.ras_restore_data"]
+            ) || 0;
     }
 
     const subsection_comp = show_subsection ? (
