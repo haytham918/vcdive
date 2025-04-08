@@ -218,7 +218,7 @@ const LoadStore: React.FC<{
             if (entry_state !== "1") {
                 load_memory_addrs[i] = process_values(
                     load_buffer_data[
-                        `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.addr`
+                        `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.load_entry.addr`
                     ],
                     selected_number_sys,
                     false,

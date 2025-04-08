@@ -64,20 +64,24 @@ const Dcache: React.FC<{
         const eviction_opacity = is_evict ? "opacity-100" : "opacity-15";
 
         // Check if read request valid and what
-        let read_granted = false;
+        let read_valid = false;
         let read_address = "0".repeat(8);
-        let write_granted = false;
+        let write_valid = false;
         let write_address = "0".repeat(8);
-        if (dcache_data["DCACHE.m_lsq_read_request_granted"]) {
-            read_granted =
-                dcache_data["DCACHE.m_lsq_read_request_granted"][
-                    DCACHE_NUM_BANKS - 1 - bank_index
+        if (
+            dcache_data[
+                "DCACHE.gen_cache[0].DCACHE_BANK.lsq_read_request_valid"
+            ]
+        ) {
+            read_valid =
+                dcache_data[
+                    `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.lsq_read_request_valid`
                 ] === "1";
 
-            if (read_granted) {
+            if (read_valid) {
                 read_address = process_values(
                     dcache_data[
-                        `DCACHE.m_lsq_read_request_address[${bank_index}]`
+                        `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.lsq_read_request_address`
                     ],
                     select_number_sys,
                     false,
@@ -85,15 +89,15 @@ const Dcache: React.FC<{
                 );
             }
 
-            write_granted =
-                dcache_data["DCACHE.m_lsq_write_request_granted"][
-                    DCACHE_NUM_BANKS - 1 - bank_index
+            write_valid =
+                dcache_data[
+                    `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.lsq_write_request_valid`
                 ] === "1";
 
-            if (write_granted) {
+            if (write_valid) {
                 write_address = process_values(
                     dcache_data[
-                        `DCACHE.m_lsq_write_request_address[${bank_index}]`
+                        `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.lsq_write_request_address`
                     ],
                     select_number_sys,
                     false,
@@ -101,8 +105,8 @@ const Dcache: React.FC<{
                 );
             }
         }
-        const write_opacity = write_granted ? "opacity-100" : "opacity-15";
-        const read_opacity = read_granted ? "opacity-100" : "opacity-15";
+        const write_opacity = write_valid ? "opacity-100" : "opacity-15";
+        const read_opacity = read_valid ? "opacity-100" : "opacity-15";
 
         // Check each data val
         for (let i = 0; i < DCACHE_BANK_ENTRY_SIZE; i++) {
@@ -356,7 +360,9 @@ const Dcache: React.FC<{
                     false
                 );
                 write_buffer_datas[i] = process_values(
-                    dcache_data[`DCACHE.WRITE_BUFFER.write_buffer[${i}].data`],
+                    dcache_data[
+                        `DCACHE.WRITE_BUFFER.write_buffer[${i}].data.dbbl_level`
+                    ],
                     select_number_sys
                 );
             }
