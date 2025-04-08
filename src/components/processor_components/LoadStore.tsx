@@ -52,14 +52,18 @@ const LoadStore: React.FC<{
     let store_num_free = 0;
     let store_branch_tail = 0;
 
-    if (store_queue_data["STORE_QUEUE.head"]) {
-        store_head = convert_hex_to_dec(store_queue_data["STORE_QUEUE.head"]);
-        store_tail = convert_hex_to_dec(store_queue_data["STORE_QUEUE.tail"]);
+    if (store_queue_data["STORE_QUEUE.current_head.pointer"]) {
+        store_head = convert_hex_to_dec(
+            store_queue_data["STORE_QUEUE.current_head.pointer"]
+        );
+        store_tail = convert_hex_to_dec(
+            store_queue_data["STORE_QUEUE.current_tail.pointer"]
+        );
         store_num_free = convert_hex_to_dec(
             store_queue_data["STORE_QUEUE.num_free_entries"]
         );
         store_branch_tail = convert_hex_to_dec(
-            store_queue_data["STORE_QUEUE.branch_tail"]
+            store_queue_data["STORE_QUEUE.branch_tail.pointer"]
         );
         for (let i = 0; i < SQ_SIZE; i++) {
             store_entry_colors[i] = fifo_entry_color(
@@ -161,7 +165,6 @@ const LoadStore: React.FC<{
                 load_buffer_data[
                     `LOAD_BUFFER.gen_load_handler[${i}].LOAD_HANDLER.state`
                 ];
-            console.log(entry_state);
             // If entry state is 0 (No Load), then it's empty
             if (entry_state === "0") continue;
 

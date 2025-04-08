@@ -317,6 +317,19 @@ const DebuggerPage = () => {
         }
     );
 
+    console.log("LOAD BUFFER: ", JSON.stringify(load_buffer_data).length);
+    console.log("Store Queue", JSON.stringify(store_queue_data).length);
+    console.log("ICACHE: ", JSON.stringify(icache_data).length);
+    console.log("DCACHE: ", JSON.stringify(dcache_data).length);
+    console.log("Issue: ", JSON.stringify(issue_data).length);
+    console.log("ALU: ", JSON.stringify(alu_data).length);
+    console.log("MUlt: ", JSON.stringify(mult_data).length);
+    console.log("CU: ", JSON.stringify(control_data).length);
+    console.log("ROB: ", JSON.stringify(rob_data).length);
+    console.log("RS: ", JSON.stringify(reservation_station_data).length);
+    console.log("regfile: ", JSON.stringify(prf_data).length);
+    
+
     const handleTerminalSettings = (module: string, set_value: boolean) => {
         const updated: any = { ...terminal_settings };
         updated[module].show = set_value;
