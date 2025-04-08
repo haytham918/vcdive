@@ -117,11 +117,21 @@ const Brat: React.FC<{
                     ) || 0;
 
                 // Get SQ Tail -----------------------------------------------
-                let checkpoint_sq_tail = 0;
-                if (sq_tail_data["SQ_TAIL_BRAT_WORKER.checkpoint_data[0]"]) {
-                    checkpoint_sq_tail = convert_hex_to_dec(
+                let checkpoint_sq_tail_pointer = 0;
+                let checkpoint_sq_tail_parity = 0;
+                if (
+                    sq_tail_data[
+                        "SQ_TAIL_BRAT_WORKER.checkpoint_data[0].pointer"
+                    ]
+                ) {
+                    checkpoint_sq_tail_pointer = convert_hex_to_dec(
                         sq_tail_data[
-                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].pointer`
+                        ]
+                    );
+                    checkpoint_sq_tail_parity = convert_hex_to_dec(
+                        sq_tail_data[
+                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].parity`
                         ]
                     );
                 }
@@ -261,7 +271,7 @@ const Brat: React.FC<{
                             {checkpoint_id_display}
                         </a>
                         {is_display ? (
-                            <div className="w-[100%] flex flex-col gap-y-2">
+                            <div className="w-[100%] flex flex-col gap-y-1.5">
                                 {/* Rob Tail Info */}
                                 <h3 className="smallsection-text font-bold">
                                     ROB Tail:{" "}
@@ -272,9 +282,17 @@ const Brat: React.FC<{
 
                                 {/* SQ Tail Info */}
                                 <h3 className="smallsection-text font-bold">
-                                    SQ Tail:{" "}
+                                    SQ Tail Pointer:{" "}
                                     <span className="text-[--color-babyblue]">
-                                        {checkpoint_sq_tail}
+                                        {checkpoint_sq_tail_pointer}
+                                    </span>
+                                </h3>
+
+                                {/* SQ Tail Parity Info */}
+                                <h3 className="smallsection-text font-bold">
+                                    SQ Tail Parity:{" "}
+                                    <span className="text-[--color-babyblue]">
+                                        {checkpoint_sq_tail_parity}
                                     </span>
                                 </h3>
 
