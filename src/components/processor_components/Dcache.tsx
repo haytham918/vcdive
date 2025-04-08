@@ -54,9 +54,9 @@ const Dcache: React.FC<{
 
         // Check if eviction enabled
         let is_evict = false;
-        if (dcache_data["DCACHE.evict_en"]) {
+        if (dcache_data["DCACHE.m_evict_en"]) {
             is_evict =
-                dcache_data["DCACHE.evict_en"][
+                dcache_data["DCACHE.m_evict_en"][
                     DCACHE_NUM_BANKS - 1 - bank_index
                 ] === "1";
         }
@@ -68,16 +68,16 @@ const Dcache: React.FC<{
         let read_address = "0".repeat(8);
         let write_granted = false;
         let write_address = "0".repeat(8);
-        if (dcache_data["DCACHE.lsq_read_request_granted"]) {
+        if (dcache_data["DCACHE.m_lsq_read_request_granted"]) {
             read_granted =
-                dcache_data["DCACHE.lsq_read_request_granted"][
+                dcache_data["DCACHE.m_lsq_read_request_granted"][
                     DCACHE_NUM_BANKS - 1 - bank_index
                 ] === "1";
 
             if (read_granted) {
                 read_address = process_values(
                     dcache_data[
-                        `DCACHE.lsq_read_request_address[${bank_index}]`
+                        `DCACHE.m_lsq_read_request_address[${bank_index}]`
                     ],
                     select_number_sys,
                     false,
@@ -86,14 +86,14 @@ const Dcache: React.FC<{
             }
 
             write_granted =
-                dcache_data["DCACHE.lsq_write_request_granted"][
+                dcache_data["DCACHE.m_lsq_write_request_granted"][
                     DCACHE_NUM_BANKS - 1 - bank_index
                 ] === "1";
 
             if (write_granted) {
                 write_address = process_values(
                     dcache_data[
-                        `DCACHE.lsq_write_request_address[${bank_index}]`
+                        `DCACHE.m_lsq_write_request_address[${bank_index}]`
                     ],
                     select_number_sys,
                     false,
