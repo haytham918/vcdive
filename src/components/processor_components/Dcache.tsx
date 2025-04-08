@@ -150,7 +150,7 @@ const Dcache: React.FC<{
                 // Get actual data
                 datas[i] = process_values(
                     dcache_data[
-                        `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.gen_memdp[${way}].dcache_bank_way.memData[${set}]`
+                        `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.gen_memdp[${way}].dcache_bank_way.memdp.memData[${set}]`
                     ],
                     select_number_sys
                 );
