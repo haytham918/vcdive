@@ -309,6 +309,10 @@ const DebuggerPage = () => {
 
     // RAS
     const ras_data = get_module_data(group_data, "RAS");
+    const ras_checkpoint_data: any = get_module_data(
+        group_data,
+        "RAS_BRAT_WORKER"
+    );
 
     // CPU Memory Bus output
     const mem_bus_address_data = get_module_data(
@@ -502,6 +506,7 @@ const DebuggerPage = () => {
                         rob_tail_data={rob_tail_data}
                         map_table_data={map_table_data}
                         gbhr_checkpoint_data={gbhr_checkpoint_data}
+                        ras_checkpoint_data={ras_checkpoint_data}
                         sq_tail_data={sq_tail_data}
                     />
                 </div>

@@ -24,6 +24,7 @@ const known_modules = [
     "DCACHE",
     "FETCH",
     "RAS",
+    "RAS_BRAT_WORKER",
     "CORE.mem_bus_address",
     "CORE.mem_bus_command",
     "CORE.mem_bus_data_out",

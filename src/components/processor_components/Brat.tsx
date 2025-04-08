@@ -15,6 +15,7 @@ const Brat: React.FC<{
     map_table_data: any;
     rob_tail_data: any;
     gbhr_checkpoint_data: any;
+    ras_checkpoint_data: any;
     sq_tail_data: any;
 }> = ({
     free_ids_mask,
@@ -22,6 +23,7 @@ const Brat: React.FC<{
     map_table_data,
     rob_tail_data,
     gbhr_checkpoint_data,
+    ras_checkpoint_data,
     sq_tail_data,
 }) => {
     let CHECKPOINT_LENGTH = 4;
@@ -133,6 +135,17 @@ const Brat: React.FC<{
                         gbhr_checkpoint_data[
                             `GBHR_BRAT_WORKER.checkpoint_data[${reverse_index}]`
                         ];
+                }
+
+                // Get Checkpoint RAS ---------------------------------------
+                let checkpoint_ras = 0;
+                if (ras_checkpoint_data[`RAS_BRAT_WORKER.checkpoint_data[0]`]) {
+                    checkpoint_ras =
+                        convert_hex_to_dec(
+                            ras_checkpoint_data[
+                                `RAS_BRAT_WORKER.checkpoint_data[${reverse_index}]`
+                            ]
+                        ) || 0;
                 }
 
                 // Map Table ---------------------------------------------------
@@ -248,7 +261,7 @@ const Brat: React.FC<{
                             {checkpoint_id_display}
                         </a>
                         {is_display ? (
-                            <div className="w-[100%] flex flex-col gap-y-3">
+                            <div className="w-[100%] flex flex-col gap-y-2">
                                 {/* Rob Tail Info */}
                                 <h3 className="smallsection-text font-bold">
                                     ROB Tail:{" "}
@@ -296,6 +309,14 @@ const Brat: React.FC<{
                                         )}
                                     </div>
                                 </div>
+
+                                {/* RAS TOP Info */}
+                                <h3 className="smallsection-text font-bold">
+                                    RAS Top:{" "}
+                                    <span className="text-[--color-babyblue]">
+                                        {checkpoint_ras}
+                                    </span>
+                                </h3>
 
                                 {/* Map Table Part */}
                                 <div className="inner-section section">
