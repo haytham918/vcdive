@@ -41,13 +41,13 @@ const ReorderBuffer: React.FC<{
     const pcs: string[] = Array(ROB_SIZE).fill("");
     const destination_tags: number[] = Array(ROB_SIZE).fill(0);
     const tag_olds: number[] = Array(ROB_SIZE).fill(0);
-    const branch_ids: string[] = Array(ROB_SIZE).fill("-");
     let retirables: string = reverse_string(retire_list_state_mask);
 
     for (let i = 0; i < ROB_SIZE; i++) {
-        const destination_tag = convert_hex_to_dec(
-            rob_data[`REORDER_BUFFER.rob_data[${i}].destination_tag`]
-        ) || 0;
+        const destination_tag =
+            convert_hex_to_dec(
+                rob_data[`REORDER_BUFFER.rob_data[${i}].destination_tag`]
+            ) || 0;
 
         // Get the current PC based on NPC
         const pc = process_values(
@@ -55,9 +55,10 @@ const ReorderBuffer: React.FC<{
             selected_number_sys,
             true
         );
-        const tag_old = convert_hex_to_dec(
-            rob_data[`REORDER_BUFFER.rob_data[${i}].tag_old`]
-        ) || 0;
+        const tag_old =
+            convert_hex_to_dec(
+                rob_data[`REORDER_BUFFER.rob_data[${i}].tag_old`]
+            ) || 0;
         const instruction_hex_string =
             rob_data[`REORDER_BUFFER.rob_data[${i}].instruction`];
         const decoded_instruction = parse_instruction(instruction_hex_string);
@@ -71,9 +72,10 @@ const ReorderBuffer: React.FC<{
     // Extract rob head and tail
     const rob_head = convert_hex_to_dec(rob_data["REORDER_BUFFER.head"]) || 0;
     const rob_tail = convert_hex_to_dec(rob_data["REORDER_BUFFER.tail"]) || 0;
-    const rob_num_free = convert_hex_to_dec(
-        rob_data["REORDER_BUFFER.num_free"]
-    ) || ROB_SIZE;
+    let rob_num_free = ROB_SIZE;
+    if (rob_data["REORDER_BUFFER.num_free"]) {
+        rob_num_free = convert_hex_to_dec(rob_data["REORDER_BUFFER.num_free"]);
+    }
 
     // Extract rob squash_en and restore_tail
     let branch_tail: string | number = "-";

@@ -28,15 +28,18 @@ const InstructionQueue: React.FC<{
     }
 
     // Get IQ head and tail, number free
-    const iq_head = convert_hex_to_dec(
-        instruction_queue_data["INSTRUCTION_QUEUE.head"]
-    ) || 0;
-    const iq_tail = convert_hex_to_dec(
-        instruction_queue_data["INSTRUCTION_QUEUE.tail"]
-    ) || 0;
-    const iq_num_free = convert_hex_to_dec(
-        instruction_queue_data["INSTRUCTION_QUEUE.num_free"]
-    ) || IQ_SIZE;
+    const iq_head =
+        convert_hex_to_dec(instruction_queue_data["INSTRUCTION_QUEUE.head"]) ||
+        0;
+    const iq_tail =
+        convert_hex_to_dec(instruction_queue_data["INSTRUCTION_QUEUE.tail"]) ||
+        0;
+    let iq_num_free = IQ_SIZE;
+    if (instruction_queue_data["INSTRUCTION_QUEUE.num_free"]) {
+        iq_num_free = convert_hex_to_dec(
+            instruction_queue_data["INSTRUCTION_QUEUE.num_free"]
+        );
+    }
 
     // Get instructions and pc
     const instructions: string[] = Array(IQ_SIZE).fill("");

@@ -49,7 +49,7 @@ const LoadStore: React.FC<{
     // Extract SQ head and tail
     let store_head = 0;
     let store_tail = 0;
-    let store_num_free = 0;
+    let store_num_free = SQ_SIZE;
     let store_branch_tail = 0;
 
     if (store_queue_data["STORE_QUEUE.current_head.pointer"]) {
