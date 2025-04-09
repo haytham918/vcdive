@@ -491,7 +491,7 @@ const Dcache: React.FC<{
                 }
                 write_buffer_write_forward_datas[i] = process_values(
                     dcache_data[
-                        `DCACHE.WRITE_BUFFER.write_request_data[${i}].dbbl_level`
+                        `DCACHE.WRITE_BUFFER.write_request_data[${i}].word_level`
                     ],
                     select_number_sys
                 );
