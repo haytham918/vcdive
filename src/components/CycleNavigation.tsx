@@ -43,43 +43,36 @@ const CycleNavigation: React.FC<{
     const [input_val, setInputVal] = useState("");
 
     // Function that updates input as user types
-    const handleInputChange = useCallback(
-        () => (event: React.ChangeEvent<HTMLInputElement>) => {
-            setInputVal(event.target?.value);
-        },
-        []
-    );
-
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputVal(event.target?.value);
+    };
     // Handler function when user inputs a cycle number
-    const handleInputCycle = () =>
-        useCallback(() => {
-            if (input_val.trim() !== "") {
-                const input_cycle = Number(input_val);
-                if (input_cycle > end_cycle_index) {
-                    toast.error("Specified Cycle\nOut of Bound");
-                    setInputVal("");
-                    return;
-                }
-                cycleHandler(input_cycle);
+    const handleInputCycle = () => {
+        if (input_val.trim() !== "") {
+            const input_cycle = Number(input_val);
+            if (input_cycle > end_cycle_index) {
+                toast.error("Specified Cycle\nOut of Bound");
                 setInputVal("");
-            }
-        }, [input_val, end_cycle_index, cycleHandler]);
-
-    // Function to handle user type on input
-    const handleInputKeyDown = useCallback(
-        () => (event: React.KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === "-" || event.key === "Subtract") {
-                event.preventDefault();
-                toast.error("No Negative Cycle");
                 return;
             }
-            if (event.key === "Enter") {
-                handleInputCycle();
-            }
-        },
-        [handleInputCycle]
-    );
+            cycleHandler(input_cycle);
+            setInputVal("");
+        }
+    };
 
+    // Function to handle user type on input
+    const handleInputKeyDown = (
+        event: React.KeyboardEvent<HTMLInputElement>
+    ) => {
+        if (event.key === "-" || event.key === "Subtract") {
+            event.preventDefault();
+            toast.error("No Negative Cycle");
+            return;
+        }
+        if (event.key === "Enter") {
+            handleInputCycle();
+        }
+    };
     // useEffect for keyboard
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
