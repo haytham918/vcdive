@@ -228,9 +228,9 @@ const LoadStore: React.FC<{
                 // Get bank
                 let binary_address;
                 if (selected_number_sys === "0x") {
-                    binary_address = parseInt(store_memory_addrs[i], 16);
+                    binary_address = parseInt(load_memory_addrs[i], 16);
                 } else {
-                    binary_address = parseInt(store_memory_addrs[i], 10);
+                    binary_address = parseInt(load_memory_addrs[i], 10);
                 }
                 const bank = (binary_address >> 3) & 0b1;
                 load_banks[i] = bank;

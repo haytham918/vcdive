@@ -90,7 +90,7 @@ const DebuggerHeader: React.FC<{
                 cycleHandler={cycleHandler}
             />
 
-            <h4 className="flex flex-col font-bold absolute right-[345px] text-[--color-primary]">
+            <h4 className="flex flex-col font-bold absolute right-[350px] text-[--color-primary]">
                 Real Cycle
                 <span className="ml-auto relative ">{real_cycle}</span>
             </h4>
