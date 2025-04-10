@@ -480,9 +480,11 @@ const Dcache: React.FC<{
                         `DCACHE.WRITE_BUFFER.write_request_sizes[${i}]`
                     ];
 
-                if (size === "0") {
-                    write_buffer_write_forward_request_sizes[i] = "WORD";
+                if (size == "0") {
+                    write_buffer_write_forward_request_sizes[i] = "-";
                 } else if (size === "1") {
+                    write_buffer_write_forward_request_sizes[i] = "WORD";
+                } else if (size === "2") {
                     write_buffer_write_forward_request_sizes[i] = "H_WORD";
                 } else {
                     write_buffer_write_forward_request_sizes[i] = "BYTE";
