@@ -33,6 +33,8 @@ const known_modules = [
     "CORE.mem_bus_req_tag_in",
     "CORE.mem_bus_complete_tag_in",
     "CORE.mem_bus_data_in",
+    "instr_count",
+    "clock_cycle",
 ];
 
 self.addEventListener("message", (event) => {

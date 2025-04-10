@@ -426,8 +426,6 @@ const Dcache: React.FC<{
         }
     }
 
-    console.log(write_buffer_read_request_ens[0]);
-
     const write_buffer_write_forward_ens: string[] = Array(
         WRITE_BUFFER_WRITE_PORT_SIZE
     ).fill("0");

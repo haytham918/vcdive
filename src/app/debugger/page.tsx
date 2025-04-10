@@ -357,6 +357,10 @@ const DebuggerPage = () => {
         "CORE.mem_bus_data_in"
     );
 
+    const instr_count_data = get_module_data(group_data, "instr_count");
+
+    const real_cycle_data = get_module_data(group_data, "clock_cycle");
+
     const [terminal_settings, setTerminalSettings] = useState<TerminalSettings>(
         {
             icache: {
@@ -436,6 +440,8 @@ const DebuggerPage = () => {
                     end_cycle_index={end_cycle_index}
                     include_neg={include_neg}
                     selected_number_sys={selected_number_sys}
+                    instr_count_data={instr_count_data}
+                    real_cycle_data={real_cycle_data}
                     negFlipHandler={negFlipHandler}
                     cycleHandler={cycleHandler}
                     numberSysHandler={numberSysHandler}

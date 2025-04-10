@@ -11,6 +11,7 @@ import Image from "next/image";
 import icon_img from "../../public/apple-touch-icon.png";
 import { NumberSystem } from "@/app/debugger/page";
 import React from "react";
+import { convert_hex_to_dec } from "@/lib/utils";
 // Additional header stuff for the debugger page
 const DebuggerHeader: React.FC<{
     file_name: string;
@@ -18,6 +19,8 @@ const DebuggerHeader: React.FC<{
     end_cycle_index: number;
     include_neg: boolean;
     selected_number_sys: NumberSystem;
+    instr_count_data: any;
+    real_cycle_data: any;
     negFlipHandler: () => void;
     cycleHandler: (cycle: number) => void;
     numberSysHandler: (number_system: NumberSystem) => void;
@@ -27,6 +30,8 @@ const DebuggerHeader: React.FC<{
     end_cycle_index,
     include_neg,
     selected_number_sys,
+    instr_count_data,
+    real_cycle_data,
     negFlipHandler,
     cycleHandler,
     numberSysHandler,
@@ -43,6 +48,18 @@ const DebuggerHeader: React.FC<{
             window.removeEventListener("keydown", handleEsc);
         };
     }, []);
+
+    let current_instr_count = 0;
+    if (instr_count_data["instr_count"]) {
+        current_instr_count = convert_hex_to_dec(
+            instr_count_data["instr_count"]
+        );
+    }
+
+    let real_cycle = 0;
+    if (real_cycle_data["clock_cycle"]) {
+        real_cycle = convert_hex_to_dec(real_cycle_data["clock_cycle"]);
+    }
 
     return (
         <div className="debugger-header">
@@ -62,13 +79,24 @@ const DebuggerHeader: React.FC<{
                 {file_name}
             </h2>
 
+            <h4 className="flex flex-col font-bold text-[--color-accent]">
+                Commit Inst #:
+                <span className="ml-auto relative">{current_instr_count}</span>
+            </h4>
+
             <CycleNavigation
                 cur_cycle={cur_cycle}
                 end_cycle_index={end_cycle_index}
                 cycleHandler={cycleHandler}
             />
+
+            <h4 className="flex flex-col font-bold absolute right-[345px] text-[--color-primary]">
+                Real Cycle
+                <span className="ml-auto relative ">{real_cycle}</span>
+            </h4>
+
             <h4 className="flex flex-col absolute right-[220px]">
-                Current Cycle
+                Parsed Cycle
                 <span className="ml-auto relative ">
                     {cur_cycle} / {end_cycle_index}
                 </span>
