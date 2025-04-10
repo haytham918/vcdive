@@ -87,7 +87,7 @@ def ssh_caen_with_duo(username: str, remote_commands: str) -> None:
         # If the command is not a curl, we expect it to be really fast
         cmd_timeout = 10
         if cmd.startswith("curl"):
-            cmd_timeout = 120  # Set longer timeout for the curl command
+            cmd_timeout = 360  # Set longer timeout for the curl command
 
         idx_command = child.expect([
             r'(\$|#|%|>)\s',               # 0 => Command prompt
