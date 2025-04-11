@@ -9,7 +9,7 @@ import vcd_parser
 from connect_caen import debug_vcd_on_caen
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024 * 1024
 CORS(app)
 
 parser = None
