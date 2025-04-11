@@ -36,19 +36,6 @@ const DebuggerHeader: React.FC<{
     cycleHandler,
     numberSysHandler,
 }) => {
-    const router = useRouter();
-    useEffect(() => {
-        const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === "b") {
-                router.push("/");
-            }
-        };
-        window.addEventListener("keydown", handleEsc);
-        return () => {
-            window.removeEventListener("keydown", handleEsc);
-        };
-    }, []);
-
     let current_instr_count = 0;
     if (instr_count_data["instr_count"]) {
         current_instr_count = convert_hex_to_dec(
