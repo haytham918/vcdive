@@ -1,39 +1,39 @@
 {
-  "name": "vcdive",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "install-dependencies": "pip install -r src/parse/requirements.txt",
-    "build-parser": "cd src/parse && python3 setup.py build_ext --inplace",
-    "start-flask": "cd src/parse && python3 -m flask --app main run",
-    "flask-dev": "pnpm install-dependencies && pnpm build-parser && pnpm start-flask",
-    "next-dev": "next dev",
-    "dev": "concurrently \"pnpm next-dev\" \"pnpm flask-dev\"",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "axios": "^1.7.9",
-    "concurrently": "^9.1.2",
-    "headlessui": "^0.0.0",
-    "next": "15.1.6",
-    "phosphor-react": "^1.4.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-dropzone": "^14.3.5",
-    "react-hot-toast": "^2.5.2"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.6",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  }
+    "name": "vcdive",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "install-dependencies": "pip install -r src/parse/requirements.txt",
+        "build-parser": "cd src/parse && python3 setup.py build_ext --inplace",
+        "start-flask": "cd src/parse && python3 -m flask --app main run",
+        "flask-dev": "pnpm install-dependencies && pnpm build-parser && pnpm start-flask",
+        "next-dev": "next dev",
+        "dev": "concurrently \"pnpm next-dev\" \"pnpm flask-dev\"",
+        "build": "next build",
+        "start": "concurrently \"next start\" \"pnpm flask-dev\"",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@headlessui/react": "^2.2.0",
+        "axios": "^1.7.9",
+        "concurrently": "^9.1.2",
+        "headlessui": "^0.0.0",
+        "next": "15.1.6",
+        "phosphor-react": "^1.4.1",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-dropzone": "^14.3.5",
+        "react-hot-toast": "^2.5.2"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "15.1.6",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5"
+    }
 }

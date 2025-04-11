@@ -171,4 +171,4 @@ def cycle_info(pos_neg, cycle_number):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(port=5000)
