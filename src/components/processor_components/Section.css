@@ -140,6 +140,9 @@
 .psb-table {
     min-width: 380px;
 }
+.psb-read-table {
+    min-width: 380px;
+}
 
 .terminal-container {
     display: flex;

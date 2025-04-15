@@ -4,8 +4,6 @@ import { ArrowUUpLeft } from "phosphor-react";
 import "./DebuggerHeader.css";
 import CycleNavigation from "./CycleNavigation";
 import NSToggle from "./NSToggle";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import icon_img from "../../public/apple-touch-icon.png";
@@ -77,7 +75,7 @@ const DebuggerHeader: React.FC<{
                 cycleHandler={cycleHandler}
             />
 
-            <h4 className="flex flex-col font-bold absolute right-[350px] text-[--color-primary]">
+            <h4 className="flex flex-col font-bold absolute right-[360px] text-[--color-primary]">
                 Real Cycle
                 <span className="ml-auto relative ">{real_cycle}</span>
             </h4>
