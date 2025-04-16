@@ -70,7 +70,7 @@ const Icache: React.FC<{
 
         // Check if read request valid and what
         let read_granted = false;
-        let read_address = "0".repeat(8);
+        let read_address = "0".repeat(4);
         if (icache_data["ICACHE.bank_read_request_granted"]) {
             read_granted =
                 icache_data["ICACHE.bank_read_request_granted"][
@@ -324,7 +324,7 @@ const Icache: React.FC<{
         let referenced_opacity = "opacity-15";
         let clear_referenced = "0";
         let clear_referenced_opacity = "opacity-15";
-        let prefetch_addr = "0".repeat(8);
+        let prefetch_addr = "0".repeat(4);
         let prefetch_gnt = "0";
         let prefetch_opacity = "opacity-15";
 

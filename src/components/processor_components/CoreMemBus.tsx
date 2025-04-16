@@ -30,7 +30,7 @@ const CoreMemBus: React.FC<{
     };
 
     // Output
-    let mem_bus_address = "0".repeat(8);
+    let mem_bus_address = "0".repeat(4);
     let mem_bus_command = "NONE";
     let mem_bus_data_out = "-";
 

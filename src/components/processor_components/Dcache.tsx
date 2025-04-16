@@ -65,9 +65,9 @@ const Dcache: React.FC<{
 
         // Check if read request valid and what
         let read_valid = false;
-        let read_address = "0".repeat(8);
+        let read_address = "0".repeat(4);
         let write_valid = false;
-        let write_address = "0".repeat(8);
+        let write_address = "0".repeat(4);
         if (
             dcache_data[
                 "DCACHE.gen_cache[0].DCACHE_BANK.lsq_read_request_valid"
