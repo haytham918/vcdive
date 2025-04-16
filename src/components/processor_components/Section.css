@@ -210,7 +210,7 @@
 
 .dialog-box {
     width: 900px;
-    min-height: 35%;
+    min-height: max-content;
     border: 3px solid;
     border-color: var(--dropzone-border);
     border-radius: 3px;

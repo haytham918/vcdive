@@ -18,6 +18,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { reverse_string } from "@/lib/utils";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Fetch from "@/components/processor_components/Fetch";
 const Terminal = dynamic(
     () => import("@/components/processor_components/Terminal"),
     { ssr: false }
@@ -461,9 +462,9 @@ const DebuggerPage = () => {
                         <div className="flex">
                             {/* Group Here */}
                             <div>
-                                <Decoder
+                                <Fetch
                                     selected_number_sys={selected_number_sys}
-                                    decoder_data={decoder_data}
+                                    fetch_data={fetch_data}
                                 />
                                 <BranchGshare
                                     branch_status={branch_status}
@@ -472,10 +473,18 @@ const DebuggerPage = () => {
                                 />
                             </div>
 
-                            <InstructionQueue
-                                selected_number_sys={selected_number_sys}
-                                instruction_queue_data={instruction_queue_data}
-                            />
+                            <div>
+                                <Decoder
+                                    selected_number_sys={selected_number_sys}
+                                    decoder_data={decoder_data}
+                                />
+                                <InstructionQueue
+                                    selected_number_sys={selected_number_sys}
+                                    instruction_queue_data={
+                                        instruction_queue_data
+                                    }
+                                />
+                            </div>
                         </div>
                         <CoreMemBus
                             mem_bus_address_data={mem_bus_address_data}
