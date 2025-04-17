@@ -8,9 +8,10 @@ import {
     reverse_string,
 } from "@/lib/utils";
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
+import { TagTrackContext } from "../TagTrackProvider";
 let ROB_SIZE = 32;
 
 const ReorderBuffer: React.FC<{
@@ -91,6 +92,9 @@ const ReorderBuffer: React.FC<{
         branch_info_opacity = "opacity-100";
     }
 
+    // Tag Track
+    const { tag } = useContext(TagTrackContext);
+
     const subsection_comp = show_subsection ? (
         <div>
             <div className={`section small-section ${branch_info_opacity}`}>
@@ -160,8 +164,24 @@ const ReorderBuffer: React.FC<{
                                         <td className={entry_color}>{pc}</td>
                                         {/* If No color Or red(tail), then garbage vals */}
                                         <td className={entry_color}>{inst}</td>
-                                        <td className={entry_color}>{t_dst}</td>
-                                        <td className={entry_color}>{t_old}</td>
+                                        <td
+                                            className={
+                                                tag !== null && tag === t_dst
+                                                    ? "tag-match"
+                                                    : entry_color
+                                            }
+                                        >
+                                            {t_dst}
+                                        </td>
+                                        <td
+                                            className={
+                                                tag !== null && tag === t_old
+                                                    ? "tag-match"
+                                                    : entry_color
+                                            }
+                                        >
+                                            {t_old}
+                                        </td>
                                         <td className={entry_color}>
                                             {is_ready_retire}
                                         </td>

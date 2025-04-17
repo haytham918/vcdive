@@ -5,9 +5,10 @@ import {
     process_values,
 } from "@/lib/utils";
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
+import { TagTrackContext } from "../TagTrackProvider";
 let RS_SIZE = 16;
 
 // Entry color
@@ -156,6 +157,9 @@ const ReservationStation: React.FC<{
         branch_info_opacity = "opacity-100";
     }
 
+    // Tag Tack
+    const { tag } = useContext(TagTrackContext);
+
     const subsection_comp = show_subsection ? (
         <div>
             <div className={`section small-section ${branch_info_opacity}`}>
@@ -207,15 +211,39 @@ const ReservationStation: React.FC<{
                                         <td className={entry_color}>
                                             {is_valid ? instructions[i] : ""}
                                         </td>
-                                        <td className={entry_color}>
+                                        <td
+                                            className={
+                                                is_valid &&
+                                                tag !== null &&
+                                                tag == destination_tags[i]
+                                                    ? "tag-match"
+                                                    : entry_color
+                                            }
+                                        >
                                             {is_valid
                                                 ? destination_tags[i]
                                                 : ""}
                                         </td>
-                                        <td className={entry_color}>
+                                        <td
+                                            className={
+                                                is_valid &&
+                                                tag !== null &&
+                                                tag == t1s[i]
+                                                    ? "tag-match"
+                                                    : entry_color
+                                            }
+                                        >
                                             {is_valid ? t1s[i] : ""}
                                         </td>
-                                        <td className={entry_color}>
+                                        <td
+                                            className={
+                                                is_valid &&
+                                                tag !== null &&
+                                                tag == t2s[i]
+                                                    ? "tag-match"
+                                                    : entry_color
+                                            }
+                                        >
                                             {is_valid ? t2s[i] : ""}
                                         </td>
                                         <td className={entry_color}>

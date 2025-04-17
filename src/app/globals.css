@@ -224,6 +224,10 @@ td.beige {
     background-color: var(--table-entry-beige) !important;
 }
 
+td.tag-match {
+    background-color: var(--set-color-7) !important;
+}
+
 td.set0 {
     background-color: var(--set-color-0) !important;
 }
