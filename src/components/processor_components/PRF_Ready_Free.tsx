@@ -1,7 +1,7 @@
 "use client";
 import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import {
     convert_hex_to_dec,
     process_values,
@@ -10,6 +10,7 @@ import {
     segment_mask_table,
 } from "@/lib/utils";
 import React from "react";
+import { TagTrackContext } from "../TagTrackProvider";
 export let PRF_SIZE = 64;
 export const PRF_SEGMENT_SIZE = 16;
 export let PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
@@ -54,6 +55,9 @@ const PRF_Ready_Free: React.FC<{
         PRF_SIZE = convert_hex_to_dec(prf_data["REGFILE.NUM_PHYS_REG"]);
         PRF_INDEX_SEGMENTS = segment_idx(PRF_SEGMENT_SIZE, PRF_SIZE);
     }
+
+    // Tag Track
+    const { tag } = useContext(TagTrackContext);
 
     // Read Write Ports Info
     let READ_PORTS_SIZE = 13;
@@ -131,7 +135,15 @@ const PRF_Ready_Free: React.FC<{
                         return (
                             <tr key={i}>
                                 <td className={color}>{idx}</td>
-                                <td className={color}>{write_index}</td>
+                                <td
+                                    className={
+                                        tag !== null && tag === write_index
+                                            ? "tag-match"
+                                            : color
+                                    }
+                                >
+                                    {write_index}
+                                </td>
                                 <td className={color}>{write_val}</td>
                             </tr>
                         );
@@ -203,7 +215,15 @@ const PRF_Ready_Free: React.FC<{
                         return (
                             <tr key={i}>
                                 <td className={color}>{idx}</td>
-                                <td className={color}>{read_index}</td>
+                                <td
+                                    className={
+                                        tag !== null && tag === read_index
+                                            ? "tag-match"
+                                            : color
+                                    }
+                                >
+                                    {read_index}
+                                </td>
                                 <td className={color}>{read_val}</td>
                             </tr>
                         );
@@ -280,7 +300,15 @@ const PRF_Ready_Free: React.FC<{
 
                     return (
                         <tr key={i}>
-                            <td className={color}>{reg_index}</td>
+                            <td
+                                className={
+                                    tag !== null && tag === reg_index
+                                        ? "tag-match"
+                                        : color
+                                }
+                            >
+                                {reg_index}
+                            </td>
                             <td className={color}>{value}</td>
                             <td className={color}>{ready}</td>
                             <td className={color}>{free}</td>

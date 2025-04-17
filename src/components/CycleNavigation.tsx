@@ -215,7 +215,7 @@ const CycleNavigation: React.FC<{
             />
 
             <input
-                className="input-cycle"
+                className="input-tag"
                 placeholder="Tag #"
                 type="number"
                 min="0"
