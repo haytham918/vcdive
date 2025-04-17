@@ -19,6 +19,7 @@ import { reverse_string } from "@/lib/utils";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Fetch from "@/components/processor_components/Fetch";
+import TagTrackProvider from "@/components/TagTrackProvider";
 const Terminal = dynamic(
     () => import("@/components/processor_components/Terminal"),
     { ssr: false }
@@ -417,175 +418,193 @@ const DebuggerPage = () => {
 
     return (
         <>
-            <header>
-                <DebuggerHeader
-                    file_name={file_name}
-                    cur_cycle={cur_cycle}
-                    end_cycle_index={end_cycle_index}
-                    include_neg={include_neg}
-                    selected_number_sys={selected_number_sys}
-                    instr_count_data={instr_count_data}
-                    real_cycle_data={real_cycle_data}
-                    negFlipHandler={negFlipHandler}
-                    cycleHandler={cycleHandler}
-                    numberSysHandler={numberSysHandler}
-                />
-                <ThemeToggle />
-            </header>
-            <main>
-                <div className="ml-4 mr-4 flex flex-row flex-wrap">
-                    <Icache
-                        select_number_sys={selected_number_sys}
-                        icache_data={icache_data}
+            <TagTrackProvider>
+                <header>
+                    <DebuggerHeader
+                        file_name={file_name}
+                        cur_cycle={cur_cycle}
+                        end_cycle_index={end_cycle_index}
+                        include_neg={include_neg}
+                        selected_number_sys={selected_number_sys}
+                        instr_count_data={instr_count_data}
+                        real_cycle_data={real_cycle_data}
+                        negFlipHandler={negFlipHandler}
+                        cycleHandler={cycleHandler}
+                        numberSysHandler={numberSysHandler}
                     />
 
-                    {/* Group Here */}
-                    <div>
-                        {/* Group Here */}
-                        <div className="flex">
-                            {/* Group Here */}
-                            <div>
-                                <Fetch
-                                    selected_number_sys={selected_number_sys}
-                                    fetch_data={fetch_data}
-                                />
-                                <BranchGshare
-                                    branch_status={branch_status}
-                                    gshare_gbhr={gshare_gbhr}
-                                    control_data={control_data}
-                                />
-                            </div>
+                    <ThemeToggle />
+                </header>
+                <main>
+                    <div className="ml-4 mr-4 flex flex-row flex-wrap">
+                        <Icache
+                            select_number_sys={selected_number_sys}
+                            icache_data={icache_data}
+                        />
 
-                            <div>
-                                <Decoder
-                                    selected_number_sys={selected_number_sys}
-                                    decoder_data={decoder_data}
-                                />
-                                <InstructionQueue
-                                    selected_number_sys={selected_number_sys}
-                                    instruction_queue_data={
-                                        instruction_queue_data
-                                    }
-                                />
+                        {/* Group Here */}
+                        <div>
+                            {/* Group Here */}
+                            <div className="flex">
+                                {/* Group Here */}
+                                <div>
+                                    <Fetch
+                                        selected_number_sys={
+                                            selected_number_sys
+                                        }
+                                        fetch_data={fetch_data}
+                                    />
+                                    <BranchGshare
+                                        branch_status={branch_status}
+                                        gshare_gbhr={gshare_gbhr}
+                                        control_data={control_data}
+                                    />
+                                </div>
+
+                                <div>
+                                    <Decoder
+                                        selected_number_sys={
+                                            selected_number_sys
+                                        }
+                                        decoder_data={decoder_data}
+                                    />
+                                    <InstructionQueue
+                                        selected_number_sys={
+                                            selected_number_sys
+                                        }
+                                        instruction_queue_data={
+                                            instruction_queue_data
+                                        }
+                                    />
+                                </div>
                             </div>
+                            <CoreMemBus
+                                mem_bus_address_data={mem_bus_address_data}
+                                mem_bus_command_data={mem_bus_command_data}
+                                mem_bus_complete_tag_in_data={
+                                    mem_bus_complete_tag_in_data
+                                }
+                                mem_bus_data_out_data={mem_bus_data_out_data}
+                                mem_bus_data_in_data={mem_bus_data_in_data}
+                                mem_bus_req_tag_in_data={
+                                    mem_bus_req_tag_in_data
+                                }
+                                select_number_sys={selected_number_sys}
+                            />
+
+                            <MapTable map_table_data={map_table_data} />
                         </div>
-                        <CoreMemBus
-                            mem_bus_address_data={mem_bus_address_data}
-                            mem_bus_command_data={mem_bus_command_data}
-                            mem_bus_complete_tag_in_data={
-                                mem_bus_complete_tag_in_data
-                            }
-                            mem_bus_data_out_data={mem_bus_data_out_data}
-                            mem_bus_data_in_data={mem_bus_data_in_data}
-                            mem_bus_req_tag_in_data={mem_bus_req_tag_in_data}
+
+                        <ReorderBuffer
+                            selected_number_sys={selected_number_sys}
+                            rob_data={rob_data}
+                            retire_list_state_mask={retire_list_state_mask}
+                            branch_status={branch_status}
+                        />
+
+                        <div className="flex flex-col">
+                            <ReservationStation
+                                selected_number_sys={selected_number_sys}
+                                reservation_station_data={
+                                    reservation_station_data
+                                }
+                                branch_status={branch_status}
+                            />
+                            <RAS
+                                ras_data={ras_data}
+                                selected_number_sys={selected_number_sys}
+                                branch_status={branch_status}
+                            />
+                        </div>
+                        <PRF_Ready_Free
+                            selected_number_sys={selected_number_sys}
+                            ready_list_data={ready_list_data}
+                            prf_data={prf_data}
+                            current_free_list={current_free_list}
+                        />
+
+                        <LoadStore
+                            selected_number_sys={selected_number_sys}
+                            store_queue_data={store_queue_data}
+                            load_buffer_data={load_buffer_data}
+                            branch_status={branch_status}
+                        />
+
+                        <Dcache
+                            dcache_data={dcache_data}
                             select_number_sys={selected_number_sys}
                         />
-                        <MapTable map_table_data={map_table_data} />
-                    </div>
-                    <ReorderBuffer
-                        selected_number_sys={selected_number_sys}
-                        rob_data={rob_data}
-                        retire_list_state_mask={retire_list_state_mask}
-                        branch_status={branch_status}
-                    />
 
-                    <div className="flex flex-col">
-                        <ReservationStation
-                            selected_number_sys={selected_number_sys}
-                            reservation_station_data={reservation_station_data}
-                            branch_status={branch_status}
-                        />
-                        <RAS
-                            ras_data={ras_data}
-                            selected_number_sys={selected_number_sys}
-                            branch_status={branch_status}
+                        <Brat
+                            free_ids_mask={free_ids_mask}
+                            free_list_data={free_list_data}
+                            rob_tail_data={rob_tail_data}
+                            map_table_data={map_table_data}
+                            gbhr_checkpoint_data={gbhr_checkpoint_data}
+                            ras_checkpoint_data={ras_checkpoint_data}
+                            sq_tail_data={sq_tail_data}
                         />
                     </div>
-                    <PRF_Ready_Free
-                        selected_number_sys={selected_number_sys}
+                    <Terminal
+                        icache_data={icache_data}
+                        fetch_data={fetch_data}
+                        decoder_data={decoder_data}
+                        instruction_queue_data={instruction_queue_data}
+                        reservation_station_data={reservation_station_data}
+                        rob_data={rob_data}
+                        issue_data={issue_data}
+                        dispatch_data={dispatch_data}
+                        alu_data={alu_data}
+                        mult_data={mult_data}
+                        control_data={control_data}
                         ready_list_data={ready_list_data}
+                        coordinator_data={coordinator_data}
                         prf_data={prf_data}
-                        current_free_list={current_free_list}
-                    />
-                    <LoadStore
-                        selected_number_sys={selected_number_sys}
+                        free_list_data={free_list_data}
+                        map_table_data={map_table_data}
+                        rob_tail_data={rob_tail_data}
+                        retire_list_data={retire_list_data}
+                        gshare_data={gshare_data}
+                        gbhr_checkpoint_data={gbhr_checkpoint_data}
                         store_queue_data={store_queue_data}
                         load_buffer_data={load_buffer_data}
-                        branch_status={branch_status}
-                    />
-                    <Dcache
-                        dcache_data={dcache_data}
-                        select_number_sys={selected_number_sys}
-                    />
-                    <Brat
-                        free_ids_mask={free_ids_mask}
-                        free_list_data={free_list_data}
-                        rob_tail_data={rob_tail_data}
-                        map_table_data={map_table_data}
-                        gbhr_checkpoint_data={gbhr_checkpoint_data}
-                        ras_checkpoint_data={ras_checkpoint_data}
                         sq_tail_data={sq_tail_data}
+                        dcache_data={dcache_data}
+                        load_unit_data={load_unit_data}
+                        store_unit_data={store_unit_data}
+                        ras_checkpoint_data={ras_checkpoint_data}
+                        ras_data={ras_data}
+                        terminal_settings={terminal_settings}
+                        handleOpenDialog={handleOpenDialog}
                     />
-                </div>
-                <Terminal
-                    icache_data={icache_data}
-                    fetch_data={fetch_data}
-                    decoder_data={decoder_data}
-                    instruction_queue_data={instruction_queue_data}
-                    reservation_station_data={reservation_station_data}
-                    rob_data={rob_data}
-                    issue_data={issue_data}
-                    dispatch_data={dispatch_data}
-                    alu_data={alu_data}
-                    mult_data={mult_data}
-                    control_data={control_data}
-                    ready_list_data={ready_list_data}
-                    coordinator_data={coordinator_data}
-                    prf_data={prf_data}
-                    free_list_data={free_list_data}
-                    map_table_data={map_table_data}
-                    rob_tail_data={rob_tail_data}
-                    retire_list_data={retire_list_data}
-                    gshare_data={gshare_data}
-                    gbhr_checkpoint_data={gbhr_checkpoint_data}
-                    store_queue_data={store_queue_data}
-                    load_buffer_data={load_buffer_data}
-                    sq_tail_data={sq_tail_data}
-                    dcache_data={dcache_data}
-                    load_unit_data={load_unit_data}
-                    store_unit_data={store_unit_data}
-                    ras_checkpoint_data={ras_checkpoint_data}
-                    ras_data={ras_data}
+                </main>
+                <TerminalDialog
+                    show_dialog={show_dialog}
+                    handleCloseDialog={handleCloseDialog}
                     terminal_settings={terminal_settings}
-                    handleOpenDialog={handleOpenDialog}
+                    handleTerminalSettings={handleTerminalSettings}
                 />
-            </main>
-            <TerminalDialog
-                show_dialog={show_dialog}
-                handleCloseDialog={handleCloseDialog}
-                terminal_settings={terminal_settings}
-                handleTerminalSettings={handleTerminalSettings}
-            />
-            <Toaster
-                position="bottom-right"
-                toastOptions={{
-                    duration: 3000,
-                    style: {
-                        color: "dark-gray",
-                        fontWeight: "bold",
-                    },
-                    success: {
+                <Toaster
+                    position="bottom-right"
+                    toastOptions={{
+                        duration: 3000,
                         style: {
-                            background: "beige",
+                            color: "dark-gray",
+                            fontWeight: "bold",
                         },
-                    },
-                    error: {
-                        style: {
-                            background: "beige",
+                        success: {
+                            style: {
+                                background: "beige",
+                            },
                         },
-                    },
-                }}
-            />
+                        error: {
+                            style: {
+                                background: "beige",
+                            },
+                        },
+                    }}
+                />
+            </TagTrackProvider>
         </>
     );
 };

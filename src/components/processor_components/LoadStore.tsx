@@ -7,9 +7,10 @@ import {
     process_values,
 } from "@/lib/utils";
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
+import { TagTrackContext } from "../TagTrackProvider";
 let SQ_SIZE = 16;
 let LB_SIZE = 16;
 
@@ -290,6 +291,9 @@ const LoadStore: React.FC<{
         }
     }
 
+    // Tag Track
+    const { tag } = useContext(TagTrackContext);
+
     const subsection_comp = show_subsection ? (
         <div>
             <div className="section small-section">
@@ -362,7 +366,13 @@ const LoadStore: React.FC<{
                                             </td>
 
                                             <td
-                                                className={load_entry_colors[i]}
+                                                className={
+                                                    tag !== null &&
+                                                    tag ===
+                                                        load_destination_tags[i]
+                                                        ? "tag-match"
+                                                        : load_entry_colors[i]
+                                                }
                                             >
                                                 {load_destination_tags[i]}
                                             </td>

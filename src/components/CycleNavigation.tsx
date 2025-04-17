@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import "./DebuggerHeader.css";
 import toast from "react-hot-toast";
 import React from "react";
+import { PRF_SIZE } from "./processor_components/PRF_Ready_Free";
+import { TagTrackContext } from "./TagTrackProvider";
 
 const CycleNavigation: React.FC<{
     cur_cycle: number; // The current cycle
@@ -119,6 +121,42 @@ const CycleNavigation: React.FC<{
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [handleStartCycle, handleCycleChange, handleEndCycle]);
+
+    // Context Provider Stuff
+    const { tag, setTag } = useContext(TagTrackContext);
+
+    // Input Tag
+    const [input_tag, setInputTag] = useState("");
+    const handleTagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputTag(event.target?.value);
+    };
+
+    // Handler function when user inputs a tag number
+    const handleInputTag = () => {
+        if (input_tag.trim() != "") {
+            const input_tag_number = Number(input_tag);
+            if (input_tag_number > PRF_SIZE) {
+                toast.error("Specified Tag\nLarger than Size");
+                setInputTag("");
+                return;
+            }
+            setTag(input_tag_number);
+        } else {
+            setInputTag("");
+            setTag(null);
+        }
+    };
+
+    const handleTagKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "-" || event.key === "Subtract") {
+            event.preventDefault();
+            toast.error("No Negative Tag");
+            return;
+        }
+        if (event.key === "Enter") {
+            handleInputTag();
+        }
+    };
     return (
         <div className="cycle-navigation-container">
             {/* Go to Cycle 0 Button */}
@@ -174,6 +212,18 @@ const CycleNavigation: React.FC<{
                 onChange={handleInputChange}
                 onKeyDown={handleInputKeyDown}
                 onBlur={handleInputCycle}
+            />
+
+            <input
+                className="input-cycle"
+                placeholder="Tag #"
+                type="number"
+                min="0"
+                max={PRF_SIZE - 1}
+                value={input_tag}
+                onChange={handleTagChange}
+                onKeyDown={handleTagKeyDown}
+                onBlur={handleInputTag}
             />
         </div>
     );

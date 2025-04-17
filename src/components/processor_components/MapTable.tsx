@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, segment_idx } from "@/lib/utils";
 import React from "react";
 import { ParsedData } from "@/app/debugger/page";
+import { TagTrackContext } from "../TagTrackProvider";
 export const MAP_TABLE_SIZE = 32;
 export const MAP_TABLE_SEGMENT_SIZE = 8;
 export const MAP_TABLE_INDEX_SEGMENTS = segment_idx(
@@ -37,6 +38,9 @@ const MapTable: React.FC<{
                 map_table_data[`MAP_TABLE_BRAT_WORKER.next_state[${i}]`]
             );
     }
+    // Tag Track
+    const { tag } = useContext(TagTrackContext);
+
     // Segment Map Tables
     const map_tables = MAP_TABLE_INDEX_SEGMENTS.map((segment, segment_idx) => (
         <table key={segment_idx}>
@@ -60,10 +64,24 @@ const MapTable: React.FC<{
                     return (
                         <tr key={i}>
                             <td className="cyan">{segment[i]}</td>
-                            <td className={entry_color}>
+                            <td
+                                className={
+                                    tag !== null &&
+                                    tag === current_map_values[segment[i]]
+                                        ? "tag-match"
+                                        : entry_color
+                                }
+                            >
                                 {current_map_values[segment[i]]}
                             </td>
-                            <td className={entry_color}>
+                            <td
+                                className={
+                                    tag !== null &&
+                                    tag === next_map_values[segment[i]]
+                                        ? "tag-match"
+                                        : entry_color
+                                }
+                            >
                                 {next_map_values[segment[i]]}
                             </td>
                         </tr>
@@ -73,6 +91,7 @@ const MapTable: React.FC<{
         </table>
     ));
 
+    console.log(tag);
     const subsection_comp = show_subsection ? (
         <div>
             <div className="section sub-section">

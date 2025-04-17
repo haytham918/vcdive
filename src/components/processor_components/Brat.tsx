@@ -1,5 +1,5 @@
 import "./Section.css";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import { convert_hex_to_dec, reverse_string } from "@/lib/utils";
 import {
     MAP_TABLE_INDEX_SEGMENTS,
@@ -10,6 +10,7 @@ import { PRF_INDEX_SEGMENTS, PRF_SEGMENT_SIZE } from "./PRF_Ready_Free";
 import { GSHARE_LENGTH } from "./BranchGshare";
 import React from "react";
 import { ParsedData } from "@/app/debugger/page";
+import { TagTrackContext } from "../TagTrackProvider";
 const Brat: React.FC<{
     free_ids_mask: string;
     free_list_data: ParsedData;
@@ -74,6 +75,8 @@ const Brat: React.FC<{
         </h3>
     );
 
+    const { tag } = useContext(TagTrackContext);
+
     const checkpoint_tables = (
         // Container to contain all checkpoints
         <div className="flex gap-x-4">
@@ -125,16 +128,18 @@ const Brat: React.FC<{
                         "SQ_TAIL_BRAT_WORKER.checkpoint_data[0].pointer"
                     ]
                 ) {
-                    checkpoint_sq_tail_pointer = convert_hex_to_dec(
-                        sq_tail_data[
-                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].pointer`
-                        ]
-                    ) || 0;
-                    checkpoint_sq_tail_parity = convert_hex_to_dec(
-                        sq_tail_data[
-                            `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].parity`
-                        ]
-                    ) || 0;
+                    checkpoint_sq_tail_pointer =
+                        convert_hex_to_dec(
+                            sq_tail_data[
+                                `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].pointer`
+                            ]
+                        ) || 0;
+                    checkpoint_sq_tail_parity =
+                        convert_hex_to_dec(
+                            sq_tail_data[
+                                `SQ_TAIL_BRAT_WORKER.checkpoint_data[${reverse_index}].parity`
+                            ]
+                        ) || 0;
                 }
 
                 // Get Checkpoint GBHR --------------------------------------
@@ -191,7 +196,17 @@ const Brat: React.FC<{
                                                 <td className="cyan">
                                                     {segment[i]}
                                                 </td>
-                                                <td className="">
+                                                <td
+                                                    className={
+                                                        tag !== null &&
+                                                        tag ===
+                                                            checkpoint_map_table_valeus[
+                                                                segment[i]
+                                                            ]
+                                                            ? "tag-match"
+                                                            : ""
+                                                    }
+                                                >
                                                     {
                                                         checkpoint_map_table_valeus[
                                                             segment[i]
