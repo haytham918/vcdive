@@ -3,6 +3,7 @@ import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, segment_idx } from "@/lib/utils";
 import React from "react";
+import { ParsedData } from "@/app/debugger/page";
 export const MAP_TABLE_SIZE = 32;
 export const MAP_TABLE_SEGMENT_SIZE = 8;
 export const MAP_TABLE_INDEX_SEGMENTS = segment_idx(
@@ -10,7 +11,7 @@ export const MAP_TABLE_INDEX_SEGMENTS = segment_idx(
     MAP_TABLE_SIZE
 );
 const MapTable: React.FC<{
-    map_table_data: any;
+    map_table_data: ParsedData;
 }> = ({ map_table_data }) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
@@ -20,11 +21,13 @@ const MapTable: React.FC<{
     };
 
     const current_map_values: number[] = Array(MAP_TABLE_SIZE).fill(0);
-    for (let i = 0; i < MAP_TABLE_SIZE; i++) {
-        if (map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`])
-            current_map_values[i] = convert_hex_to_dec(
-                map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`]
-            );
+    if (map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[0]`]) {
+        for (let i = 0; i < MAP_TABLE_SIZE; i++) {
+            if (map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`])
+                current_map_values[i] = convert_hex_to_dec(
+                    map_table_data[`MAP_TABLE_BRAT_WORKER.current_state[${i}]`]
+                );
+        }
     }
 
     const next_map_values: number[] = Array(MAP_TABLE_SIZE).fill(0);

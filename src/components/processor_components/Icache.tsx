@@ -7,7 +7,7 @@ import {
     process_values,
     segment_idx,
 } from "@/lib/utils";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 
 let ICACHE_NUM_BANKS = 2; // Number of BANKS
@@ -20,7 +20,7 @@ let PSB_SIZE = 4; // Size of Prefetch Stream Buffer
 let NUM_PSB = 2; // Number of PSB
 const Icache: React.FC<{
     select_number_sys: NumberSystem;
-    icache_data: any;
+    icache_data: ParsedData;
 }> = ({ select_number_sys, icache_data }) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);
@@ -78,7 +78,7 @@ const Icache: React.FC<{
                 ] === "1";
 
             if (read_granted) {
-                let binary_addr =
+                let binary_addr: string | number =
                     icache_data[
                         `ICACHE.bank_read_request_address[${bank_index}].tag`
                     ] +

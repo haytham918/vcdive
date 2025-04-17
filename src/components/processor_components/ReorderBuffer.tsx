@@ -9,13 +9,13 @@ import {
 } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 let ROB_SIZE = 32;
 
 const ReorderBuffer: React.FC<{
     selected_number_sys: NumberSystem;
-    rob_data: any;
+    rob_data: ParsedData;
     retire_list_state_mask: string;
     branch_status: string;
 }> = ({
@@ -41,7 +41,7 @@ const ReorderBuffer: React.FC<{
     const pcs: string[] = Array(ROB_SIZE).fill("");
     const destination_tags: number[] = Array(ROB_SIZE).fill(0);
     const tag_olds: number[] = Array(ROB_SIZE).fill(0);
-    let retirables: string = reverse_string(retire_list_state_mask);
+    const retirables: string = reverse_string(retire_list_state_mask);
 
     for (let i = 0; i < ROB_SIZE; i++) {
         const destination_tag =

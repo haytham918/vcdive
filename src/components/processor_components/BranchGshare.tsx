@@ -1,11 +1,12 @@
+import { ParsedData } from "@/app/debugger/page";
 import { useState, MouseEvent } from "react";
 import React from "react";
 export let GSHARE_LENGTH = 4;
 
 const BranchGshare: React.FC<{
-    branch_status: any;
-    gshare_gbhr: any;
-    control_data: any;
+    branch_status: string;
+    gshare_gbhr: string;
+    control_data: ParsedData;
 }> = ({ branch_status, gshare_gbhr, control_data }) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);

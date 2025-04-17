@@ -6,7 +6,7 @@ import {
 } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 let RS_SIZE = 16;
 
@@ -17,7 +17,7 @@ const rs_entry_color = (is_valid: boolean) => {
 
 const ReservationStation: React.FC<{
     selected_number_sys: NumberSystem;
-    reservation_station_data: any;
+    reservation_station_data: ParsedData;
     branch_status: string;
 }> = ({ selected_number_sys, reservation_station_data, branch_status }) => {
     const [show_subsection, setShowSubsection] = useState(true);
@@ -129,7 +129,7 @@ const ReservationStation: React.FC<{
                 `RESERVATION_STATION.rs_table[${i}].dest_fu`
             ];
         // If dest_fu is 4, then it's branch_idx
-        if (dest_fu == 4 && decoded_instruction.asm !== "wfi") {
+        if (dest_fu === "4" && decoded_instruction.asm !== "wfi") {
             const branch_id =
                 reservation_station_data[
                     `RESERVATION_STATION.rs_table[${i}].branch_id`

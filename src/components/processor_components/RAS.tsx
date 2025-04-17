@@ -2,13 +2,13 @@
 import { convert_hex_to_dec, process_values, segment_idx } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 let RAS_SIZE = 16;
 const RAS_SEGMENT_SIZE = 8;
 
 const RAS: React.FC<{
-    ras_data: any;
+    ras_data: ParsedData;
     selected_number_sys: NumberSystem;
     branch_status: string;
 }> = ({ ras_data, selected_number_sys, branch_status }) => {

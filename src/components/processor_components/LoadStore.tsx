@@ -8,15 +8,15 @@ import {
 } from "@/lib/utils";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 let SQ_SIZE = 16;
 let LB_SIZE = 16;
 
 const LoadStore: React.FC<{
     selected_number_sys: NumberSystem;
-    store_queue_data: any;
-    load_buffer_data: any;
+    store_queue_data: ParsedData;
+    load_buffer_data: ParsedData;
     branch_status: string;
 }> = ({
     selected_number_sys,

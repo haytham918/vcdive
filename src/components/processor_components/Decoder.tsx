@@ -1,4 +1,4 @@
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import {
     convert_hex_to_dec,
     parse_instruction,
@@ -11,7 +11,7 @@ import React from "react";
 let DECODER_SIZE = 4; // Init to be 4
 const Decoder: React.FC<{
     selected_number_sys: NumberSystem;
-    decoder_data: any;
+    decoder_data: ParsedData;
 }> = ({ selected_number_sys, decoder_data }) => {
     if (decoder_data["DECODER.MAX_DECODE"]) {
         DECODER_SIZE = convert_hex_to_dec(decoder_data["DECODER.MAX_DECODE"]);
@@ -28,8 +28,8 @@ const Decoder: React.FC<{
         convert_hex_to_dec(decoder_data[`DECODER.num_legal_instructions`]) || 0;
 
     // Get instructions and pcs
-    let instructions: string[] = Array(DECODER_SIZE).fill("");
-    let pcs: string[] = Array(DECODER_SIZE).fill("");
+    const instructions: string[] = Array(DECODER_SIZE).fill("");
+    const pcs: string[] = Array(DECODER_SIZE).fill("");
 
     // Update info if we have decoder data
     if (decoder_data) {

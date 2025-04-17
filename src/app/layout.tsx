@@ -51,7 +51,7 @@ export default async function RootLayout({
         <footer className="opacity-50 flex flex-col p-1 font-heading text-center w-full flex-shrink-0 mt-8">
           <span>Shourya Bansal, Haytham Tang, Akshay Tate</span>
           <span>
-            &#169; Kris and Ron's Biggest Fans (EECS470-WN25). All Rights
+            &#169; Kris and Ron&apos;s Biggest Fans (EECS470-WN25). All Rights
             Reserved
           </span>
         </footer>

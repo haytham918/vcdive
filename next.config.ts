@@ -10,10 +10,6 @@ const nextConfig: NextConfig = {
             },
         ];
     },
-    eslint: {
-        // Warning: This will allow production builds to complete even if there are lint errors.
-        ignoreDuringBuilds: true,
-    },
 };
 
 export default nextConfig;

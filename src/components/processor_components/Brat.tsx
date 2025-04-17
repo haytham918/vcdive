@@ -9,14 +9,15 @@ import {
 import { PRF_INDEX_SEGMENTS, PRF_SEGMENT_SIZE } from "./PRF_Ready_Free";
 import { GSHARE_LENGTH } from "./BranchGshare";
 import React from "react";
+import { ParsedData } from "@/app/debugger/page";
 const Brat: React.FC<{
     free_ids_mask: string;
-    free_list_data: any;
-    map_table_data: any;
-    rob_tail_data: any;
-    gbhr_checkpoint_data: any;
-    ras_checkpoint_data: any;
-    sq_tail_data: any;
+    free_list_data: ParsedData;
+    map_table_data: ParsedData;
+    rob_tail_data: ParsedData;
+    gbhr_checkpoint_data: ParsedData;
+    ras_checkpoint_data: ParsedData;
+    sq_tail_data: ParsedData;
 }> = ({
     free_ids_mask,
     free_list_data,
