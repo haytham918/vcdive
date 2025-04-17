@@ -1,5 +1,5 @@
 "use client";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import "./Section.css";
 import { MouseEvent, useState } from "react";
 import {
@@ -17,8 +17,8 @@ let READ_WRITE_SEGMENT_SIZE = 5;
 
 const PRF_Ready_Free: React.FC<{
     selected_number_sys: NumberSystem;
-    ready_list_data: any;
-    prf_data: any;
+    ready_list_data: ParsedData;
+    prf_data: ParsedData;
     current_free_list: string;
 }> = ({
     selected_number_sys,
@@ -76,8 +76,8 @@ const PRF_Ready_Free: React.FC<{
 
     // Get Write port related info
     let write_en: string = "0".repeat(WRITE_PORTS_SIZE);
-    let write_idx: (number | string)[] = Array(WRITE_PORTS_SIZE).fill("");
-    let write_data: string[] = Array(WRITE_PORTS_SIZE).fill("");
+    const write_idx: (number | string)[] = Array(WRITE_PORTS_SIZE).fill("");
+    const write_data: string[] = Array(WRITE_PORTS_SIZE).fill("");
     if (prf_data["REGFILE.write_en"]) {
         write_en = reverse_string(prf_data["REGFILE.write_en"]);
         for (let i = 0; i < WRITE_PORTS_SIZE; i++) {
@@ -142,8 +142,8 @@ const PRF_Ready_Free: React.FC<{
     );
 
     // Get read port related info
-    let read_idx: (number | string)[] = Array(READ_PORTS_SIZE).fill("");
-    let read_data: string[] = Array(READ_PORTS_SIZE).fill("");
+    const read_idx: (number | string)[] = Array(READ_PORTS_SIZE).fill("");
+    const read_data: string[] = Array(READ_PORTS_SIZE).fill("");
     for (let i = 0; i < READ_PORTS_SIZE; i++) {
         const read_idx_str = prf_data[`REGFILE.read_idx[${i}]`];
         if (read_idx_str && read_idx_str !== "x") {

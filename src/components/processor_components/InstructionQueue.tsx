@@ -1,4 +1,4 @@
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import {
     convert_hex_to_dec,
     fifo_entry_color,
@@ -12,7 +12,7 @@ import React from "react";
 let IQ_SIZE = 8;
 const InstructionQueue: React.FC<{
     selected_number_sys: NumberSystem;
-    instruction_queue_data: any;
+    instruction_queue_data: ParsedData;
 }> = ({ selected_number_sys, instruction_queue_data }) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);

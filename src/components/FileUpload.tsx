@@ -36,7 +36,7 @@ const FileUpload: React.FC<{
 
             setFile(uploaded_file);
         }
-    }, []);
+    }, [fileNameHandler]);
 
     // If the user is not uploading a vcd file
     const onDropRejected = useCallback((rejected_file: FileRejection[]) => {

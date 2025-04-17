@@ -39,12 +39,12 @@ const ParseButton: React.FC<{
                 toast.error(`Parsing Failed\n${result.error}`);
                 throw new Error(`Error: ${result.error}`);
             }
-
-            console.log("Upload completed successfully:", result.data);
             toast.success("Parsed Successfully");
             router.push("/debugger/");
-        } catch (error: any) {
-            console.error("Failed: ", error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Failed:", error.message);
+            }
         } finally {
             loadingHandler(false);
         }
@@ -81,8 +81,8 @@ const ParseButton: React.FC<{
             console.log(result.message);
             toast.success("Parsed Successfully");
             router.push("/debugger/");
-        } catch (error: any) {
-            console.log("FAILED: ", error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) console.log("FAILED: ", error.message);
         } finally {
             loadingHandler(false);
         }
@@ -119,8 +119,8 @@ const ParseButton: React.FC<{
             console.log("Local Successful");
             toast.success("Parsed Successfully");
             router.push("/debugger/");
-        } catch (error: any) {
-            console.log("FAILED: ", error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) console.log("FAILED: ", error.message);
         } finally {
             loadingHandler(false);
         }

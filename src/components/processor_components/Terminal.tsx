@@ -1,36 +1,36 @@
-import { TerminalSettings } from "@/app/debugger/page";
+import { ParsedData, TerminalSettings } from "@/app/debugger/page";
 import { Gear, TerminalWindow } from "phosphor-react";
 import { MouseEvent, useState } from "react";
 import React from "react";
 const Terminal: React.FC<{
-    icache_data: any;
-    fetch_data: any;
-    decoder_data: any;
-    instruction_queue_data: any;
-    dispatch_data: any;
-    rob_data: any;
-    reservation_station_data: any;
-    issue_data: any;
-    alu_data: any;
-    mult_data: any;
-    control_data: any;
-    ready_list_data: any;
-    coordinator_data: any;
-    free_list_data: any;
-    retire_list_data: any;
-    rob_tail_data: any;
-    map_table_data: any;
-    prf_data: any;
-    gshare_data: any;
-    gbhr_checkpoint_data: any;
-    store_queue_data: any;
-    load_buffer_data: any;
-    sq_tail_data: any;
-    dcache_data: any;
-    load_unit_data: any;
-    store_unit_data: any;
-    ras_checkpoint_data: any;
-    ras_data: any;
+    icache_data: ParsedData;
+    fetch_data: ParsedData;
+    decoder_data: ParsedData;
+    instruction_queue_data: ParsedData;
+    dispatch_data: ParsedData;
+    rob_data: ParsedData;
+    reservation_station_data: ParsedData;
+    issue_data: ParsedData;
+    alu_data: ParsedData;
+    mult_data: ParsedData;
+    control_data: ParsedData;
+    ready_list_data: ParsedData;
+    coordinator_data: ParsedData;
+    free_list_data: ParsedData;
+    retire_list_data: ParsedData;
+    rob_tail_data: ParsedData;
+    map_table_data: ParsedData;
+    prf_data: ParsedData;
+    gshare_data: ParsedData;
+    gbhr_checkpoint_data: ParsedData;
+    store_queue_data: ParsedData;
+    load_buffer_data: ParsedData;
+    sq_tail_data: ParsedData;
+    dcache_data: ParsedData;
+    load_unit_data: ParsedData;
+    store_unit_data: ParsedData;
+    ras_checkpoint_data: ParsedData;
+    ras_data: ParsedData;
     terminal_settings: TerminalSettings;
     handleOpenDialog: () => void;
 }> = ({
@@ -75,7 +75,7 @@ const Terminal: React.FC<{
     const data_factory = (name: string, is_show: boolean) => {
         // If not show, return nothing
         if (!is_show) return null;
-        let data: any;
+        let data: ParsedData | null;
         switch (name) {
             case "I-Cache": {
                 data = icache_data;
@@ -190,6 +190,7 @@ const Terminal: React.FC<{
                 break;
             }
             default:
+                data = null;
                 break;
         }
         return data ? (
@@ -233,8 +234,8 @@ const Terminal: React.FC<{
             {/* If terminal is open */}
             {show_terminal ? (
                 <div className="terminal-data-section">
-                    {Object.entries(terminal_settings).map(([key, value]) =>
-                        data_factory(value.label, value.show)
+                    {Object.entries(terminal_settings).map((entry) =>
+                        data_factory(entry[1].label, entry[1].show)
                     )}
                 </div>
             ) : null}

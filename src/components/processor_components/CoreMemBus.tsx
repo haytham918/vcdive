@@ -1,4 +1,4 @@
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import { convert_hex_to_dec, process_values } from "@/lib/utils";
 import { useState } from "react";
 import { MouseEvent } from "react";
@@ -6,12 +6,12 @@ import "./Section.css";
 import React from "react";
 
 const CoreMemBus: React.FC<{
-    mem_bus_address_data: any;
-    mem_bus_command_data: any;
-    mem_bus_data_out_data: any;
-    mem_bus_req_tag_in_data: any;
-    mem_bus_complete_tag_in_data: any;
-    mem_bus_data_in_data: any;
+    mem_bus_address_data: ParsedData;
+    mem_bus_command_data: ParsedData;
+    mem_bus_data_out_data: ParsedData;
+    mem_bus_req_tag_in_data: ParsedData;
+    mem_bus_complete_tag_in_data: ParsedData;
+    mem_bus_data_in_data: ParsedData;
     select_number_sys: NumberSystem;
 }> = ({
     mem_bus_address_data,

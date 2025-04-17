@@ -1,4 +1,4 @@
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import {
     convert_hex_to_dec,
     parse_instruction,
@@ -9,7 +9,7 @@ import { MouseEvent } from "react";
 import "./Section.css";
 const Fetch: React.FC<{
     selected_number_sys: NumberSystem;
-    fetch_data: any;
+    fetch_data: ParsedData;
 }> = ({ selected_number_sys, fetch_data }) => {
     let FETCH_SIZE = 4; // Init to be 4
     if (fetch_data["FETCH.MAX_FETCH"]) {

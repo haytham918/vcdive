@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MouseEvent } from "react";
 import "./Section.css";
 import { convert_hex_to_dec, process_values, segment_idx } from "@/lib/utils";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 let DCACHE_NUM_BANKS = 2; // Number of BANKS
 let DCACHE_NUM_SETS = 4; // Number of Sets per Bank
@@ -16,7 +16,7 @@ let WRITE_BUFFER_READ_PORT_SIZE = 2;
 let WRITE_BUFFER_WRITE_PORT_SIZE = 2;
 const Dcache: React.FC<{
     select_number_sys: NumberSystem;
-    dcache_data: any;
+    dcache_data: ParsedData;
 }> = ({ select_number_sys, dcache_data }) => {
     // Display
     const [show_subsection, setShowSubsection] = useState(true);

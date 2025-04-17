@@ -7,7 +7,7 @@ import NSToggle from "./NSToggle";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import icon_img from "../../public/apple-touch-icon.png";
-import { NumberSystem } from "@/app/debugger/page";
+import { NumberSystem, ParsedData } from "@/app/debugger/page";
 import React from "react";
 import { convert_hex_to_dec } from "@/lib/utils";
 // Additional header stuff for the debugger page
@@ -17,8 +17,8 @@ const DebuggerHeader: React.FC<{
     end_cycle_index: number;
     include_neg: boolean;
     selected_number_sys: NumberSystem;
-    instr_count_data: any;
-    real_cycle_data: any;
+    instr_count_data: ParsedData;
+    real_cycle_data: ParsedData;
     negFlipHandler: () => void;
     cycleHandler: (cycle: number) => void;
     numberSysHandler: (number_system: NumberSystem) => void;
