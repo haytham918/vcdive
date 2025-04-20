@@ -46,8 +46,7 @@ const Dcache: React.FC<{
             DCACHE_BANK_ENTRY_SIZE
         ).fill("");
         const valids: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("0");
-        const is_hands: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("");
-        const refs: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("-");
+        const dirtys: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("-");
         const tags: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("-");
         const datas: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("-");
         const colors: string[] = Array(DCACHE_BANK_ENTRY_SIZE).fill("");
@@ -126,23 +125,13 @@ const Dcache: React.FC<{
                     `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.memdp_metadata[${set}][${way}].valid`
                 ];
 
-            // Get hand val
-            const set_hand = convert_hex_to_dec(
-                dcache_data[
-                    `DCACHE.gen_cache[${bank_index}].EVICTION_POLICY.clock_queues[${set}].hand`
-                ]
-            );
-            if (set_hand == way) {
-                is_hands[i] = "h";
-            }
-
             // Set other values if it's valid
             if (valids[i] === "1") {
-                // Get referenced
-                refs[i] =
+                // get dirty
+                dirtys[i] =
                     dcache_data[
-                        `DCACHE.gen_cache[${bank_index}].EVICTION_POLICY.clock_queues[${set}].referenced`
-                    ][DCACHE_NUM_WAYS - 1 - way];
+                        `DCACHE.gen_cache[${bank_index}].DCACHE_BANK.memdp_metadata[${set}][${way}].dirty`
+                    ];
 
                 // Get tag
                 const raw_tag =
@@ -158,7 +147,6 @@ const Dcache: React.FC<{
                     ],
                     select_number_sys
                 );
-                console.log(datas[i]);
             }
         }
         return (
@@ -206,8 +194,7 @@ const Dcache: React.FC<{
                             <th>Set</th>
                             <th>Way</th>
                             <th>Valid</th>
-                            <th>Hand</th>
-                            <th>Ref</th>
+                            <th>Dirty</th>
                             <th>Tag</th>
                             <th>Data</th>
                         </tr>
@@ -224,9 +211,7 @@ const Dcache: React.FC<{
 
                                     <td className={colors[i]}>{valids[i]}</td>
 
-                                    <td className={colors[i]}>{is_hands[i]}</td>
-
-                                    <td className={colors[i]}>{refs[i]}</td>
+                                    <td className={colors[i]}>{dirtys[i]}</td>
 
                                     <td className={colors[i]}>{tags[i]}</td>
 

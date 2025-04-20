@@ -123,7 +123,7 @@ const CycleNavigation: React.FC<{
     }, [handleStartCycle, handleCycleChange, handleEndCycle]);
 
     // Context Provider Stuff
-    const { tag, setTag } = useContext(TagTrackContext);
+    const {setTag } = useContext(TagTrackContext);
 
     // Input Tag
     const [input_tag, setInputTag] = useState("");
